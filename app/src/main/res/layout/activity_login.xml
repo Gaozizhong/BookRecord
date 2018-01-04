@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="#fff"
     tools:context="cn.a1949science.www.bookrecord.LoginActivity">
 
     <RelativeLayout
@@ -32,8 +33,8 @@
         android:orientation="vertical">
 
         <RelativeLayout
-            android:layout_width="270dp"
-            android:layout_height="wrap_content"
+            android:layout_width="280dp"
+            android:layout_height="25dp"
             android:layout_gravity="center_horizontal"
             android:layout_weight="3"
             android:background="@drawable/bg_border">
@@ -41,28 +42,40 @@
             <TextView
                 android:id="@+id/chinaPhoneNumber"
                 android:layout_width="50dp"
-                android:layout_height="30dp"
-                android:layout_alignBottom="@+id/phoneNumber"
-                android:gravity="center_horizontal"
+                android:layout_height="25dp"
+                android:layout_centerVertical="true"
+                android:gravity="center_horizontal|center_vertical"
                 android:text="中国86" />
-
+            <ImageView
+                android:layout_width="5dp"
+                android:layout_height="25dp"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/chinaPhoneNumber"
+                android:background="@mipmap/verticalline"/>
             <EditText
                 android:id="@+id/phoneNumber"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_alignParentEnd="true"
+                android:layout_toLeftOf="@+id/phoneNumberDelete"
                 android:inputType="phone"
-                android:singleLine="true" />
+                android:singleLine="true"/>
+            <Button
+                android:id="@+id/phoneNumberDelete"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_centerVertical="true"
+                android:background="@mipmap/delete"
+                android:layout_alignParentEnd="true"/>
         </RelativeLayout>
         <RelativeLayout
-            android:layout_width="270dp"
+            android:layout_width="280dp"
             android:layout_height="10dp"
             android:layout_gravity="center_horizontal">
         </RelativeLayout>
         <RelativeLayout
-            android:layout_width="270dp"
-            android:layout_height="wrap_content"
+            android:layout_width="280dp"
+            android:layout_height="25dp"
             android:layout_gravity="center_horizontal"
             android:layout_weight="3"
             android:background="@drawable/bg_border">
@@ -70,26 +83,31 @@
             <TextView
                 android:id="@+id/TextVerification"
                 android:layout_width="50dp"
-                android:layout_height="30dp"
-                android:layout_alignBottom="@+id/verification"
-                android:gravity="center_horizontal"
+                android:layout_height="25dp"
+                android:layout_centerVertical="true"
+                android:gravity="center_vertical|center_horizontal"
                 android:text=" 验证码" />
-
+            <ImageView
+                android:layout_width="5dp"
+                android:layout_height="25dp"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/TextVerification"
+                android:background="@mipmap/verticalline"/>
             <EditText
                 android:id="@+id/verification"
-                android:layout_width="120dp"
+                android:layout_width="125dp"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_toRightOf="@+id/TextVerification"
                 android:hint="请输入验证码"
                 android:singleLine="true"
                 android:textColorHint="#95A1AA"
+                android:inputType="phone"
                 android:textSize="15sp" />
-
             <Button
                 android:id="@+id/VerificationButton"
                 android:layout_width="100dp"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
                 android:layout_alignBottom="@+id/verification"
                 android:layout_toRightOf="@+id/verification"
                 android:text="@string/getVerification"
@@ -121,7 +139,7 @@
             <Button
                 android:id="@+id/weibo"
                 android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_height="25dp"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:background="@mipmap/webo" />
@@ -135,7 +153,7 @@
 
         <Button
             android:id="@+id/loginButton"
-            android:layout_width="200dp"
+            android:layout_width="275dp"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
