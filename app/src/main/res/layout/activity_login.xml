@@ -1,9 +1,150 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="cn.a1949science.www.bookrecord.LoginActivity">
 
-</android.support.constraint.ConstraintLayout>
+    <RelativeLayout
+        android:id="@+id/loginText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="4">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="39dp"
+            android:layout_marginTop="37dp"
+            android:text="登录"
+            android:textSize="40dp"/>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/loginInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="3"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="270dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="3"
+            android:background="@drawable/bg_border">
+
+            <TextView
+                android:id="@+id/chinaPhoneNumber"
+                android:layout_width="50dp"
+                android:layout_height="30dp"
+                android:layout_alignBottom="@+id/phoneNumber"
+                android:gravity="center_horizontal"
+                android:text="中国86" />
+
+            <EditText
+                android:id="@+id/phoneNumber"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_alignParentEnd="true"
+                android:inputType="phone"
+                android:singleLine="true" />
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="270dp"
+            android:layout_height="10dp"
+            android:layout_gravity="center_horizontal">
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="270dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="3"
+            android:background="@drawable/bg_border">
+
+            <TextView
+                android:id="@+id/TextVerification"
+                android:layout_width="50dp"
+                android:layout_height="30dp"
+                android:layout_alignBottom="@+id/verification"
+                android:gravity="center_horizontal"
+                android:text=" 验证码" />
+
+            <EditText
+                android:id="@+id/verification"
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/TextVerification"
+                android:hint="请输入验证码"
+                android:singleLine="true"
+                android:textColorHint="#95A1AA"
+                android:textSize="15sp" />
+
+            <Button
+                android:id="@+id/VerificationButton"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/verification"
+                android:layout_toRightOf="@+id/verification"
+                android:text="@string/getVerification"
+                android:textSize="10dp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="200dp"
+            android:layout_height="100dp"
+            android:layout_weight="2"
+            android:layout_gravity="center_horizontal">
+
+            <Button
+                android:id="@+id/wechat"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:background="@mipmap/wechat" />
+
+            <Button
+                android:id="@+id/qq"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:background="@mipmap/qq" />
+
+            <Button
+                android:id="@+id/weibo"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:background="@mipmap/webo" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="2">
+
+        <Button
+            android:id="@+id/loginButton"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:text="登录" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="3">
+    </RelativeLayout>
+</LinearLayout>

@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">BookRecord</string>
+    <string name="getVerification">获取短信验证码</string>
 </resources>
