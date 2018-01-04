@@ -21,11 +21,11 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        phoneNumber=(EditText)findViewById(R.id.phoneNumber);
-
-        verification=(EditText)findViewById(R.id.verification);
-        delete=(Button)findViewById(R.id.phoneNumberDelete);
-        getverification=(Button)findViewById(R.id.VerificationButton);
+        findView();//寻找地址
+        onClick();
+    }
+//事件
+    private void onClick() {
         //对输入的电话号码进行判断
         phoneNumber.addTextChangedListener(new TextWatcher() {
             @Override
@@ -43,10 +43,13 @@ public class LoginActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
 
             }
-            public void ifphoneNumber() {
-
-
-            }
         });
+    }
+
+    private void findView() {
+        phoneNumber=(EditText)findViewById(R.id.phoneNumber);
+        verification=(EditText)findViewById(R.id.verification);
+        delete=(Button)findViewById(R.id.phoneNumberDelete);
+        getverification=(Button)findViewById(R.id.VerificationButton);
     }
 }
