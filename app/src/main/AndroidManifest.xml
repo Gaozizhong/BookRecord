@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="cn.a1949science.www.bookrecord">
+
     <!-- 允许联网 -->
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -37,7 +38,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.PermissionsActivity"></activity>
+        <activity android:name=".activity.PermissionsActivity" />
+        <activity android:name=".activity.BookInfoActivity" />
+        <activity android:name=".activity.WantReadActivity" />
+        <activity android:name=".activity.ReadingActivity" />
+        <activity android:name=".activity.SeenActivity" />
+        <activity android:name=".activity.AdviceActivity" />
+        <activity android:name=".activity.AboutUsActivity"></activity>
     </application>
 
 </manifest>
