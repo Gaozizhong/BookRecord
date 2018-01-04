@@ -1,4 +1,4 @@
-package cn.a1949science.www.bookrecord;
+package cn.a1949science.www.bookrecord.activity;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -6,6 +6,8 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.Button;
 import android.widget.EditText;
+
+import cn.a1949science.www.bookrecord.R;
 
 public class LoginActivity extends AppCompatActivity {
 
