@@ -1,5 +1,6 @@
 package cn.a1949science.www.bookrecord.activity;
 
+import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -8,9 +9,10 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import cn.a1949science.www.bookrecord.R;
+import cn.a1949science.www.bookrecord.utils.AMUtils;
 
 public class LoginActivity extends AppCompatActivity {
-
+    Context mContext =LoginActivity.this;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,7 +35,7 @@ public class LoginActivity extends AppCompatActivity {
                 if(temp.length()>11)
                 {
                     phoneNumber.setText(s);
-
+                    AMUtils.onInactive(mContext,phoneNumber);
                 }
             }
 
