@@ -12,16 +12,20 @@ import cn.a1949science.www.bookrecord.R;
 import cn.a1949science.www.bookrecord.utils.AMUtils;
 
 public class LoginActivity extends AppCompatActivity {
-    Context mContext =LoginActivity.this;
+
+    Context mContext = LoginActivity.this;
+    EditText phoneNumber,verification;
+    Button delete,getverification;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        final EditText phoneNumber=(EditText)findViewById(R.id.phoneNumber);
+        phoneNumber=(EditText)findViewById(R.id.phoneNumber);
 
-        final EditText verification=(EditText)findViewById(R.id.verification);
-        Button delete=(Button)findViewById(R.id.phoneNumberDelete);
-        Button getverification=(Button)findViewById(R.id.VerificationButton);
+        verification=(EditText)findViewById(R.id.verification);
+        delete=(Button)findViewById(R.id.phoneNumberDelete);
+        getverification=(Button)findViewById(R.id.VerificationButton);
         //对输入的电话号码进行判断
         phoneNumber.addTextChangedListener(new TextWatcher() {
             @Override
@@ -30,15 +34,11 @@ public class LoginActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                String temp=s.toString();
-                if(temp.length()>11)
-                {
-                    phoneNumber.setText(s);
-                    AMUtils.onInactive(mContext,phoneNumber);
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (charSequence.length() == 11) {
+                    AMUtils.onInactive(mContext, phoneNumber);
                 }
             }
-
             @Override
             public void afterTextChanged(Editable s) {
 
