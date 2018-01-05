@@ -3,8 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/BookRecord.iml" filepath="$PROJECT_DIR$/BookRecord.iml" />
-      <module fileurl="file://$PROJECT_DIR$/BookRecord_Andriod.iml" filepath="$PROJECT_DIR$/BookRecord_Andriod.iml" />
-      <module fileurl="file://D:/MyApplication/BookRecord/BookRecord_Andriod.iml" filepath="D:/MyApplication/BookRecord/BookRecord_Andriod.iml" />
+      <module fileurl="file://D:\MyApplication\BookRecord\BookRecord_Andriod.iml" filepath="D:\MyApplication\BookRecord\BookRecord_Andriod.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
