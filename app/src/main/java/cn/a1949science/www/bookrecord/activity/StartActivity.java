@@ -13,6 +13,7 @@ import android.view.animation.Animation;
 import cn.a1949science.www.bookrecord.R;
 import cn.a1949science.www.bookrecord.activity.LoginActivity;
 import cn.a1949science.www.bookrecord.activity.MainActivity;
+import cn.a1949science.www.bookrecord.adapter.BookInfoAdapter;
 import cn.a1949science.www.bookrecord.widget.PermissionsChecker;
 
 public class StartActivity extends AppCompatActivity {

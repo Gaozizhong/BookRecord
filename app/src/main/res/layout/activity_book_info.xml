@@ -16,8 +16,8 @@
         android:background="#fff">
         <Button
             android:id="@+id/book_info_return"
-            android:layout_width="30dp"
-            android:layout_height="25dp"
+            android:layout_width="25dp"
+            android:layout_height="20dp"
             android:layout_marginLeft="5dp"
             android:layout_centerVertical="true"
             android:background="@mipmap/returnbutton" />
@@ -38,8 +38,8 @@
             android:layout_toRightOf="@+id/book_info_vertivalline"
             android:text="@string/bookName"/>
         <Button
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:layout_alignParentEnd="true"
             android:layout_marginEnd="12dp"
             android:layout_centerVertical="true"
@@ -96,7 +96,7 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginLeft="10dp"
                     android:layout_height="35dp"
-                    android:isIndicator="false"
+                    android:isIndicator="true"
                     android:numStars="5"
                     android:rating="3" />
                 <TextView
@@ -204,21 +204,22 @@
             android:layout_gravity="center_horizontal"
             android:gravity="center_vertical"
           />
-       <LinearLayout
-           android:layout_width="match_parent"
-           android:layout_height="wrap_content"
-           android:layout_marginTop="10dp"
-           android:layout_marginLeft="10dp"
-           android:layout_marginRight="10dp"
-           android:background="#fff"
-           android:orientation="vertical">
-           <ListView
-               android:layout_width="match_parent"
-               android:layout_height="wrap_content"
-               android:divider="#eee"
-               android:dividerHeight="10px"
-               />
-       </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="#fff"
+            android:orientation="vertical">
+            <cn.a1949science.www.bookrecord.widget.MyListView
+                android:id="@+id/book_info_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:divider="#eee"
+                android:dividerHeight="10px"
+                />
+        </LinearLayout>
     </LinearLayout>
     </ScrollView>
     </LinearLayout>
