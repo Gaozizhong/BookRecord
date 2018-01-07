@@ -6,6 +6,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -14,11 +15,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.Toast;
 
+import com.miguelcatalan.materialsearchview.MaterialSearchView;
 import com.ycl.tabview.library.TabView;
 import com.ycl.tabview.library.TabViewChild;
 
@@ -38,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     DrawerLayout drawer;
     View headerLayout;
     TabView tabView;
+    MaterialSearchView searchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +55,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
         initView();
+        onClick();
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -65,6 +71,47 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 //Intent it = new Intent(mContext,User_Info.class);
                 //startActivity(it);
                 //overridePendingTransition(R.anim.slide_right_in,R.anim.slide_left_out);
+            }
+        });
+    }
+
+    //点击事件
+    private void onClick() {
+        //对搜索的文字监听
+        searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                Snackbar.make(findViewById(R.id.container), "Query: " + query, Snackbar.LENGTH_LONG)
+                        .show();
+
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                //Do some magic
+                return false;
+            }
+        });
+
+        //
+        searchView.setOnSearchViewListener(new MaterialSearchView.SearchViewListener() {
+            @Override
+            public void onSearchViewShown() {
+                //Do some magic
+            }
+
+            @Override
+            public void onSearchViewClosed() {
+            //Do some magic
+            }
+        });
+
+        //点击事件
+        searchView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Toast.makeText(mContext,"第"+i+"行",Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -97,6 +144,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             }
         });
+        searchView = findViewById(R.id.search_view);
+        searchView.setVoiceSearch(false);
+        //searchView.setCursorDrawable(R.drawable.color_cursor_white);
+        //Add suggestions
+        searchView.setSuggestions(getResources().getStringArray(R.array.query_suggestions));
+
     }
 
     private void addDate() {
@@ -104,11 +157,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
+    //返回键监听事件
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
+        }else if(searchView.isSearchOpen()){
+            searchView.closeSearch();
         }//点击两次返回键退出程序
         else if(System.currentTimeMillis() - exitTime > 2000) {
             Toast.makeText(this, "再按一次退出程序", Toast.LENGTH_SHORT).show();
@@ -118,6 +174,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             System.exit(0);
             android.os.Process.killProcess(android.os.Process.myPid());
         }
+    }
+
+    //toolbar右面按钮
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+
+        MenuItem item = menu.findItem(R.id.action_search);
+        searchView.setMenuItem(item);
+
+        return true;
+    }
+
+    //toolbar右面按钮的事件监听
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_search) {
+            //searchView.openSearch();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     //侧滑菜单中的点击事件

@@ -28,16 +28,17 @@
         android:layout_toRightOf="@+id/book_info_headicon"
         android:layout_marginLeft="10dp"
         />
-    <RatingBar
-        android:id="@+id/book_info_userrating"
-        style="@style/foodRatingBar"
-        android:layout_width="wrap_content"
-        android:layout_height="35dp"
-        android:layout_alignParentEnd="true"
-        android:layout_centerVertical="true"
-        android:isIndicator="true"
-        android:numStars="5"
-        android:rating="5"/>
+
+        <RatingBar
+            android:id="@+id/book_info_userrating"
+            style="@style/foodRatingBar"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:isIndicator="true"
+            android:numStars="5"
+            android:rating="5" />
     </RelativeLayout>
     <TextView
         android:id="@+id/book_info_usercomment"
