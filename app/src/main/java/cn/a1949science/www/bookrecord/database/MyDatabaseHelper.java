@@ -36,8 +36,18 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     }
     public void insertBookInfoListview(Context context,MyDatabaseHelper db)//后期有网络数据的时候会加上参数
     {//将数据插入数据库
-        Bitmap bookImage= BitmapFactory.decodeResource(context.getResources(), R.mipmap.bookdemo);
+        Bitmap bookImage=null;
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        bookImage= BitmapFactory.decodeResource(context.getResources(), R.mipmap.bookdemo);
+        options.inPreferredConfig = Bitmap.Config.RGB_565;
+        options.inDither = true;
         byte[] bookByte=bb.bitmapIntobytes(bookImage);
+        if (bookImage!=null&&!bookImage.isRecycled())//回收资源
+        {
+            bookImage.recycle();
+            bookImage=null;
+        }
+       // db.getReadableDatabase().execSQL("delete from book_info_listview");
         //将参数传递给insertBookInfoListview函数
         insertBookInfoListview(db.getReadableDatabase(),bookByte,context.getResources().getString(R.string.usernick),3,context.getResources().getString(R.string.comment),context.getResources().getString(R.string.data));
     }
@@ -61,6 +71,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
             map.put("data",cursor.getString(5));
             result.add(map);
         }
+        cursor.close();
         return result;
     }
 

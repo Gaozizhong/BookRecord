@@ -2,8 +2,12 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://D:/MyApplication/BookRecord_Andriod/BookRecord.iml" filepath="D:/MyApplication/BookRecord_Andriod/BookRecord.iml" />
       <module fileurl="file://$PROJECT_DIR$/BookRecord_Andriod.iml" filepath="$PROJECT_DIR$/BookRecord_Andriod.iml" />
+      <module fileurl="file://D:/MyApplication/BookRecord/BookRecord_Andriod.iml" filepath="D:/MyApplication/BookRecord/BookRecord_Andriod.iml" />
+      <module fileurl="file://D:/MyApplication/BookRecord_Andriod/BookRecord_Andriod.iml" filepath="D:/MyApplication/BookRecord_Andriod/BookRecord_Andriod.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://D:/MyApplication/BookRecord_Andriod/app/app.iml" filepath="D:/MyApplication/BookRecord_Andriod/app/app.iml" />
     </modules>
   </component>
 </project>
