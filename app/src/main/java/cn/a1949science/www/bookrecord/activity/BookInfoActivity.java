@@ -47,8 +47,8 @@ public class BookInfoActivity extends AppCompatActivity {
     //测试
     private void test() {
         db=new MyDatabaseHelper(mContext,"book.db3",1);
-        db.insertBookInfoListview(mContext,db);
-
+        //将插入语句注释掉，防止重复插入
+       // db.insertBookInfoListview(mContext,db);
     }
 
     private void findView() {
@@ -96,13 +96,12 @@ public class BookInfoActivity extends AppCompatActivity {
         result=db.resultBookInfoListview(mContext,db);
         bookInfoList = (MyListView) findViewById(R.id.book_info_list);
         mData = new LinkedList<BookInfoComment>();
-        Iterator it = result.iterator();
         //对数据库得到的结果遍历
-        while(it.hasNext()) {
-            mData.add(new BookInfoComment((Bitmap) result.get(0).get("icon"), result.get(0).get("usernick").toString(), (int) result.get(0).get("rate"), result.get(0).get("comment").toString(), result.get(0).get("data").toString()));
+        for (int i = 0; i < result.size(); i++) {
+            mData.add(new BookInfoComment((Bitmap) result.get(i).get("icon"), result.get(i).get("usernick").toString(), (int) result.get(i).get("rate"), result.get(i).get("comment").toString(), result.get(i).get("data").toString()));
+            mAdapter = new BookInfoAdapter(mData, mContext);
+            bookInfoList.setAdapter(mAdapter);
         }
-        mAdapter = new BookInfoAdapter( mData, mContext);
-        bookInfoList.setAdapter(mAdapter);
     }
     public void OnDestroy()
     {
