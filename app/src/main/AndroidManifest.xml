@@ -44,7 +44,7 @@
         <activity android:name=".activity.ReadingActivity" />
         <activity android:name=".activity.SeenActivity" />
         <activity android:name=".activity.AdviceActivity" />
-        <activity android:name=".activity.AboutUsActivity"></activity>
+        <activity android:name=".activity.AboutUsActivity"/>
     </application>
 
 </manifest>
