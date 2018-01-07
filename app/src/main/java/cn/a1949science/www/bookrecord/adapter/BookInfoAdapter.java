@@ -45,6 +45,7 @@ public class BookInfoAdapter extends BaseAdapter {
         return position;
     }
 
+//listview每包含一行就会执行一次getview
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         convertView = LayoutInflater.from(mContext).inflate(R.layout.book_info_list,parent,false);
@@ -54,7 +55,7 @@ public class BookInfoAdapter extends BaseAdapter {
         RatingBar userRating=(RatingBar) convertView.findViewById(R.id.book_info_userrating) ;
         TextView userCommnent= (TextView) convertView.findViewById(R.id.book_info_usercomment);
         TextView commentdate=(TextView)convertView.findViewById(R.id.book_info_commentdate) ;
-        userIcon.setImageResource(mData.get(position).getIcon());
+        userIcon.setImageBitmap(mData.get(position).getIcon());
         userNick.setText(mData.get(position).getUsernick());
         userRating.setRating(mData.get(position).getRate());
         userCommnent.setText(mData.get(position).getComment());

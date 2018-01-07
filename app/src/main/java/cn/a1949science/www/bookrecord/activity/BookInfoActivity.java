@@ -2,6 +2,8 @@ package cn.a1949science.www.bookrecord.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,11 +14,16 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Map;
 
 import cn.a1949science.www.bookrecord.R;
 import cn.a1949science.www.bookrecord.adapter.BookInfoAdapter;
 import cn.a1949science.www.bookrecord.bean.BookInfoComment;
+import cn.a1949science.www.bookrecord.database.BitmapBytes;
+import cn.a1949science.www.bookrecord.database.MyDatabaseHelper;
 import cn.a1949science.www.bookrecord.widget.MyListView;
 
 public class BookInfoActivity extends AppCompatActivity {
@@ -25,6 +32,8 @@ public class BookInfoActivity extends AppCompatActivity {
     private BookInfoAdapter mAdapter = null;
     private MyListView bookInfoList;
     Button wantRead,reading,havaRead,returnButton;
+    private MyDatabaseHelper db;//sqlite数据库
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,7 +41,13 @@ public class BookInfoActivity extends AppCompatActivity {
         //将资源加载到listview中
         findView();
         onClick();//监听事件
+        test();//c此方法用于在测试阶段，将样本数据导入数据库
         setListview();
+    }
+    //测试
+    private void test() {
+        db=new MyDatabaseHelper(mContext,"book.db3",1);
+        db.insertBookInfoListview(mContext,db);
 
     }
 
@@ -42,7 +57,7 @@ public class BookInfoActivity extends AppCompatActivity {
         havaRead=(Button)findViewById(R.id.book_info_haveRead);
         returnButton=(Button)findViewById(R.id.book_info_return);
     }
-
+    //监听事件
     private void onClick() {
         wantRead.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,16 +89,29 @@ public class BookInfoActivity extends AppCompatActivity {
             }
         });
     }
-
+//设置listview
     private void setListview() {
+
+        ArrayList<Map<String,Object>> result;
+        result=db.resultBookInfoListview(mContext,db);
         bookInfoList = (MyListView) findViewById(R.id.book_info_list);
         mData = new LinkedList<BookInfoComment>();
-        mData.add(new BookInfoComment(R.mipmap.text,"用户1",3,"有些人只拥吻影子，于是只拥有幸福的幻影。 ——莎士比亚 爱情里最需要的，是想象力。每个人必须用尽全力和全部的想象力来形塑对方，并丝毫不向现实低头。那么，当双方的幻想相遇……就再也没有比这更美的景象了。 ——罗曼·加里 爱情，就像影子一样，如果你踩中了，就请带走我的心。 所有流言蜚语都为人津津乐道，人人都热衷于他人的不幸。 谈到时间，我常搞不懂，我的日子所剩无几，为何要用尽方法来跟我们过不去...","From BookRecord At 2017/12/31"));
-        mData.add(new BookInfoComment(R.mipmap.text,"用户2",2,"写的没看懂","From BookRecord At 2018/1/2"));
-        mData.add(new BookInfoComment(R.mipmap.bookdemo,"用户3",5,"一个很操蛋的故事","From BookRecord At 2017/12/31"));
+        Iterator it = result.iterator();
+        //对数据库得到的结果遍历
+        while(it.hasNext()) {
+            mData.add(new BookInfoComment((Bitmap) result.get(0).get("icon"), result.get(0).get("usernick").toString(), (int) result.get(0).get("rate"), result.get(0).get("comment").toString(), result.get(0).get("data").toString()));
+        }
         mAdapter = new BookInfoAdapter( mData, mContext);
         bookInfoList.setAdapter(mAdapter);
-
+    }
+    public void OnDestroy()
+    {
+        super.onDestroy();
+        if (db!=null)
+        {
+            db.close();
+        }
     }
 }
 
+//将图片转化为字节

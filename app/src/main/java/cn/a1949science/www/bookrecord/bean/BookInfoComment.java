@@ -1,9 +1,13 @@
 package cn.a1949science.www.bookrecord.bean;
+
+import android.graphics.Bitmap;
+
 //创建一个书的信息类
 public class BookInfoComment {
-    int icon,rate;
+    int rate;
+    Bitmap icon;
     String usernick,comment,date;
-    public BookInfoComment(int icon,String usernick,int rate,String comment,String date)
+    public BookInfoComment(Bitmap icon, String usernick, int rate, String comment, String date)
     {
        this.icon=icon;
        this.usernick=usernick;
@@ -11,7 +15,7 @@ public class BookInfoComment {
        this.comment=comment;
        this.date=date;
     }
-    public int getIcon()
+    public Bitmap getIcon()
     {
         return icon;
     }
@@ -36,7 +40,7 @@ public class BookInfoComment {
         this.comment = comment;
     }
 
-    public void setIcon(int icon) {
+    public void setIcon(Bitmap icon) {
         this.icon = icon;
     }
 
