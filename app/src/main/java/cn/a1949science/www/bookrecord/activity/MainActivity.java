@@ -1,7 +1,8 @@
 package cn.a1949science.www.bookrecord.activity;
 
 import android.content.Context;
-import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -15,11 +16,19 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Toast;
 
-import cn.a1949science.www.bookrecord.R;
+import com.ycl.tabview.library.TabView;
+import com.ycl.tabview.library.TabViewChild;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+import java.util.ArrayList;
+import java.util.List;
+
+import cn.a1949science.www.bookrecord.R;
+import cn.a1949science.www.bookrecord.fragment.WantFragment;
+
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, WantFragment.OnFragmentInteractionListener {
 
     Context mContext = MainActivity.this;
     SwipeRefreshLayout refresh;
@@ -28,11 +37,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     Toolbar toolbar;
     DrawerLayout drawer;
     View headerLayout;
+    TabView tabView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        /*沉浸式标题栏*/
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+        }
 
         initView();
 
@@ -58,6 +73,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         drawer = findViewById(R.id.drawer_layout);
+        //为底部导航栏添加数据源
+        List<TabViewChild> tabViewChildList=new ArrayList<>();
+        TabViewChild tabViewChild01=new TabViewChild(R.drawable.wanting,R.drawable.wanting,"想读", WantFragment.newInstance("想读","1"));
+        TabViewChild tabViewChild02=new TabViewChild(R.drawable.reading,R.drawable.reading,"在读",  WantFragment.newInstance("在读","2"));
+        TabViewChild tabViewChild03=new TabViewChild(R.drawable.seen,R.drawable.seen,"读过",  WantFragment.newInstance("读过","3"));
+        tabViewChildList.add(tabViewChild01);
+        tabViewChildList.add(tabViewChild02);
+        tabViewChildList.add(tabViewChild03);
+        tabView = findViewById(R.id.tabView);
+        tabView.setTabViewChild(tabViewChildList,getSupportFragmentManager());
         //下拉刷新
         refresh = findViewById(R.id.refresh);
         recyclerView = findViewById(R.id.list);
@@ -117,5 +142,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
     }
 }

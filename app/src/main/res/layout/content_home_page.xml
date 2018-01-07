@@ -18,4 +18,13 @@
         </android.support.v7.widget.RecyclerView>
     </android.support.v4.widget.SwipeRefreshLayout>
 
+    <com.ycl.tabview.library.TabView
+        android:id="@+id/tabView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:tab_imageViewHeight="20dip"
+        app:tab_imageViewWidth="20dip"
+        app:tab_textViewSize="10sp">
+    </com.ycl.tabview.library.TabView>
+
 </android.support.constraint.ConstraintLayout>

@@ -13,7 +13,8 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="#fff"
-            app:navigationIcon="@drawable/menu"/>
+            app:navigationIcon="@drawable/menu"
+            android:fitsSystemWindows="true"/>
 
     </android.support.design.widget.AppBarLayout>
 
