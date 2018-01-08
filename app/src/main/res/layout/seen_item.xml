@@ -48,6 +48,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
+                <com.willy.ratingbar.ScaleRatingBar
+                    android:id="@+id/simpleRatingBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srb_numStars="5"
+                    app:srb_stepSize="0.5"
+                    app:srb_rating="5"
+                    app:srb_drawableEmpty="@mipmap/ministar_empty"
+                    app:srb_drawableFilled="@mipmap/ministar_full">
+                </com.willy.ratingbar.ScaleRatingBar>
+
                 <RatingBar
                     android:id="@+id/rating_star"
                     style="@style/miniRatingBar"
