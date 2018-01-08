@@ -2,7 +2,7 @@ package cn.a1949science.www.bookrecord.bean;
 
 import android.graphics.Bitmap;
 
-//创建一个书的信息类
+//创建一个书的评价信息类
 public class BookInfoComment {
     int rate;
     Bitmap icon;

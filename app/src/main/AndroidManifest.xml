@@ -19,6 +19,8 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <!-- 允许打电话 -->
     <uses-permission android:name="android.permission.CALL_PHONE" />
+    <!-- 允许振动 -->
+    <uses-permission android:name="android.permission.VIBRATE"/>
 
     <application
         android:allowBackup="true"
@@ -44,7 +46,8 @@
         <activity android:name=".activity.ReadingActivity" />
         <activity android:name=".activity.SeenActivity" />
         <activity android:name=".activity.AdviceActivity" />
-        <activity android:name=".activity.AboutUsActivity"/>
+        <activity android:name=".activity.AboutUsActivity" />
+        <activity android:name=".activity.ScanISBN"></activity>
     </application>
 
 </manifest>
