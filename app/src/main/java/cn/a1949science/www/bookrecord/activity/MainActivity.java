@@ -1,12 +1,17 @@
 package cn.a1949science.www.bookrecord.activity;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -23,6 +28,9 @@ import android.widget.AdapterView;
 import android.widget.Toast;
 
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
+import com.uuzuche.lib_zxing.activity.CaptureActivity;
+import com.uuzuche.lib_zxing.activity.CodeUtils;
+import com.uuzuche.lib_zxing.activity.ZXingLibrary;
 import com.ycl.tabview.library.TabView;
 import com.ycl.tabview.library.TabViewChild;
 
@@ -43,6 +51,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     View headerLayout;
     TabView tabView;
     MaterialSearchView searchView;
+    private int REQUEST_CODE = 5,REQUEST_CAMERA_PERMISSION = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,6 +126,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void initView() {
+        //执行二维码扫描的初始化操作
+        ZXingLibrary.initDisplayOpinion(this);
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         drawer = findViewById(R.id.drawer_layout);
@@ -132,7 +143,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         tabView.setTabViewChild(tabViewChildList,getSupportFragmentManager());
         //下拉刷新
         refresh = findViewById(R.id.refresh);
-        recyclerView = findViewById(R.id.list);
+        recyclerView = findViewById(R.id.recycler_view);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(mLayoutManager);
         addDate();
@@ -190,11 +201,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     //toolbar右面按钮的事件监听
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_search) {
-            //searchView.openSearch();
+        //return super.onOptionsItemSelected(item);
+        int menuItemId = item.getItemId();
+        if (menuItemId == R.id.action_scan) {
+            //如果有权限
+            if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+                Intent it = new Intent(mContext, CaptureActivity.class);
+                startActivityForResult(it, REQUEST_CODE);
+            } else {//没有权限
+                ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.CAMERA},REQUEST_CAMERA_PERMISSION);
+            }
+
         }
-        return super.onOptionsItemSelected(item);
+        return true;
     }
 
     //侧滑菜单中的点击事件
@@ -225,4 +244,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void onFragmentInteraction(Uri uri) {
 
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        /**
+         * 处理二维码扫描结果
+         */
+        if (requestCode == REQUEST_CODE) {
+            //处理扫描结果（在界面上显示）
+            if (null != data) {
+                Bundle bundle = data.getExtras();
+                if (bundle == null) {
+                    return;
+                }
+                if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_SUCCESS) {
+                    String result = bundle.getString(CodeUtils.RESULT_STRING);
+                    Toast.makeText(this, "解析结果:" + result, Toast.LENGTH_LONG).show();
+                } else if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_FAILED) {
+                    Toast.makeText(MainActivity.this, "解析二维码失败", Toast.LENGTH_LONG).show();
+                }
+            }
+        }
+    }
+
 }
