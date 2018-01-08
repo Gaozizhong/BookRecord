@@ -37,4 +37,5 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.5.0'
     compile 'com.miguelcatalan:materialsearchview:1.4.0'
     compile 'cn.yipianfengye.android:zxing-library:2.2'
+    compile 'com.github.sendtion:XRichText:1.1'
 }
