@@ -48,7 +48,7 @@ public class BookInfoActivity extends AppCompatActivity {
     private void test() {
         db=new MyDatabaseHelper(mContext,"book.db3",1);
         //将插入语句注释掉，防止重复插入
-       // db.insertBookInfoListview(mContext,db);
+            db.insertBookInfoListview(mContext, db);
     }
 
     private void findView() {
@@ -62,28 +62,31 @@ public class BookInfoActivity extends AppCompatActivity {
         wantRead.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast toast=Toast.makeText(mContext,"已添加至想读",Toast.LENGTH_SHORT);
-                toast.show();
+                Intent intent = new Intent(mContext,WantReadActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
         reading.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                Toast toast=Toast.makeText(mContext,"已添加至在读",Toast.LENGTH_SHORT);
-                toast.show();
+                public void onClick(View v) {
+                    Intent intent = new Intent(mContext,ReadingActivity.class);
+                    startActivity(intent);
+                    finish();
             }
         });
         havaRead.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast toast=Toast.makeText(mContext,"已添加至读过",Toast.LENGTH_SHORT);
-                toast.show();
+                Intent intent = new Intent(mContext,SeenActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
         returnButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(mContext,WantReadActivity.class);
+                Intent intent = new Intent(mContext,MainActivity.class);
                 startActivity(intent);
                 finish();
             }

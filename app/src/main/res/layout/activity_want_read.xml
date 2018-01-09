@@ -1,9 +1,114 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#ddd"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
     tools:context="cn.a1949science.www.bookrecord.activity.WantReadActivity">
 
-</android.support.constraint.ConstraintLayout>
+    <android.support.v7.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@android:color/white">
+        <Button
+            android:id="@+id/want_read_return"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:background="@mipmap/returnbutton"/>
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/verticalline" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="已读记录"
+            android:textSize="20dp"
+            android:textColor="@android:color/black"/>
+    </android.support.v7.widget.Toolbar>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:orientation="vertical"
+        android:background="#fff"
+        android:gravity="center_horizontal"
+        >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:textSize="20dp"
+            android:text="豆瓣评分"
+            android:gravity="center_horizontal"
+            android:textColor="@android:color/black"/>
+        <RatingBar
+            android:id="@+id/want_read_bookRating"
+            style="@style/foodRatingBar"
+            android:layout_width="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="10dp"
+            android:layout_height="35dp"
+            android:isIndicator="true"
+            android:numStars="5"
+            android:rating="3" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp">
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="match_parent"
+                android:text="原因："
+                android:textSize="16dp"
+                android:textColor="@android:color/background_dark"
+                android:gravity="right|center_vertical"
+                />
+            <com.sendtion.xrichtext.RichTextEditor
+                android:id="@+id/want_read_reason"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:textSize="16dp"
+                android:textColor="@android:color/darker_gray"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="5dp"
+            >
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="match_parent"
+                android:text="期望："
+                android:textSize="16dp"
+                android:textColor="@android:color/background_dark"
+                android:gravity="right|center_vertical"
+                />
+            <com.sendtion.xrichtext.RichTextEditor
+                android:id="@+id/want_read_hope"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:textSize="16dp"
+                android:textColor="@android:color/darker_gray"/>
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/want_read_Button"
+            android:layout_marginTop="80dp"
+            android:layout_width="match_parent"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_height="50dp"
+            android:background="#3ccf1b"
+            android:text="完成记录"
+            android:textSize="16dp"
+            android:textColor="#fff"/>
+    </LinearLayout>
+</LinearLayout>
