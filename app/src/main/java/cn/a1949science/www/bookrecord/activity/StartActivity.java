@@ -67,7 +67,7 @@ public class StartActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         } else {
-            Intent intent = new Intent(this,BookInfoActivity.class);
+            Intent intent = new Intent(this,ReadingActivity.class);
             startActivity(intent);
             finish();
         }

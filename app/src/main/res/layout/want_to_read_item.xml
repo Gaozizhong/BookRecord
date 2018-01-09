@@ -1,6 +1,108 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_margin="5dp"
+    app:cardCornerRadius="4dp">
 
-</android.support.constraint.ConstraintLayout>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/seen_item"
+            android:layout_width="120dp"
+            android:layout_height="150dp"
+            android:scaleType="centerCrop" />
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/book_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="clip_horizontal"
+                    android:textColor="@color/black"
+                    android:textSize="25sp"/>
+
+                <TextView
+                    android:id="@+id/public_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="clip_horizontal"
+                    android:textColor="@color/text_gray"
+                    android:textSize="15sp"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.willy.ratingbar.ScaleRatingBar
+                    android:id="@+id/simpleRatingBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srb_starWidth="15dp"
+                    app:srb_starHeight="15dp"
+                    app:srb_starPadding="5dp"
+                    app:srb_numStars="5"
+                    app:srb_stepSize="0.5"
+                    app:srb_rating="5"
+                    app:srb_isIndicator="true"
+                    app:srb_drawableEmpty="@mipmap/ministar_empty"
+                    app:srb_drawableFilled="@mipmap/ministar_full">
+                </com.willy.ratingbar.ScaleRatingBar>
+
+                <TextView
+                    android:id="@+id/rating"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="clip_horizontal"
+                    android:textColor="@color/text_gray"
+                    android:textSize="16sp"/>
+            </LinearLayout>
+
+
+            <TextView
+                android:id="@+id/author_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="clip_horizontal"
+                android:textColor="@color/text_gray"
+                android:textSize="20sp"/>
+
+            <TextView
+                android:id="@+id/public_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="clip_horizontal"
+                android:textColor="@color/text_gray"
+                android:textSize="20sp"/>
+
+            <Button
+                android:id="@+id/button_reading"
+                android:layout_width="60dp"
+                android:layout_height="30dp"
+                android:text="在读"
+                android:background="@drawable/book_info_bg_border"
+                android:textColor="@color/orange"
+                android:layout_gravity="end"
+                android:layout_marginEnd="20dp"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>

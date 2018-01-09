@@ -109,15 +109,14 @@
             android:text="方式："
             android:textSize="16dp"
             android:textColor="@android:color/background_dark"
-            android:gravity="right|center_vertical"
-            />
+            android:gravity="right|center_vertical" />
 
             <Spinner
                 android:id="@+id/reading_way"
                 android:layout_width="200dp"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="50dp"
-                ></Spinner>
+                android:layout_marginLeft="50dp">
+            </Spinner>
         </LinearLayout>
 
         <LinearLayout

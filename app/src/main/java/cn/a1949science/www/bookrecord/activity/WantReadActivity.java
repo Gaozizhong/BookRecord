@@ -24,9 +24,8 @@ Button returnButton;
         returnButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(context,BookInfoActivity.class);
-                startActivity(intent);
                 finish();
+                overridePendingTransition(R.anim.slide_left_in,R.anim.slide_right_out);
             }
         });
     }
