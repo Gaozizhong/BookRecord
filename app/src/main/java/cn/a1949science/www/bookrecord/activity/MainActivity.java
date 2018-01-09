@@ -34,6 +34,13 @@ import com.uuzuche.lib_zxing.activity.ZXingLibrary;
 import com.ycl.tabview.library.TabView;
 import com.ycl.tabview.library.TabViewChild;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,6 +48,9 @@ import cn.a1949science.www.bookrecord.R;
 import cn.a1949science.www.bookrecord.fragment.ReadingFragment;
 import cn.a1949science.www.bookrecord.fragment.SeenFragment;
 import cn.a1949science.www.bookrecord.fragment.WantFragment;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener, WantFragment.OnFragmentInteractionListener
@@ -145,7 +155,6 @@ public class MainActivity extends AppCompatActivity implements
         tabView.setTabViewChild(tabViewChildList,getSupportFragmentManager());
         searchView = findViewById(R.id.search_view);
         searchView.setVoiceSearch(false);
-        //searchView.setCursorDrawable(R.drawable.color_cursor_white);
         //Add suggestions
         searchView.setSuggestions(getResources().getStringArray(R.array.query_suggestions));
 
@@ -243,12 +252,77 @@ public class MainActivity extends AppCompatActivity implements
                 }
                 if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_SUCCESS) {
                     String result = bundle.getString(CodeUtils.RESULT_STRING);
-                    Toast.makeText(this, "解析结果:" + result, Toast.LENGTH_LONG).show();
+                    getBookInfo(result);
+                    //Toast.makeText(this, "解析结果:" + result, Toast.LENGTH_LONG).show();
                 } else if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_FAILED) {
                     Toast.makeText(MainActivity.this, "解析二维码失败", Toast.LENGTH_LONG).show();
                 }
             }
         }
+    }
+
+    //从豆瓣服务器获取相应的图书信息
+    private void getBookInfo(final String result) {
+        //开启线程来发起网络请求
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                //HttpURLConnection实现
+                /*HttpURLConnection connection = null;
+                BufferedReader reader = null;
+                try{
+                    URL url = new URL("https://api.douban.com/v2/book/isbn/" + result);
+                    connection = (HttpURLConnection) url.openConnection();
+                    connection.setRequestMethod("GET");
+                    connection.setConnectTimeout(8000);
+                    connection.setReadTimeout(8000);
+                    InputStream in = connection.getInputStream();
+                    //下面对获取到的输入流进行读取
+                    reader = new BufferedReader(new InputStreamReader(in));
+                    StringBuilder response = new StringBuilder();
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        response.append(line);
+                    }
+                    decodeBookInfo(response.toString());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    if (reader != null) {
+                        try {
+                            reader.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    if (connection != null) {
+                        connection.disconnect();
+                    }
+                }*/
+                //okHttp实现
+                try {
+                    OkHttpClient client = new OkHttpClient();
+                    Request request = new Request.Builder()
+                            .url("https://api.douban.com/v2/book/isbn/" + result)
+                            .build();
+                    Response response = client.newCall(request).execute();
+                    String responseData = response.body().string();
+                    decodeBookInfo(response.toString());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+    //解析从豆瓣传回来的json数据
+    private void decodeBookInfo(final String response) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(mContext, response , Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
 }
