@@ -4,11 +4,21 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 import cn.a1949science.www.bookrecord.R;
+import cn.a1949science.www.bookrecord.adapter.BookListAdapter;
+import cn.a1949science.www.bookrecord.bean.BookInfo;
 
 
 /**
@@ -20,6 +30,22 @@ import cn.a1949science.www.bookrecord.R;
  * create an instance of this fragment.
  */
 public class WantFragment extends Fragment {
+
+    SwipeRefreshLayout refresh;
+
+    RecyclerView recyclerView;
+
+    private BookInfo[] bookInfos = {new BookInfo("https://img3.doubanio.com/lpic/s29418322.jpg","芳华","2017-4-1","8.1","严歌苓","人民文学出版社"),
+            new BookInfo("https://img3.doubanio.com/lpic/s29418322.jpg","芳华","2017-4-1","8.1","严歌苓","人民文学出版社"),
+            new BookInfo("https://img3.doubanio.com/lpic/s29418322.jpg","芳华","2017-4-1","8.1","严歌苓","人民文学出版社"),
+            new BookInfo("https://img3.doubanio.com/lpic/s29418322.jpg","芳华","2017-4-1","8.1","严歌苓","人民文学出版社")};
+
+    private List<BookInfo> bookInfoList = new ArrayList<>();
+
+    private BookListAdapter adapter;
+
+    LinearLayoutManager mLayoutManager;
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -62,11 +88,51 @@ public class WantFragment extends Fragment {
         }
     }
 
+    private void initList() {
+        bookInfoList.clear();
+        for (int i = 0; i < 50;i++) {
+            Random random = new Random();
+            int index = random.nextInt(bookInfos.length);
+            bookInfoList.add(bookInfos[index]);
+        }
+    }
+
+    private void onClick() {
+
+    }
+
+    private void findView() {
+
+        //下拉刷新
+        mLayoutManager = new LinearLayoutManager(this.getActivity());
+        recyclerView.setLayoutManager(mLayoutManager);
+        addDate();
+        adapter = new BookListAdapter(bookInfoList);
+        recyclerView.setAdapter(adapter);
+        refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+
+            }
+        });
+    }
+
+    private void addDate() {
+        Toast.makeText(getContext(), "请加载数据", Toast.LENGTH_SHORT).show();
+
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_want, container, false);
+        View view = inflater.inflate(R.layout.fragment_want, container, false);
+        recyclerView = view.findViewById(R.id.recycler_view);
+        refresh = view.findViewById(R.id.refresh);
+        findView();
+        initList();
+        onClick();
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event

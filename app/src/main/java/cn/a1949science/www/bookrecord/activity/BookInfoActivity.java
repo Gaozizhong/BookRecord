@@ -3,33 +3,25 @@ package cn.a1949science.www.bookrecord.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ListAdapter;
-import android.widget.ListView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
 
 import cn.a1949science.www.bookrecord.R;
-import cn.a1949science.www.bookrecord.adapter.BookInfoAdapter;
+import cn.a1949science.www.bookrecord.adapter.CommentAdapter;
 import cn.a1949science.www.bookrecord.bean.BookInfoComment;
-import cn.a1949science.www.bookrecord.database.BitmapBytes;
 import cn.a1949science.www.bookrecord.database.MyDatabaseHelper;
 import cn.a1949science.www.bookrecord.widget.MyListView;
 
 public class BookInfoActivity extends AppCompatActivity {
     private LinkedList<BookInfoComment> mData = null;
     private Context mContext=BookInfoActivity.this;
-    private BookInfoAdapter mAdapter = null;
+    private CommentAdapter mAdapter = null;
     private MyListView bookInfoList;
     Button wantRead,reading,havaRead,returnButton;
     private MyDatabaseHelper db;//sqlite数据库
@@ -99,7 +91,7 @@ public class BookInfoActivity extends AppCompatActivity {
         //对数据库得到的结果遍历
         for (int i = 0; i < result.size(); i++) {
             mData.add(new BookInfoComment((Bitmap) result.get(i).get("icon"), result.get(i).get("usernick").toString(), (int) result.get(i).get("rate"), result.get(i).get("comment").toString(), result.get(i).get("data").toString()));
-            mAdapter = new BookInfoAdapter(mData, mContext);
+            mAdapter = new CommentAdapter(mData, mContext);
             bookInfoList.setAdapter(mAdapter);
         }
     }

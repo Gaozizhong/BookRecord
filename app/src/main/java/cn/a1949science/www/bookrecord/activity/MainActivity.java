@@ -43,8 +43,6 @@ import cn.a1949science.www.bookrecord.fragment.WantFragment;
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, WantFragment.OnFragmentInteractionListener {
 
     Context mContext = MainActivity.this;
-    SwipeRefreshLayout refresh;
-    RecyclerView recyclerView;
     private long exitTime = 0;
     Toolbar toolbar;
     DrawerLayout drawer;
@@ -141,30 +139,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         tabViewChildList.add(tabViewChild03);
         tabView = findViewById(R.id.tabView);
         tabView.setTabViewChild(tabViewChildList,getSupportFragmentManager());
-        //下拉刷新
-        refresh = findViewById(R.id.refresh);
-        recyclerView = findViewById(R.id.recycler_view);
-        LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(mLayoutManager);
-        addDate();
-        //adapter = new myAdapterRecyclerView(mContext, routeInfos);
-        //recyclerView.setAdapter(adapter);
-        refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-
-            }
-        });
         searchView = findViewById(R.id.search_view);
         searchView.setVoiceSearch(false);
         //searchView.setCursorDrawable(R.drawable.color_cursor_white);
         //Add suggestions
         searchView.setSuggestions(getResources().getStringArray(R.array.query_suggestions));
-
-    }
-
-    private void addDate() {
-        Toast.makeText(mContext, "请加载数据", Toast.LENGTH_SHORT).show();
 
     }
 
