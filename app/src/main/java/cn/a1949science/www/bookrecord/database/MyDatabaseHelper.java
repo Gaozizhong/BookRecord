@@ -47,7 +47,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
             bookImage.recycle();
             bookImage=null;
         }
-       // db.getReadableDatabase().execSQL("delete from book_info_listview");
+      // db.getReadableDatabase().execSQL("delete from book_info_listview");
         //将参数传递给insertBookInfoListview函数
         insertBookInfoListview(db.getReadableDatabase(),bookByte,context.getResources().getString(R.string.usernick),3,context.getResources().getString(R.string.comment),context.getResources().getString(R.string.data));
     }

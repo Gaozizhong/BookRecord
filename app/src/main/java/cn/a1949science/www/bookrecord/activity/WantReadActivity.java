@@ -33,4 +33,8 @@ Button returnButton;
     private void findView() {
         returnButton=(Button)findViewById(R.id.want_read_return);
     }
+    public void onBackPressed()
+    {
+        finish();
+    }
 }

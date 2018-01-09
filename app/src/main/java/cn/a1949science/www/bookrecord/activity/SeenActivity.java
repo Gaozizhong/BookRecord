@@ -32,4 +32,8 @@ public class SeenActivity extends AppCompatActivity {
     private void findView() {
         returnButton=findViewById(R.id.seen_return);
     }
+    public void onBackPressed()
+    {
+        finish();
+    }
 }

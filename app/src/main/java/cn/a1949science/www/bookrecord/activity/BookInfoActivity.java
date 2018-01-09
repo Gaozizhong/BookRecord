@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Handler;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -28,11 +30,12 @@ import cn.a1949science.www.bookrecord.widget.MyListView;
 
 public class BookInfoActivity extends AppCompatActivity {
     private LinkedList<BookInfoComment> mData = null;
-    private Context mContext=BookInfoActivity.this;
+    private Context mContext = BookInfoActivity.this;
     private BookInfoAdapter mAdapter = null;
     private MyListView bookInfoList;
-    Button wantRead,reading,havaRead,returnButton;
+    Button wantRead, reading, havaRead, returnButton;
     private MyDatabaseHelper db;//sqlite数据库
+    private long exitTime = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,55 +47,58 @@ public class BookInfoActivity extends AppCompatActivity {
         test();//c此方法用于在测试阶段，将样本数据导入数据库
         setListview();
     }
+
     //测试
     private void test() {
-        db=new MyDatabaseHelper(mContext,"book.db3",1);
+        db = new MyDatabaseHelper(mContext, "book.db3", 1);
         //将插入语句注释掉，防止重复插入
-            db.insertBookInfoListview(mContext, db);
+        //db.insertBookInfoListview(mContext, db);
     }
 
     private void findView() {
-        wantRead=(Button)findViewById(R.id.book_info_wantRead);
-        reading=(Button)findViewById(R.id.book_info_reading);
-        havaRead=(Button)findViewById(R.id.book_info_haveRead);
-        returnButton=(Button)findViewById(R.id.book_info_return);
+        wantRead = (Button) findViewById(R.id.book_info_wantRead);
+        reading = (Button) findViewById(R.id.book_info_reading);
+        havaRead = (Button) findViewById(R.id.book_info_haveRead);
+        returnButton = (Button) findViewById(R.id.book_info_return);
     }
+
     //监听事件
     private void onClick() {
         wantRead.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(mContext,WantReadActivity.class);
+                Intent intent = new Intent(mContext, WantReadActivity.class);
                 startActivity(intent);
             }
         });
         reading.setOnClickListener(new View.OnClickListener() {
             @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(mContext,ReadingActivity.class);
-                    startActivity(intent);
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, ReadingActivity.class);
+                startActivity(intent);
             }
         });
         havaRead.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(mContext,SeenActivity.class);
+                Intent intent = new Intent(mContext, SeenActivity.class);
                 startActivity(intent);
             }
         });
         returnButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(mContext,MainActivity.class);
+                Intent intent = new Intent(mContext, MainActivity.class);
                 startActivity(intent);
             }
         });
     }
-//设置listview
+
+    //设置listview
     private void setListview() {
 
-        ArrayList<Map<String,Object>> result;
-        result=db.resultBookInfoListview(mContext,db);
+        ArrayList<Map<String, Object>> result;
+        result = db.resultBookInfoListview(mContext, db);
         bookInfoList = (MyListView) findViewById(R.id.book_info_list);
         mData = new LinkedList<BookInfoComment>();
         //对数据库得到的结果遍历
@@ -102,14 +108,18 @@ public class BookInfoActivity extends AppCompatActivity {
             bookInfoList.setAdapter(mAdapter);
         }
     }
-    public void OnDestroy()
-    {
+
+    public void OnDestroy() {
         super.onDestroy();
-        if (db!=null)
-        {
+        if (db != null) {
             db.close();
         }
     }
-}
 
-//将图片转化为字节
+    public void onBackPressed() {
+        Intent intent = new Intent(this,MainActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+}
