@@ -12,7 +12,7 @@
         android:layout_height="wrap_content">
 
         <ImageView
-            android:id="@+id/want_to_read_item"
+            android:id="@+id/book_image"
             android:layout_width="100dp"
             android:layout_height="140dp"
             android:layout_margin="10dp"
@@ -32,7 +32,7 @@
 
                 <TextView
                     android:id="@+id/book_name"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="clip_horizontal"
                     android:textColor="@color/black"
@@ -45,7 +45,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:textColor="@color/text_gray"
-                    android:textSize="15sp"
+                    android:textSize="12sp"
                     android:layout_marginEnd="20dp"/>
 
             </LinearLayout>
@@ -57,27 +57,32 @@
                 android:layout_height="wrap_content">
 
                 <com.willy.ratingbar.ScaleRatingBar
+                    android:layout_weight="3"
                     android:id="@+id/simpleRatingBar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:srb_starWidth="20dp"
-                    app:srb_starHeight="20dp"
-                    app:srb_starPadding="0dp"
+                    app:srb_starWidth="18dp"
+                    app:srb_starHeight="18dp"
+                    app:srb_starPadding="2dp"
                     app:srb_numStars="5"
-                    app:srb_stepSize="0.5"
-                    app:srb_rating="5"
+                    app:srb_stepSize="0.1"
+                    app:srb_rating="2"
                     app:srb_isIndicator="true"
+                    app:srb_clickable="true"
+                    app:srb_scrollable="true"
+                    app:srb_clearRatingEnabled="true"
                     app:srb_drawableEmpty="@mipmap/ministar_empty"
                     app:srb_drawableFilled="@mipmap/ministar_full">
                 </com.willy.ratingbar.ScaleRatingBar>
 
                 <TextView
+                    android:layout_weight="3"
                     android:id="@+id/rating"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="clip_horizontal"
+                    android:layout_gravity="center_vertical"
                     android:textColor="@color/text_gray"
-                    android:textSize="16sp"/>
+                    android:textSize="12sp"/>
             </LinearLayout>
 
 
@@ -87,7 +92,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="clip_horizontal"
                 android:textColor="@color/text_gray"
-                android:textSize="15sp"/>
+                android:textSize="16sp"/>
 
             <LinearLayout
                 android:orientation="horizontal"
@@ -100,7 +105,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="top"
                     android:textColor="@color/text_gray"
-                    android:textSize="15sp"
+                    android:textSize="16sp"
                     android:layout_weight="1"/>
 
                 <Button

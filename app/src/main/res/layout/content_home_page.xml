@@ -9,6 +9,7 @@
 
     <com.ycl.tabview.library.TabView
         android:id="@+id/tabView"
+        app:tab_textViewSelColor="#33CCFF"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:tab_imageViewHeight="20dip"

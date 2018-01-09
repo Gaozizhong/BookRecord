@@ -38,9 +38,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.a1949science.www.bookrecord.R;
+import cn.a1949science.www.bookrecord.fragment.ReadingFragment;
+import cn.a1949science.www.bookrecord.fragment.SeenFragment;
 import cn.a1949science.www.bookrecord.fragment.WantFragment;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, WantFragment.OnFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity implements
+        NavigationView.OnNavigationItemSelectedListener, WantFragment.OnFragmentInteractionListener
+        ,ReadingFragment.OnFragmentInteractionListener,SeenFragment.OnFragmentInteractionListener {
 
     Context mContext = MainActivity.this;
     private long exitTime = 0;
@@ -132,8 +136,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //为底部导航栏添加数据源
         List<TabViewChild> tabViewChildList=new ArrayList<>();
         TabViewChild tabViewChild01=new TabViewChild(R.drawable.wanting,R.drawable.wanting,"想读", WantFragment.newInstance("想读","1"));
-        TabViewChild tabViewChild02=new TabViewChild(R.drawable.reading,R.drawable.reading,"在读",  WantFragment.newInstance("在读","2"));
-        TabViewChild tabViewChild03=new TabViewChild(R.drawable.seen,R.drawable.seen,"读过",  WantFragment.newInstance("读过","3"));
+        TabViewChild tabViewChild02=new TabViewChild(R.drawable.reading,R.drawable.reading,"在读",  ReadingFragment.newInstance("在读","1"));
+        TabViewChild tabViewChild03=new TabViewChild(R.drawable.seen,R.drawable.seen,"读过",  SeenFragment.newInstance("读过","1"));
         tabViewChildList.add(tabViewChild01);
         tabViewChildList.add(tabViewChild02);
         tabViewChildList.add(tabViewChild03);
