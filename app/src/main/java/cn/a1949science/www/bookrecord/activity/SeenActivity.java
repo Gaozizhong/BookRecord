@@ -11,8 +11,7 @@ import cn.a1949science.www.bookrecord.R;
 
 public class SeenActivity extends AppCompatActivity {
     Context context=SeenActivity.this;
-    private Button returnButton;
-
+       private Button returnButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,12 +25,15 @@ public class SeenActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 finish();
-                overridePendingTransition(R.anim.slide_left_in,R.anim.slide_right_out);
             }
         });
     }
 
     private void findView() {
-        returnButton= findViewById(R.id.seen_return);
+        returnButton=findViewById(R.id.seen_return);
+    }
+    public void onBackPressed()
+    {
+        finish();
     }
 }

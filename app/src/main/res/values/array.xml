@@ -7,4 +7,25 @@
         <item>Ruby</item>
         <item>JavaScript</item>
     </string-array>
+    <string-array name="readway">
+        <item>自己的书</item>
+        <item>借图书馆</item>
+        <item>借朋友的</item>
+        <item>kindle</item>
+        <item>微信读书</item>
+        <item>网易蜗牛阅读</item>
+        <item>其他</item>
+    </string-array>
+    <string-array name="readclassfy">
+        <item>中图法</item>
+    </string-array>
+    <string-array name="seen_date">
+        <item>刚刚读完</item>
+        <item>一周之前</item>
+        <item>一个月之前</item>
+        <item>三个月之前</item>
+        <item>半年之前</item>
+        <item>一年之前</item>
+        <item>很久之前</item>
+    </string-array>
 </resources>
