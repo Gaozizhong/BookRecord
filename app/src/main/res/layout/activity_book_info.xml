@@ -160,7 +160,7 @@
                 android:layout_marginLeft="20dp"
                 android:text="想读"
                 android:background="@drawable/book_info_bg_border"
-                android:textColor="#ff6702"/>
+                android:textColor="@color/orange"/>
             <Button
                 android:id="@+id/book_info_reading"
                 android:layout_width="wrap_content"

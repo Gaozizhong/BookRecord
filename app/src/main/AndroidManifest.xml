@@ -47,7 +47,7 @@
         <activity android:name=".activity.SeenActivity" />
         <activity android:name=".activity.AdviceActivity" />
         <activity android:name=".activity.AboutUsActivity" />
-        <activity android:name=".activity.ScanISBN"></activity>
+        <activity android:name=".activity.ScanISBN"/>
     </application>
 
 </manifest>
