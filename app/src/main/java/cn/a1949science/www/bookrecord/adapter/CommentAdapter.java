@@ -15,13 +15,13 @@ import cn.a1949science.www.bookrecord.bean.BookInfoComment;
 import cn.a1949science.www.bookrecord.widget.CircleImageView;
 
 //自定义BaseAdapter
-public class BookInfoAdapter extends BaseAdapter {
+public class CommentAdapter extends BaseAdapter {
     private LinkedList<BookInfoComment> mData;//保存多个读书类
     private Context mContext;
 
-    public BookInfoAdapter()
+    public CommentAdapter()
     {}
-    public BookInfoAdapter(LinkedList<BookInfoComment> mData,Context context)
+    public CommentAdapter(LinkedList<BookInfoComment> mData, Context context)
     {
         this.mData=mData;
         this.mContext=context;
