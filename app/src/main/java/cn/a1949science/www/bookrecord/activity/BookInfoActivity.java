@@ -64,7 +64,6 @@ public class BookInfoActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(mContext,WantReadActivity.class);
                 startActivity(intent);
-                finish();
             }
         });
         reading.setOnClickListener(new View.OnClickListener() {
@@ -72,7 +71,6 @@ public class BookInfoActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     Intent intent = new Intent(mContext,ReadingActivity.class);
                     startActivity(intent);
-                    finish();
             }
         });
         havaRead.setOnClickListener(new View.OnClickListener() {
@@ -80,7 +78,6 @@ public class BookInfoActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(mContext,SeenActivity.class);
                 startActivity(intent);
-                finish();
             }
         });
         returnButton.setOnClickListener(new View.OnClickListener() {
@@ -88,7 +85,6 @@ public class BookInfoActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(mContext,MainActivity.class);
                 startActivity(intent);
-                finish();
             }
         });
     }

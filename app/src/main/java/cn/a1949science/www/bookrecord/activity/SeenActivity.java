@@ -24,14 +24,12 @@ public class SeenActivity extends AppCompatActivity {
         returnButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(context,BookInfoActivity.class);
-                startActivity(intent);
                 finish();
             }
         });
     }
 
     private void findView() {
-        returnButton=(Button)findViewById(R.id.seen_return);
+        returnButton=findViewById(R.id.seen_return);
     }
 }
