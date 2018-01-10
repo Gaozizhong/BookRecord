@@ -216,11 +216,11 @@ public class MainActivity extends AppCompatActivity implements
             // Handle the camera action
         } else if (id == R.id.nav_advice)
         {
-            Intent intent = new Intent(this,AdviceActivity.class);
+            Intent intent = new Intent(mContext,AdviceActivity.class);
             startActivity(intent);
             finish();
         } else if (id == R.id.nav_about) {
-            Intent intent = new Intent(this,AboutUsActivity.class);
+            Intent intent = new Intent(mContext,AboutUsActivity.class);
             startActivity(intent);
             finish();
         }else if (id == R.id.nav_update) {
