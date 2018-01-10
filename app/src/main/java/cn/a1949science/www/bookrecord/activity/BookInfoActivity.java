@@ -3,28 +3,18 @@ package cn.a1949science.www.bookrecord.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.Handler;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ListAdapter;
-import android.widget.ListView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
 
 import cn.a1949science.www.bookrecord.R;
 import cn.a1949science.www.bookrecord.adapter.CommentAdapter;
 import cn.a1949science.www.bookrecord.bean.BookInfoComment;
-import cn.a1949science.www.bookrecord.database.BitmapBytes;
 import cn.a1949science.www.bookrecord.database.MyDatabaseHelper;
 import cn.a1949science.www.bookrecord.widget.MyListView;
 

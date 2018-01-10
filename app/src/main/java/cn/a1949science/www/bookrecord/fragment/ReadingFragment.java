@@ -3,7 +3,6 @@ package cn.a1949science.www.bookrecord.fragment;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -21,16 +20,15 @@ import cn.a1949science.www.bookrecord.R;
 import cn.a1949science.www.bookrecord.adapter.BookListAdapter;
 import cn.a1949science.www.bookrecord.bean.BookInfo;
 
-
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link WantFragment.OnFragmentInteractionListener} interface
+ * {@link ReadingFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link WantFragment#newInstance} factory method to
+ * Use the {@link ReadingFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class WantFragment extends Fragment {
+public class ReadingFragment extends Fragment {
 
     private SwipeRefreshLayout refresh;
 
@@ -58,7 +56,7 @@ public class WantFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    public WantFragment() {
+    public ReadingFragment() {
         // Required empty public constructor
     }
 
@@ -68,11 +66,11 @@ public class WantFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment WantFragment.
+     * @return A new instance of fragment ReadingFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static WantFragment newInstance(String param1, String param2) {
-        WantFragment fragment = new WantFragment();
+    public static ReadingFragment newInstance(String param1, String param2) {
+        ReadingFragment fragment = new ReadingFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -101,7 +99,8 @@ public class WantFragment extends Fragment {
 
     //adapter中添加数据
     private void addDate() {
-        adapter = new BookListAdapter(bookInfoList,"want");
+        //Toast.makeText(getContext(), "请加载数据", Toast.LENGTH_SHORT).show();
+        adapter = new BookListAdapter(bookInfoList,"reading");
         recyclerView.setAdapter(adapter);
 
     }
@@ -110,9 +109,9 @@ public class WantFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_want, container, false);
-        recyclerView = view.findViewById(R.id.recycler_view);
-        refresh = view.findViewById(R.id.refresh_want);
+        View view = inflater.inflate(R.layout.fragment_reading, container, false);
+        recyclerView = view.findViewById(R.id.recycler_reading);
+        refresh = view.findViewById(R.id.refresh_reading);
         //刷新控件颜色设置
         refresh.setColorSchemeResources(android.R.color.holo_blue_light,
                 android.R.color.holo_red_light, android.R.color.holo_orange_light, android.R.color.holo_green_light);
