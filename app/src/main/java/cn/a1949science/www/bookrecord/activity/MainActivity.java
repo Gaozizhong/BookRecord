@@ -1,6 +1,7 @@
 package cn.a1949science.www.bookrecord.activity;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -22,6 +23,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
@@ -43,6 +45,7 @@ import cn.a1949science.www.bookrecord.fragment.ReadingFragment;
 import cn.a1949science.www.bookrecord.fragment.SeenFragment;
 import cn.a1949science.www.bookrecord.fragment.WantFragment;
 import cn.a1949science.www.bookrecord.utils.BookInfoGetFromDouban;
+import cn.a1949science.www.bookrecord.widget.CircleImageView;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -58,6 +61,8 @@ public class MainActivity extends AppCompatActivity implements
     View headerLayout;
     TabView tabView;
     MaterialSearchView searchView;
+    CircleImageView favicon;
+    TextView nickname;
     private int REQUEST_CODE = 5,REQUEST_CAMERA_PERMISSION = 0;
 
     @Override
@@ -89,6 +94,8 @@ public class MainActivity extends AppCompatActivity implements
                 //overridePendingTransition(R.anim.slide_right_in,R.anim.slide_left_out);
             }
         });
+        nickname = headerLayout.findViewById(R.id.nickname);
+        favicon = headerLayout.findViewById(R.id.favicon);
     }
 
     //点击事件
@@ -265,39 +272,6 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
-    //从豆瓣服务器获取相应的图书信息
-    private void getBookInfo(final String result) {
 
-    }
-
-    //解析从豆瓣传回来的json数据
-    private void decodeBookInfo(final String responseData) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                JSONObject jsonObject = JSON.parseObject(responseData);
-                BookInfo bookInfo = new BookInfo();
-                String imageUrl = jsonObject.getString("image");
-                bookInfo.setImageUrl(imageUrl);
-                String bookName = jsonObject.getString("title");
-                bookInfo.setBookName(bookName);
-                String publishDate = jsonObject.getString("pubdate");
-                bookInfo.setPublishDate(publishDate);
-                String rating = jsonObject.getString("rating");
-                JSONObject ratingObject = JSON.parseObject(rating);
-                rating = ratingObject.getString("average");
-                bookInfo.setRating(rating);
-                String authorName = jsonObject.getString("author");
-                bookInfo.setAuthorName(authorName);
-                String publish = jsonObject.getString("publisher");
-                bookInfo.setPublish(publish);
-                String ISBN = jsonObject.getString("isbn13");
-                bookInfo.setISBN(ISBN);
-                String book_summary = jsonObject.getString("summary");
-                bookInfo.setBook_summary(book_summary);
-                Toast.makeText(mContext, rating , Toast.LENGTH_LONG).show();
-            }
-        });
-    }
 
 }
