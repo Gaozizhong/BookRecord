@@ -1,7 +1,9 @@
 package cn.a1949science.www.bookrecord.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.CountDownTimer;
 import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
@@ -38,6 +40,12 @@ public class LoginActivity extends AppCompatActivity {
 
     //事件
     private void onClick() {
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                phoneNumber.setText("");
+            }
+        });
         //对输入的电话号码进行判断
         phoneNumber.addTextChangedListener(new TextWatcher() {
             @Override
@@ -56,30 +64,37 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        //登录按钮的触发事件
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //验证验证码是否正确
-                new Thread(){
-                    @Override
-                    public void run(){
-                        String code = verification.getText().toString();
-                        try {
-                            String str = MobileMessageCheck.checkMsg(phoneNumber.getText().toString(), code);
-                            if(str.equals("success")){
-                                Intent intent = new Intent(mContext, MainActivity.class);
-                                startActivity(intent);
-                                finish();
-                            }else{
-                                Looper.prepare();
-                                Toast.makeText(mContext, "验证失败！", Toast.LENGTH_LONG).show();
-                                Looper.loop();
+                if (!phoneNumber.getText().toString().equals("") && !verification.getText().toString().equals("")) {
+                    //验证验证码是否正确
+                    new Thread() {
+                        @Override
+                        public void run() {
+                            String code = verification.getText().toString();
+                            try {
+                                String str = MobileMessageCheck.checkMsg(phoneNumber.getText().toString(), code);
+                                if (str.equals("success")) {
+                                    String userId = addDataToMysql(phoneNumber.getText().toString(), System.currentTimeMillis());
+                                    addDataToLocal(userId, phoneNumber.getText().toString(), System.currentTimeMillis() + 30 * 24 * 60 * 60 * 1000);
+                                    Intent intent = new Intent(mContext, MainActivity.class);
+                                    startActivity(intent);
+                                    finish();
+                                } else {
+                                    Looper.prepare();
+                                    Toast.makeText(mContext, "验证失败！", Toast.LENGTH_LONG).show();
+                                    Looper.loop();
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
                             }
-                        } catch (Exception e) {
-                            e.printStackTrace();
                         }
-                    }
-                }.start();
+                    }.start();
+                } else {
+                    Toast.makeText(mContext, "请填写正确的信息！", Toast.LENGTH_LONG).show();
+                }
 
             }
         });
@@ -127,12 +142,29 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    //把用户数据写入到本地
+    private void addDataToLocal(String userId,String phoneNumber,Long deadline) {
+        SharedPreferences sp = mContext.getSharedPreferences("userData", MODE_PRIVATE);
+        @SuppressLint("CommitPrefEdits") SharedPreferences.Editor editor = sp.edit();
+        editor.putString("phoneNumber", phoneNumber);
+        editor.putString("userId", userId);
+        editor.putLong("deadline", deadline);
+        editor.apply();
+    }
+
+    //把用户数据写入到数据库中
+    private String addDataToMysql(String phoneNumber, Long time) {
+        //把两个参数存到服务器中，返回userId
+
+        return phoneNumber;
+    }
+
     private void findView() {
-        phoneNumber=(EditText)findViewById(R.id.phoneNumber);
-        verification=(EditText)findViewById(R.id.verification);
-        delete=(Button)findViewById(R.id.phoneNumberDelete);
-        getverification=(Button)findViewById(R.id.VerificationButton);
-        loginButton=(Button)findViewById(R.id.loginButton);
+        phoneNumber= findViewById(R.id.phoneNumber);
+        verification= findViewById(R.id.verification);
+        delete= findViewById(R.id.phoneNumberDelete);
+        getverification= findViewById(R.id.VerificationButton);
+        loginButton= findViewById(R.id.loginButton);
     }
 
 

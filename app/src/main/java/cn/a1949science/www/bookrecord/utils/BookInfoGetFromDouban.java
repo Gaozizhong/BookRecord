@@ -53,12 +53,17 @@ public class BookInfoGetFromDouban {
             }
         }*/
         //okHttp实现
+        String responseData = null;
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
                 .url("https://api.douban.com/v2/book/isbn/" + ISBN_scan)
                 .build();
         Response response = client.newCall(request).execute();
-        String responseData = response.body().string();
+        if (response.isSuccessful()) {
+            responseData = response.body().string();
+        } else {
+            throw new IOException("Unexpected code"+response);
+        }
         //解析从豆瓣传回来的json数据
         JSONObject jsonObject = JSON.parseObject(responseData);
         BookInfo bookInfo = new BookInfo();

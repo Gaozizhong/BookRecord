@@ -42,6 +42,7 @@ import cn.a1949science.www.bookrecord.fragment.ReadingFragment;
 import cn.a1949science.www.bookrecord.fragment.SeenFragment;
 import cn.a1949science.www.bookrecord.fragment.WantFragment;
 import cn.a1949science.www.bookrecord.utils.BookInfoGetFromDouban;
+import cn.a1949science.www.bookrecord.utils.HttpUtils;
 import cn.a1949science.www.bookrecord.widget.CircleImageView;
 
 public class MainActivity extends AppCompatActivity implements
@@ -254,6 +255,7 @@ public class MainActivity extends AppCompatActivity implements
                 }
                 if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_SUCCESS) {
                     final String result = bundle.getString(CodeUtils.RESULT_STRING);
+                    Toast.makeText(MainActivity.this, HttpUtils.doGetAsy("https://api.douban.com/v2/book/isbn/" + result), Toast.LENGTH_LONG).show();
                     //开启线程来发起网络请求
                     new Thread(new Runnable() {
                         @Override

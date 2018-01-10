@@ -46,6 +46,7 @@ public class NetUtils {
     public static boolean isOpenNetwork(Context context) {
         ConnectivityManager connManager = (ConnectivityManager) context
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
+        assert connManager != null;
         if (connManager.getActiveNetworkInfo() != null) {
             return connManager.getActiveNetworkInfo().isAvailable();
         }
@@ -104,7 +105,7 @@ public class NetUtils {
                 }
                 return builder.toString();
             }
-        } catch (Exception e) {
+        } catch (Exception ignored) {
 
         }
 
@@ -133,7 +134,7 @@ public class NetUtils {
                 System.out.println(statueCode);
                 return EntityUtils.toString(response.getEntity());
             }
-        } catch (Exception e) {
+        } catch (Exception ignored) {
 
         }
 

@@ -1,7 +1,9 @@
 package cn.a1949science.www.bookrecord.activity;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,6 +16,8 @@ import cn.a1949science.www.bookrecord.R;
 import cn.a1949science.www.bookrecord.widget.PermissionsChecker;
 
 public class StartActivity extends AppCompatActivity {
+
+    Context mContext = StartActivity.this;
 
     private static final int REQUEST_CODE = 0; // 请求码
     // 所需的全部权限
@@ -59,8 +63,9 @@ public class StartActivity extends AppCompatActivity {
 
     private void redirectTo(){
         //判断用户是否登录过
-        if (false) {
-            Intent intent = new Intent(this, MainActivity.class);
+        SharedPreferences sp = mContext.getSharedPreferences("userData", Context.MODE_PRIVATE);
+        if (sp.getString("userId",null) == null || (sp.getLong("deadline",0) < System.currentTimeMillis()) ) {
+            Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
             finish();
         } else {
