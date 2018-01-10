@@ -6,7 +6,6 @@
     android:background="#ddd"
     android:orientation="vertical"
     android:gravity="center_horizontal">
-
         <android.support.v7.widget.Toolbar
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
@@ -27,12 +26,16 @@
                 android:textSize="20dp"
                 android:textColor="@android:color/black"/>
         </android.support.v7.widget.Toolbar>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="#fff">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
             android:orientation="vertical"
             android:background="#fff"
             android:gravity="center_horizontal"
@@ -183,4 +186,5 @@
                 android:textSize="16dp"
                 android:textColor="#fff"/>
         </LinearLayout>
+    </ScrollView>
     </LinearLayout>

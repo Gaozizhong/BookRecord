@@ -1,26 +1,26 @@
 package cn.a1949science.www.bookrecord.activity;
 
 import android.content.Context;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
 import cn.a1949science.www.bookrecord.R;
 
-public class AboutUsActivity extends AppCompatActivity {
-Context context=AboutUsActivity.this;
-Button returnButton;
+public class UserInfoActivity extends AppCompatActivity {
+    Context context=UserInfoActivity.this;
+    Button userReturn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_about_us);
+        setContentView(R.layout.activity_user_info);
         findView();
         onClick();
     }
 
     private void onClick() {
-        returnButton.setOnClickListener(new View.OnClickListener() {
+        userReturn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 finish();
@@ -29,7 +29,7 @@ Button returnButton;
     }
 
     private void findView() {
-        returnButton=findViewById(R.id.about_us_return_button);
+        userReturn=findViewById(R.id.user_info_return_button);
     }
 
     @Override

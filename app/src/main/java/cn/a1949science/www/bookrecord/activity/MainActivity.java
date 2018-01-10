@@ -14,11 +14,8 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -34,13 +31,6 @@ import com.uuzuche.lib_zxing.activity.ZXingLibrary;
 import com.ycl.tabview.library.TabView;
 import com.ycl.tabview.library.TabViewChild;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -217,10 +207,15 @@ public class MainActivity extends AppCompatActivity implements
 
         if (id == R.id.nav_statistic) {
             // Handle the camera action
-        } else if (id == R.id.nav_advice) {
-
+        } else if (id == R.id.nav_advice)
+        {
+            Intent intent = new Intent(this,AdviceActivity.class);
+            startActivity(intent);
+            finish();
         } else if (id == R.id.nav_about) {
-
+            Intent intent = new Intent(this,AboutUsActivity.class);
+            startActivity(intent);
+            finish();
         } else if (id == R.id.nav_update) {
 
         }else if (id == R.id.nav_quit) {

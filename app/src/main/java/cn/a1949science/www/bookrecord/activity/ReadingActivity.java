@@ -109,7 +109,7 @@ private Spinner  reading_classfy=null;
                        String city=amapLocation.getCity();//城市信息
                         String block=amapLocation.getDistrict();//城区信息
                        String street= amapLocation.getStreet();//街道信息
-                      String streetNumber=amapLocation.getStreetNum();//街道门牌号信息
+                         String streetNumber=amapLocation.getStreetNum();//街道门牌号信息
                       adressText.setText(country+province+city+block+street+streetNumber);
                     } else {
                         //定位失败时，可通过ErrCode（错误码）信息来确定失败的原因，errInfo是错误信息，详见错误码表。

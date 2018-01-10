@@ -1,9 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#ddd"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
     tools:context="cn.a1949science.www.bookrecord.activity.AdviceActivity">
-
-</android.support.constraint.ConstraintLayout>
+<android.support.v7.widget.Toolbar
+    android:layout_width="match_parent"
+    android:layout_height="?attr/actionBarSize"
+    android:background="@android:color/white">
+    <Button
+        android:id="@+id/advice_return_button"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:background="@mipmap/returnbutton"/>
+    <ImageView
+        android:layout_width="30dp"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/verticalline" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="意见反馈"
+        android:textSize="20dp"
+        android:textColor="@android:color/black"/>
+</android.support.v7.widget.Toolbar>
+        <TextView
+            android:id="@+id/advice_text"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:hint="请提出您的宝贵意见"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
+            android:gravity="center_horizontal|center_vertical"
+            android:background="@android:color/white"
+           />
+    <Button
+        android:id="@+id/advice_button"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:layout_marginTop="50dp"
+        android:text="确定"
+        android:textColor="#fff"
+        android:background="#ff7b02"/>
+</LinearLayout>
