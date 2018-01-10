@@ -45,7 +45,7 @@ public class CommentAdapter extends BaseAdapter {
         return position;
     }
 
-//listview每包含一行就会执行一次getview
+    //listview每包含一行就会执行一次getview
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         convertView = LayoutInflater.from(mContext).inflate(R.layout.book_info_list,parent,false);

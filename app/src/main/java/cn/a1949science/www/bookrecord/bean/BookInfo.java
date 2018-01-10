@@ -19,13 +19,23 @@ public class BookInfo {
 
     private String publish;
 
-    public BookInfo(String imageUrl,String bookName,String publishDate,String rating,String authorName,String publish) {
+    private String ISBN;
+
+    private String book_summary;
+
+    public BookInfo() {
+
+    }
+
+    public BookInfo(String imageUrl, String bookName, String publishDate, String rating, String authorName, String publish) {
         this.imageUrl = imageUrl;
         this.bookName = bookName;
         this.publishDate = publishDate;
         this.rating = rating;
         this.authorName = authorName;
         this.publish = publish;
+        this.ISBN = ISBN;
+        this.book_summary = book_summary;
     }
 
     public void setImageUrl(String imageUrl) {
@@ -74,5 +84,21 @@ public class BookInfo {
 
     public String getPublish() {
         return publish;
+    }
+
+    public void setISBN(String ISBN) {
+        this.ISBN = ISBN;
+    }
+
+    public String getISBN() {
+        return ISBN;
+    }
+
+    public void setBook_summary(String book_summary) {
+        this.book_summary = book_summary;
+    }
+
+    public String getBook_summary() {
+        return book_summary;
     }
 }

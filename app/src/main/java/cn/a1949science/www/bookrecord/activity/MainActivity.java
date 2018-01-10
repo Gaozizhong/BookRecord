@@ -14,11 +14,8 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -27,6 +24,8 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 import com.uuzuche.lib_zxing.activity.CaptureActivity;
 import com.uuzuche.lib_zxing.activity.CodeUtils;
@@ -34,20 +33,16 @@ import com.uuzuche.lib_zxing.activity.ZXingLibrary;
 import com.ycl.tabview.library.TabView;
 import com.ycl.tabview.library.TabViewChild;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
 import cn.a1949science.www.bookrecord.R;
+import cn.a1949science.www.bookrecord.bean.BookInfo;
 import cn.a1949science.www.bookrecord.fragment.ReadingFragment;
 import cn.a1949science.www.bookrecord.fragment.SeenFragment;
 import cn.a1949science.www.bookrecord.fragment.WantFragment;
+import cn.a1949science.www.bookrecord.utils.BookInfoGetFromDouban;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -251,9 +246,18 @@ public class MainActivity extends AppCompatActivity implements
                     return;
                 }
                 if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_SUCCESS) {
-                    String result = bundle.getString(CodeUtils.RESULT_STRING);
-                    getBookInfo(result);
-                    //Toast.makeText(this, "解析结果:" + result, Toast.LENGTH_LONG).show();
+                    final String result = bundle.getString(CodeUtils.RESULT_STRING);
+                    //开启线程来发起网络请求
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                BookInfo bookInfo = BookInfoGetFromDouban.BookInfoGet(result);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }).start();
                 } else if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_FAILED) {
                     Toast.makeText(MainActivity.this, "解析二维码失败", Toast.LENGTH_LONG).show();
                 }
@@ -263,64 +267,35 @@ public class MainActivity extends AppCompatActivity implements
 
     //从豆瓣服务器获取相应的图书信息
     private void getBookInfo(final String result) {
-        //开启线程来发起网络请求
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                //HttpURLConnection实现
-                /*HttpURLConnection connection = null;
-                BufferedReader reader = null;
-                try{
-                    URL url = new URL("https://api.douban.com/v2/book/isbn/" + result);
-                    connection = (HttpURLConnection) url.openConnection();
-                    connection.setRequestMethod("GET");
-                    connection.setConnectTimeout(8000);
-                    connection.setReadTimeout(8000);
-                    InputStream in = connection.getInputStream();
-                    //下面对获取到的输入流进行读取
-                    reader = new BufferedReader(new InputStreamReader(in));
-                    StringBuilder response = new StringBuilder();
-                    String line;
-                    while ((line = reader.readLine()) != null) {
-                        response.append(line);
-                    }
-                    decodeBookInfo(response.toString());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                } finally {
-                    if (reader != null) {
-                        try {
-                            reader.close();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    if (connection != null) {
-                        connection.disconnect();
-                    }
-                }*/
-                //okHttp实现
-                try {
-                    OkHttpClient client = new OkHttpClient();
-                    Request request = new Request.Builder()
-                            .url("https://api.douban.com/v2/book/isbn/" + result)
-                            .build();
-                    Response response = client.newCall(request).execute();
-                    String responseData = response.body().string();
-                    decodeBookInfo(response.toString());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
+
     }
 
     //解析从豆瓣传回来的json数据
-    private void decodeBookInfo(final String response) {
+    private void decodeBookInfo(final String responseData) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Toast.makeText(mContext, response , Toast.LENGTH_LONG).show();
+                JSONObject jsonObject = JSON.parseObject(responseData);
+                BookInfo bookInfo = new BookInfo();
+                String imageUrl = jsonObject.getString("image");
+                bookInfo.setImageUrl(imageUrl);
+                String bookName = jsonObject.getString("title");
+                bookInfo.setBookName(bookName);
+                String publishDate = jsonObject.getString("pubdate");
+                bookInfo.setPublishDate(publishDate);
+                String rating = jsonObject.getString("rating");
+                JSONObject ratingObject = JSON.parseObject(rating);
+                rating = ratingObject.getString("average");
+                bookInfo.setRating(rating);
+                String authorName = jsonObject.getString("author");
+                bookInfo.setAuthorName(authorName);
+                String publish = jsonObject.getString("publisher");
+                bookInfo.setPublish(publish);
+                String ISBN = jsonObject.getString("isbn13");
+                bookInfo.setISBN(ISBN);
+                String book_summary = jsonObject.getString("summary");
+                bookInfo.setBook_summary(book_summary);
+                Toast.makeText(mContext, rating , Toast.LENGTH_LONG).show();
             }
         });
     }
