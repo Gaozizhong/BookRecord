@@ -44,7 +44,6 @@ public class BookInfoActivity extends AppCompatActivity {
         //将插入语句注释掉，防止重复插入
         //db.insertBookInfoListview(mContext, db);
     }
-
     private void findView() {
         wantRead = (Button) findViewById(R.id.book_info_wantRead);
         reading = (Button) findViewById(R.id.book_info_reading);
@@ -78,8 +77,7 @@ public class BookInfoActivity extends AppCompatActivity {
         returnButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(mContext, MainActivity.class);
-                startActivity(intent);
+              finish();
             }
         });
     }
@@ -98,7 +96,6 @@ public class BookInfoActivity extends AppCompatActivity {
             bookInfoList.setAdapter(mAdapter);
         }
     }
-
     public void OnDestroy() {
         super.onDestroy();
         if (db != null) {
@@ -107,8 +104,6 @@ public class BookInfoActivity extends AppCompatActivity {
     }
 
     public void onBackPressed() {
-        Intent intent = new Intent(this,MainActivity.class);
-        startActivity(intent);
         finish();
     }
 

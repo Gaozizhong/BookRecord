@@ -104,14 +104,13 @@ private Spinner  reading_classfy=null;
                 if (amapLocation != null) {
                     if (amapLocation.getErrorCode() == 0) {
                         //可在其中解析amapLocation获取相应内容。
-                        String country=amapLocation.getCountry();//国家信息
-                        String province=amapLocation.getProvince();//省信息
-                        String city=amapLocation.getCity();//城市信息
+                       String country=amapLocation.getCountry();//国家信息
+                       String province=amapLocation.getProvince();//省信息
+                       String city=amapLocation.getCity();//城市信息
                         String block=amapLocation.getDistrict();//城区信息
-                        String street= amapLocation.getStreet();//街道信息
-                        String streetNumber=amapLocation.getStreetNum();//街道门牌号信息
-                        Toast.makeText(context, country , Toast.LENGTH_LONG).show();
-                        adressText.setText(country+province+city+block+street+streetNumber);
+                       String street= amapLocation.getStreet();//街道信息
+                         String streetNumber=amapLocation.getStreetNum();//街道门牌号信息
+                      adressText.setText(country+province+city+block+street+streetNumber);
                     } else {
                         //定位失败时，可通过ErrCode（错误码）信息来确定失败的原因，errInfo是错误信息，详见错误码表。
                         Log.e("AmapError", "location Error, ErrCode:"
