@@ -1,7 +1,6 @@
 package cn.a1949science.www.bookrecord.activity;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -26,8 +25,6 @@ import android.widget.AdapterView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 import com.uuzuche.lib_zxing.activity.CaptureActivity;
 import com.uuzuche.lib_zxing.activity.CodeUtils;
@@ -46,9 +43,6 @@ import cn.a1949science.www.bookrecord.fragment.SeenFragment;
 import cn.a1949science.www.bookrecord.fragment.WantFragment;
 import cn.a1949science.www.bookrecord.utils.BookInfoGetFromDouban;
 import cn.a1949science.www.bookrecord.widget.CircleImageView;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener, WantFragment.OnFragmentInteractionListener
@@ -89,10 +83,11 @@ public class MainActivity extends AppCompatActivity implements
         headerLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Intent it = new Intent(mContext,User_Info.class);
-                //startActivity(it);
-                //overridePendingTransition(R.anim.slide_right_in,R.anim.slide_left_out);
+                Intent it = new Intent(mContext,UserInfoActivity.class);
+                startActivity(it);
+                overridePendingTransition(R.anim.slide_right_in,R.anim.slide_left_out);
             }
+
         });
         nickname = headerLayout.findViewById(R.id.nickname);
         favicon = headerLayout.findViewById(R.id.favicon);
@@ -219,11 +214,16 @@ public class MainActivity extends AppCompatActivity implements
 
         if (id == R.id.nav_statistic) {
             // Handle the camera action
-        } else if (id == R.id.nav_advice) {
-
+        } else if (id == R.id.nav_advice)
+        {
+            Intent intent = new Intent(this,AdviceActivity.class);
+            startActivity(intent);
+            finish();
         } else if (id == R.id.nav_about) {
-
-        } else if (id == R.id.nav_update) {
+            Intent intent = new Intent(this,AboutUsActivity.class);
+            startActivity(intent);
+            finish();
+        }else if (id == R.id.nav_update) {
 
         }else if (id == R.id.nav_quit) {
 
