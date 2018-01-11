@@ -1,8 +1,12 @@
 package cn.a1949science.www.bookrecord.activity;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
@@ -227,7 +231,31 @@ public class MainActivity extends AppCompatActivity implements
         }else if (id == R.id.nav_update) {
 
         }else if (id == R.id.nav_quit) {
+            AlertDialog dlg = new AlertDialog.Builder(mContext)
+                    .setTitle("确认退出？")
+                    .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
 
+                        }
+                    })
+                    .setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            SharedPreferences sp = mContext.getSharedPreferences("userData", MODE_PRIVATE);
+                            SharedPreferences.Editor editor = sp.edit();
+                            editor.clear();
+                            editor.apply();
+                            Intent intent = new Intent(mContext, LoginActivity.class);
+                            //清空源来栈中的Activity，新建栈打开相应的Activity
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
+                            overridePendingTransition(R.anim.slide_left_in,R.anim.slide_right_out);
+
+                        }
+                    })
+                    .create();
+            dlg.show();
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);

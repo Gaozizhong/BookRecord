@@ -46,6 +46,10 @@ public class LoginActivity extends AppCompatActivity {
 
     //事件
     private void onClick() {
+        SharedPreferences sp = mContext.getSharedPreferences("userData", Context.MODE_PRIVATE);
+        if (sp.getString("phoneNumber",null) != null) {
+            phoneNumber.setText(sp.getString("phoneNumber",null));
+        }
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -72,13 +76,13 @@ public class LoginActivity extends AppCompatActivity {
 
         //登录按钮的触发事件
         loginButton.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("ShowToast")
             @Override
             public void onClick(View v) {
-                String userId = addDataToMysql(phoneNumber.getText().toString(), System.currentTimeMillis());
-                addDataToLocal(userId, phoneNumber.getText().toString(), System.currentTimeMillis() + 30 * 24 * 60 * 60 * 1000);
-                Intent intent = new Intent(mContext, MainActivity.class);
-                startActivity(intent);
-                finish();
+                addDataToMysql(phoneNumber.getText().toString(), System.currentTimeMillis());
+                //Intent intent = new Intent(mContext, MainActivity.class);
+                //startActivity(intent);
+                //finish();
                 /*if (!phoneNumber.getText().toString().equals("") && !verification.getText().toString().equals("")) {
                     //验证验证码是否正确
                     new Thread() {
@@ -164,23 +168,26 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     //把用户数据写入到数据库中
-    private String addDataToMysql(String phoneNumber, Long time) {
+    private void addDataToMysql(final String phoneNumber, final long time) {
         //把两个参数存到服务器中，返回userId
         //创建一个Map对象
         Map<String,String> map = new HashMap<>();
         map.put("user_phone_number", phoneNumber);
-        map.put("create_time", time.toString());
+        //map.put("creat_time", time.toString());
         //转成JSON数据
         final String json = JSON.toJSONString(map,true);
-        final String[] userId = new String[1];
-        HttpUtils.doPostAsy("http://139.199.123.55:8080/login2/login.jsp", json, new HttpUtils.CallBack() {
+        //Toast.makeText(mContext, json, Toast.LENGTH_SHORT).show();
+        HttpUtils.doPostAsy("http://139.199.123.55:8080/login1/Login.jsp", json, new HttpUtils.CallBack() {
             @Override
-            public void onRequestComplete(String result) {
-                JSONObject jsonObject = JSON.parseObject(result);
-                userId[0] = jsonObject.getString("userId");
+            public void onRequestComplete(final String result) {
+                JSONObject jsonObject = JSON.parseObject(result.trim());
+                final String userId = jsonObject.getString("user_id");
+                addDataToLocal(userId, phoneNumber, time + (long)30 * 24 * 60 * 60 * 1000);
+                Intent intent = new Intent(mContext,MainActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
-        return userId[0];
     }
 
     private void findView() {

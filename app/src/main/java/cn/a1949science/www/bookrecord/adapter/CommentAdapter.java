@@ -52,7 +52,7 @@ public class CommentAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         convertView = LayoutInflater.from(mContext).inflate(R.layout.book_info_list,parent,false);
         //加载对应的各种资源
-        CircleImageView userIcon = convertView.findViewById(R.id.book_info_headicon);
+        CircleImageView userIcon = convertView.findViewById(R.id.headicon);
         TextView userNick = convertView.findViewById(R.id.book_info_usernick);
         ScaleRatingBar userRating= convertView.findViewById(R.id.book_info_rating);
         TextView userCommnent= convertView.findViewById(R.id.book_info_usercomment);
