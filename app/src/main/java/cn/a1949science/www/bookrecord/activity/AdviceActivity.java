@@ -29,7 +29,7 @@ Button returnButton;
     }
 
     private void findView() {
-        returnButton.findViewById(R.id.advice_return_button);
+      returnButton=findViewById(R.id.advice_return_button);
 
     }
 

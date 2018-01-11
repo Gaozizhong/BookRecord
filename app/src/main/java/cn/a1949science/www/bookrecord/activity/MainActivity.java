@@ -219,11 +219,9 @@ public class MainActivity extends AppCompatActivity implements
         {
             Intent intent = new Intent(mContext,AdviceActivity.class);
             startActivity(intent);
-            finish();
         } else if (id == R.id.nav_about) {
             Intent intent = new Intent(mContext,AboutUsActivity.class);
             startActivity(intent);
-            finish();
         }else if (id == R.id.nav_update) {
 
         }else if (id == R.id.nav_quit) {
