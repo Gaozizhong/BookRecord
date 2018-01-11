@@ -8,6 +8,8 @@ import android.widget.BaseAdapter;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.willy.ratingbar.ScaleRatingBar;
+
 import java.util.LinkedList;
 
 import cn.a1949science.www.bookrecord.R;
@@ -50,11 +52,11 @@ public class CommentAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         convertView = LayoutInflater.from(mContext).inflate(R.layout.book_info_list,parent,false);
         //加载对应的各种资源
-        CircleImageView userIcon = (CircleImageView) convertView.findViewById(R.id.book_info_headicon);
-        TextView userNick = (TextView) convertView.findViewById(R.id.book_info_usernick);
-        RatingBar userRating=(RatingBar) convertView.findViewById(R.id.book_info_userrating) ;
-        TextView userCommnent= (TextView) convertView.findViewById(R.id.book_info_usercomment);
-        TextView commentdate=(TextView)convertView.findViewById(R.id.book_info_commentdate) ;
+        CircleImageView userIcon = convertView.findViewById(R.id.book_info_headicon);
+        TextView userNick = convertView.findViewById(R.id.book_info_usernick);
+        ScaleRatingBar userRating= convertView.findViewById(R.id.book_info_rating);
+        TextView userCommnent= convertView.findViewById(R.id.book_info_usercomment);
+        TextView commentdate= convertView.findViewById(R.id.book_info_commentdate);
         userIcon.setImageBitmap(mData.get(position).getIcon());
         userNick.setText(mData.get(position).getUsernick());
         userRating.setRating(mData.get(position).getRate());

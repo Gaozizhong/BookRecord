@@ -4,10 +4,10 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -16,11 +16,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import cn.a1949science.www.bookrecord.R;
 import cn.a1949science.www.bookrecord.utils.AMUtils;
-import cn.a1949science.www.bookrecord.utils.MobileMessageCheck;
+import cn.a1949science.www.bookrecord.utils.HttpUtils;
 import cn.a1949science.www.bookrecord.utils.MobileMessageSend;
 
 public class LoginActivity extends AppCompatActivity {
@@ -34,7 +39,8 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        findView();//寻找地址
+        //寻找地址
+        findView();
         onClick();
     }
 
@@ -68,7 +74,12 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!phoneNumber.getText().toString().equals("") && !verification.getText().toString().equals("")) {
+                String userId = addDataToMysql(phoneNumber.getText().toString(), System.currentTimeMillis());
+                addDataToLocal(userId, phoneNumber.getText().toString(), System.currentTimeMillis() + 30 * 24 * 60 * 60 * 1000);
+                Intent intent = new Intent(mContext, MainActivity.class);
+                startActivity(intent);
+                finish();
+                /*if (!phoneNumber.getText().toString().equals("") && !verification.getText().toString().equals("")) {
                     //验证验证码是否正确
                     new Thread() {
                         @Override
@@ -94,7 +105,7 @@ public class LoginActivity extends AppCompatActivity {
                     }.start();
                 } else {
                     Toast.makeText(mContext, "请填写正确的信息！", Toast.LENGTH_LONG).show();
-                }
+                }*/
 
             }
         });
@@ -155,8 +166,26 @@ public class LoginActivity extends AppCompatActivity {
     //把用户数据写入到数据库中
     private String addDataToMysql(String phoneNumber, Long time) {
         //把两个参数存到服务器中，返回userId
-
-        return phoneNumber;
+        //创建一个Map对象
+        Map<String,String> map = new HashMap<>();
+        map.put("user_phone_number", phoneNumber);
+        map.put("create_time", time.toString());
+        //转成JSON数据
+        final String json = JSON.toJSONString(map,true);
+        final String[] userId = new String[1];
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    String result = HttpUtils.post("http://139.199.123.55:8080/login2/login.jsp", json);
+                    JSONObject jsonObject = JSON.parseObject(result);
+                    userId[0] = jsonObject.getString("userId");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+        return userId[0];
     }
 
     private void findView() {

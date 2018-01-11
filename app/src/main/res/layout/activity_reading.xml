@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#ddd"
     android:orientation="vertical"
     android:gravity="center_horizontal">
@@ -48,16 +48,24 @@
                 android:text="评分"
                 android:gravity="center_horizontal"
                 android:textColor="@android:color/black"/>
-            <RatingBar
-                android:id="@+id/reading_bookRating"
-                style="@style/foodRatingBar"
+            <com.willy.ratingbar.ScaleRatingBar
+                android:layout_gravity="center_horizontal"
+                android:id="@+id/bookRating"
                 android:layout_width="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_marginLeft="10dp"
-                android:layout_height="35dp"
-                android:isIndicator="true"
-                android:numStars="5"
-                android:rating="3" />
+                android:layout_height="wrap_content"
+                app:srb_starWidth="50dp"
+                app:srb_starHeight="50dp"
+                app:srb_starPadding="0dp"
+                app:srb_numStars="5"
+                app:srb_stepSize="0.1"
+                app:srb_rating="0"
+                app:srb_isIndicator="false"
+                app:srb_clickable="true"
+                app:srb_scrollable="true"
+                app:srb_clearRatingEnabled="true"
+                app:srb_drawableEmpty="@mipmap/star_empty"
+                app:srb_drawableFilled="@mipmap/star_full">
+            </com.willy.ratingbar.ScaleRatingBar>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

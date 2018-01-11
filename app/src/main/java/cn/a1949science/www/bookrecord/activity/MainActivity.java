@@ -37,12 +37,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.a1949science.www.bookrecord.R;
-import cn.a1949science.www.bookrecord.bean.BookInfo;
 import cn.a1949science.www.bookrecord.fragment.ReadingFragment;
 import cn.a1949science.www.bookrecord.fragment.SeenFragment;
 import cn.a1949science.www.bookrecord.fragment.WantFragment;
-import cn.a1949science.www.bookrecord.utils.BookInfoGetFromDouban;
 import cn.a1949science.www.bookrecord.utils.HttpUtils;
+import cn.a1949science.www.bookrecord.utils.NetUtils;
 import cn.a1949science.www.bookrecord.widget.CircleImageView;
 
 public class MainActivity extends AppCompatActivity implements
@@ -241,6 +240,7 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        final String[] str = new String[1];
         /**
          * 处理二维码扫描结果
          */
@@ -253,25 +253,38 @@ public class MainActivity extends AppCompatActivity implements
                 }
                 if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_SUCCESS) {
                     final String result = bundle.getString(CodeUtils.RESULT_STRING);
-                    Toast.makeText(MainActivity.this, HttpUtils.doGetAsy("https://api.douban.com/v2/book/isbn/" + result), Toast.LENGTH_LONG).show();
+                    NetUtils.doGetAsy("https://api.douban.com/v2/book/isbn/" + result, new NetUtils.CallBack() {
+                        @Override
+                        public void onRequestComplete(String result) {
+
+                        }
+                    });
+
+
+
+
                     //开启线程来发起网络请求
-                    new Thread(new Runnable() {
+                    /*new Thread(new Runnable() {
                         @Override
                         public void run() {
                             try {
                                 BookInfo bookInfo = BookInfoGetFromDouban.BookInfoGet(result);
+                                Intent intent = new Intent();
+                                intent.setClass(mContext, MainActivity.class);
+                                Bundle bundle = new Bundle();
+                                bundle.putSerializable("bookInfo", bookInfo);
+                                intent.putExtras(bundle);
+                                startActivity(intent);
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
                         }
-                    }).start();
+                    }).start();*/
                 } else if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_FAILED) {
                     Toast.makeText(MainActivity.this, "解析二维码失败", Toast.LENGTH_LONG).show();
                 }
             }
         }
     }
-
-
 
 }
