@@ -25,8 +25,6 @@ import android.widget.AdapterView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 import com.uuzuche.lib_zxing.activity.CaptureActivity;
 import com.uuzuche.lib_zxing.activity.CodeUtils;
@@ -34,12 +32,7 @@ import com.uuzuche.lib_zxing.activity.ZXingLibrary;
 import com.ycl.tabview.library.TabView;
 import com.ycl.tabview.library.TabViewChild;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,11 +43,8 @@ import cn.a1949science.www.bookrecord.fragment.SeenFragment;
 import cn.a1949science.www.bookrecord.fragment.WantFragment;
 import cn.a1949science.www.bookrecord.utils.BookInfoGetFromDouban;
 import cn.a1949science.www.bookrecord.utils.HttpUtils;
-import cn.a1949science.www.bookrecord.utils.NetUtils;
 import cn.a1949science.www.bookrecord.widget.CircleImageView;
 import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener, WantFragment.OnFragmentInteractionListener
@@ -267,7 +257,28 @@ public class MainActivity extends AppCompatActivity implements
                 if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_SUCCESS) {
                     final String result = bundle.getString(CodeUtils.RESULT_STRING);
                     //Toast.makeText(mContext, result, Toast.LENGTH_LONG).show();
-                    getBookInfo(result);
+                    BookInfo bookInfo = null;
+                    HttpUtils.doGetAsy("https://api.douban.com/v2/book/isbn/" + result, new HttpUtils.CallBack() {
+                        @Override
+                        public void onRequestComplete(final String result) {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    try {
+                                        BookInfo bookInfo = BookInfoGetFromDouban.parsingBookInfo(result);
+                                        Intent intent = new Intent();
+                                        intent.setClass(mContext, BookInfoActivity.class);
+                                        Bundle bundle = new Bundle();
+                                        bundle.putSerializable("bookInfo", bookInfo);
+                                        intent.putExtras(bundle);
+                                        startActivity(intent);
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            });
+                        }
+                    });
 
 
                 } else if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_FAILED) {
@@ -276,26 +287,4 @@ public class MainActivity extends AppCompatActivity implements
             }
         }
     }
-
-    //从豆瓣服务器获取相应的图书信息
-    private void getBookInfo(final String result) {
-        //开启线程来发起网络请求
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    BookInfo bookInfo = BookInfoGetFromDouban.BookInfoGet(result);
-                    Intent intent = new Intent();
-                    intent.setClass(mContext, BookInfoActivity.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable("bookInfo", bookInfo);
-                    intent.putExtras(bundle);
-                    startActivity(intent);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
-    }
-
 }

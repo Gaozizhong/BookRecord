@@ -173,18 +173,13 @@ public class LoginActivity extends AppCompatActivity {
         //转成JSON数据
         final String json = JSON.toJSONString(map,true);
         final String[] userId = new String[1];
-        new Thread(new Runnable() {
+        HttpUtils.doPostAsy("http://139.199.123.55:8080/login2/login.jsp", json, new HttpUtils.CallBack() {
             @Override
-            public void run() {
-                try {
-                    String result = HttpUtils.post("http://139.199.123.55:8080/login2/login.jsp", json);
-                    JSONObject jsonObject = JSON.parseObject(result);
-                    userId[0] = jsonObject.getString("userId");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+            public void onRequestComplete(String result) {
+                JSONObject jsonObject = JSON.parseObject(result);
+                userId[0] = jsonObject.getString("userId");
             }
-        }).start();
+        });
         return userId[0];
     }
 

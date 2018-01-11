@@ -18,5 +18,10 @@
     <string name="bookimage">BookImage</string>
     <string name="aboutUs">       BookShare主要为大学生积压的实体书籍的流通与再利用创造机会，为喜欢读书并喜欢分享的大学生提供一个良好的图书共享平台，不仅可以帮助大学生分享出已经阅读完的书籍，还能够帮助大学生找到自己喜欢的书籍。在此平台中，大学生可以分享自己阅读过的好书，也可以通过平台找到自己感兴趣的书籍，以较方便的方式得到高质量的书籍，满足自己的读书需求。</string>
     <string name="history">历史</string>
+    <string name="want_to_read">想读</string>
+    <string name="reading">在读</string>
+    <string name="seen">读过</string>
+    <string name="book_summary">内容简介</string>
+    <string name="split">分隔图片</string>
 
 </resources>
