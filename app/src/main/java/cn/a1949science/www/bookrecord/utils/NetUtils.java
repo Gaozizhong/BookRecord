@@ -24,7 +24,14 @@ import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.net.URLEncoder;
 import java.security.KeyStore;
 import java.util.Iterator;
@@ -38,141 +45,172 @@ import java.util.Map;
  */
 
 public class NetUtils {
-    /**
-     * 对网络连接状态进行判断
-     *
-     * @return true, 可用； false， 不可用
-     */
-    public static boolean isOpenNetwork(Context context) {
-        ConnectivityManager connManager = (ConnectivityManager) context
-                .getSystemService(Context.CONNECTIVITY_SERVICE);
-        assert connManager != null;
-        if (connManager.getActiveNetworkInfo() != null) {
-            return connManager.getActiveNetworkInfo().isAvailable();
-        }
+    //设置网络连接超时时间
+    public static final int TIMEOUT_IN_MILLIONS = 5000;
 
-        return false;
+
+    //设置请求结果回调
+    public interface CallBack {
+        void onRequestComplete(String result);
     }
+
+    /**
+     * 异步get请求
+     *
+     * @param urlStr
+     * @param callBack 以接口对象为参数，特别好用
+     */
+    public static void doGetAsy(final String urlStr, final CallBack callBack) {
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String result = doGet(urlStr);
+                if (callBack != null) {
+                    callBack.onRequestComplete(result);
+                }
+            }
+        }).start();
+    }
+
+    /**
+     * 异步post请求
+     *
+     * @param urlStr
+     * @param params
+     * @param callBack
+     */
+    public static void doPostAsy(final String urlStr, final String params, final CallBack callBack) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String result = doPost(urlStr, params);
+                if (callBack != null) {
+                    callBack.onRequestComplete(result);
+                }
+            }
+        }).start();
+    }
+
+    /**
+     * 向指定url发送post方式的请求
+     *
+     * @param urlStr
+     * @param params
+     * @return
+     */
+    private static String doPost(String urlStr, String params) {
+        URL url;
+        String result = "";
+        BufferedReader bufferedReader = null;
+        PrintWriter printWriter = null;
+        try {
+            url = new URL(urlStr);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("POST");
+            conn.setConnectTimeout(TIMEOUT_IN_MILLIONS);
+            conn.setReadTimeout(TIMEOUT_IN_MILLIONS);
+            //设置一系列的请求属性，让服务器端知道(我发送了什么类型的数据)
+            conn.setRequestProperty("accept", "*/*");
+            conn.setRequestProperty("connection", "keep-Alive");
+            conn.setRequestProperty("charset", "utf-8");
+            conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+            //发送POST请求必须设置如下两行
+            conn.setDoInput(true);
+            conn.setDoOutput(true);
+            //对请求参数的处理
+            if (params != null && !params.trim().equals("")) {
+                //获取URLConnection对象对应的输出流
+                OutputStream os = conn.getOutputStream();
+                printWriter = new PrintWriter(os);
+                // 发送请求参数
+                printWriter.print(params);
+                printWriter.flush();
+            }
+            //定义BufferedReader输入流来读取URL的响应
+            InputStream is = conn.getInputStream();
+            InputStreamReader inputStreamReader = new InputStreamReader(is);
+            //主要是为了每次读取一行
+            bufferedReader = new BufferedReader(inputStreamReader);
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                result += line;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            //使用finally块来关闭输出流、输入流
+        } finally {
+            try {
+                if (bufferedReader != null) {
+                    bufferedReader.close();
+                }
+                if (printWriter != null) {
+                    printWriter.close();
+                }
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return result;
+    }
+
 
     /**
      * get请求
      *
-     * @param urlString
-     * @param params
+     * @param urlStr
      * @return
      */
-    public static String getRequest(String urlString, Map<String, String> params) {
-
+    private static String doGet(String urlStr) {
+        URL url = null;
+        HttpURLConnection conn = null;
+        InputStream is = null;//输入流
+        ByteArrayOutputStream baos = null; //输出流
         try {
-            StringBuilder urlBuilder = new StringBuilder();
-            urlBuilder.append(urlString);
-
-            if (null != params) {
-
-                urlBuilder.append("?");
-
-                Iterator<Map.Entry<String, String>> iterator = params.entrySet()
-                        .iterator();
-
-                while (iterator.hasNext()) {
-                    Map.Entry<String, String> param = iterator.next();
-                    urlBuilder
-                            .append(URLEncoder.encode(param.getKey(), "UTF-8"))
-                            .append('=')
-                            .append(URLEncoder.encode(param.getValue(), "UTF-8"));
-                    if (iterator.hasNext()) {
-                        urlBuilder.append('&');
-                    }
+            url = new URL(urlStr);
+            //获取一个连接对象
+            conn = (HttpURLConnection) url.openConnection();
+            conn.setConnectTimeout(TIMEOUT_IN_MILLIONS);
+            conn.setRequestMethod("GET");
+            conn.setRequestProperty("accept", "*/*");
+            conn.setRequestProperty("connection", "keep-Alive");
+            //获取响应码 说明请求成功
+            if (conn.getResponseCode() == 200) {
+                //获取一个输入流
+                is = conn.getInputStream();
+                //创建一个字节数组输出流
+                baos = new ByteArrayOutputStream();
+                int len = -1;
+                //获取一个字节数组
+                byte[] bytes = new byte[1024];
+                while ((len = is.read(bytes)) != -1) {
+                    baos.write(bytes, 0, len);
                 }
+                baos.flush();
+                //返回字符串
+                return baos.toString();
             }
-            // 创建HttpClient对象
-            HttpClient client = getNewHttpClient();
-            // 发送get请求创建HttpGet对象
-            HttpGet getMethod = new HttpGet(urlBuilder.toString());
-            HttpResponse response = client.execute(getMethod);
-            // 获取状态码
-            int res = response.getStatusLine().getStatusCode();
-            if (res == 200) {
-
-                StringBuilder builder = new StringBuilder();
-                // 获取响应内容
-                BufferedReader reader = new BufferedReader(
-                        new InputStreamReader(response.getEntity().getContent()));
-
-                for (String s = reader.readLine(); s != null; s = reader
-                        .readLine()) {
-                    builder.append(s);
-                }
-                return builder.toString();
-            }
-        } catch (Exception ignored) {
-
-        }
-
-        return null;
-    }
-
-    /**
-     * post请求
-     *
-     * @param urlString
-     * @param params
-     * @return
-     */
-    public static String postRequest(String urlString,
-                                     List<BasicNameValuePair> params) {
-
-        try {
-            // 1. 创建HttpClient对象
-            HttpClient client = getNewHttpClient();
-            // 2. 发get请求创建HttpGet对象
-            HttpPost postMethod = new HttpPost(urlString);
-            postMethod.setEntity(new UrlEncodedFormEntity(params, HTTP.UTF_8));
-            HttpResponse response = client.execute(postMethod);
-            int statueCode = response.getStatusLine().getStatusCode();
-            if (statueCode == 200) {
-                System.out.println(statueCode);
-                return EntityUtils.toString(response.getEntity());
-            }
-        } catch (Exception ignored) {
-
-        }
-
-        return null;
-    }
-
-    // 保存时+当时的秒数，
-    public static long expires(String second) {
-        Long l = Long.valueOf(second);
-
-        return l * 1000L + System.currentTimeMillis();
-    }
-
-    private static HttpClient getNewHttpClient() {
-        try {
-            KeyStore trustStore = KeyStore.getInstance(KeyStore
-                    .getDefaultType());
-            trustStore.load(null, null);
-
-            SSLSocketFactory sf = new SSLSocketFactory(trustStore);
-            sf.setHostnameVerifier(SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
-
-            HttpParams params = new BasicHttpParams();
-            HttpProtocolParams.setVersion(params, HttpVersion.HTTP_1_1);
-            HttpProtocolParams.setContentCharset(params, HTTP.UTF_8);
-
-            SchemeRegistry registry = new SchemeRegistry();
-            registry.register(new Scheme("http", PlainSocketFactory
-                    .getSocketFactory(), 80));
-            registry.register(new Scheme("https",sf, 443));
-
-            ClientConnectionManager ccm = new ThreadSafeClientConnManager(
-                    params, registry);
-
-            return new DefaultHttpClient(ccm, params);
         } catch (Exception e) {
-            return new DefaultHttpClient();
+            e.printStackTrace();
+        } finally {
+            //处理管理流的逻辑
+            if (is != null) {
+                try {
+                    is.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (baos != null) {
+                try {
+                    baos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            assert conn != null;
+            conn.disconnect();
         }
+        return null;
     }
-
 }

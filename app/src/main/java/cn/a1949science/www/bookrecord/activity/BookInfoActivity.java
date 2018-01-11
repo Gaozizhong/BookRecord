@@ -1,5 +1,6 @@
 package cn.a1949science.www.bookrecord.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -7,6 +8,11 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
+import com.willy.ratingbar.ScaleRatingBar;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -14,6 +20,7 @@ import java.util.Map;
 
 import cn.a1949science.www.bookrecord.R;
 import cn.a1949science.www.bookrecord.adapter.CommentAdapter;
+import cn.a1949science.www.bookrecord.bean.BookInfo;
 import cn.a1949science.www.bookrecord.bean.BookInfoComment;
 import cn.a1949science.www.bookrecord.database.MyDatabaseHelper;
 import cn.a1949science.www.bookrecord.widget.MyListView;
@@ -24,8 +31,13 @@ public class BookInfoActivity extends AppCompatActivity {
     private CommentAdapter mAdapter = null;
     private MyListView bookInfoList;
     Button wantRead, reading, havaRead, returnButton;
+    TextView bookName,bookScore,bookWriter,bookPressName,bookPressData,bookISBN;
+    ScaleRatingBar bookRating;
+    ImageView bookImage;
     private MyDatabaseHelper db;//sqlite数据库
     private long exitTime = 0;
+    private BookInfo bookInfo;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,9 +45,28 @@ public class BookInfoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_book_info);
         //将资源加载到listview中
         findView();
-        onClick();//监听事件
+        getBookInfo();
+        //监听事件
+        onClick();
         test();//c此方法用于在测试阶段，将样本数据导入数据库
         setListview();
+    }
+
+    //从上一页面获取图书信息类，来填充控件
+    @SuppressLint("SetTextI18n")
+    private void getBookInfo() {
+        Intent intent = this.getIntent();
+        bookInfo = (BookInfo) intent.getSerializableExtra("bookInfo");
+        bookName.setText(bookInfo.getBookName());
+        bookWriter.setText(bookInfo.getAuthorName());
+        bookPressName.setText(bookInfo.getPublish());
+        bookPressData.setText(bookInfo.getPublishDate());
+        bookISBN.setText("ISBN:"+bookInfo.getISBN());
+        Glide.with(mContext)
+                .load(bookInfo.getImageUrl())
+                .into(bookImage);
+        bookScore.setText(bookInfo.getRating()+" FROM豆瓣");
+        bookRating.setRating(Float.parseFloat(bookInfo.getRating())/2);
     }
 
     //测试
@@ -44,11 +75,20 @@ public class BookInfoActivity extends AppCompatActivity {
         //将插入语句注释掉，防止重复插入
         //db.insertBookInfoListview(mContext, db);
     }
+
     private void findView() {
-        wantRead = (Button) findViewById(R.id.book_info_wantRead);
-        reading = (Button) findViewById(R.id.book_info_reading);
-        havaRead = (Button) findViewById(R.id.book_info_haveRead);
-        returnButton = (Button) findViewById(R.id.book_info_return);
+        wantRead = findViewById(R.id.book_info_wantRead);
+        reading = findViewById(R.id.book_info_reading);
+        havaRead = findViewById(R.id.book_info_haveRead);
+        returnButton = findViewById(R.id.book_info_return);
+        bookName = findViewById(R.id.bookName);
+        bookScore = findViewById(R.id.bookScore);
+        bookWriter = findViewById(R.id.bookWriter);
+        bookPressName = findViewById(R.id.bookPressName);
+        bookPressData = findViewById(R.id.bookPressData);
+        bookISBN = findViewById(R.id.bookISBN);
+        bookRating = findViewById(R.id.bookRating);
+        bookImage = findViewById(R.id.bookImage);
     }
 
     //监听事件
@@ -87,8 +127,8 @@ public class BookInfoActivity extends AppCompatActivity {
 
         ArrayList<Map<String, Object>> result;
         result = db.resultBookInfoListview(mContext, db);
-        bookInfoList = (MyListView) findViewById(R.id.book_info_list);
-        mData = new LinkedList<BookInfoComment>();
+        bookInfoList = findViewById(R.id.book_info_list);
+        mData = new LinkedList<>();
         //对数据库得到的结果遍历
         for (int i = 0; i < result.size(); i++) {
             mData.add(new BookInfoComment((Bitmap) result.get(i).get("icon"), result.get(i).get("usernick").toString(), (int) result.get(i).get("rate"), result.get(i).get("comment").toString(), result.get(i).get("data").toString()));

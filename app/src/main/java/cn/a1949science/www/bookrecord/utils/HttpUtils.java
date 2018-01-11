@@ -17,87 +17,27 @@ public class HttpUtils {
 
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
-    /**
-     * 异步get请求
-     *
-     * @param urlStr URL对象
-     */
-    public static String doGetAsy(final String urlStr) {
-        final String[] result = {null};
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    result[0] = doGet(urlStr);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
-        return result[0];
+    //get a url
+    public static String get(String url) throws IOException {
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
+        Response response = client.newCall(request).execute();
+        return response.body().string();
     }
 
-    /**
-     * 异步post请求
-     *  @param urlStr
-     * @param json
-     */
-    public static String doPostAsy(final String urlStr, final String json) {
-        final String[] result = {null};
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    result[0] = doPost(urlStr, json);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-            }
-        }).start();
-        return result[0];
-    }
-
-    /**
-     * 向指定url发送post方式的请求
-     *
-     * @param urlStr  URL对象
-     * @param json 提交Json数据
-     * @return
-     */
-    private static String doPost(String urlStr, String json) throws IOException {
+    //post a json
+    public static String post(String url, String json) throws IOException {
         OkHttpClient client = new OkHttpClient();
         RequestBody body = RequestBody.create(JSON, json);
         Request request = new Request.Builder()
-                .url(urlStr)
+                .url(url)
                 .post(body)
                 .build();
         Response response = client.newCall(request).execute();
-        if (response.isSuccessful()) {
-            return response.body().string();
-        } else {
-            throw new IOException("Unexpected code " + response);
-        }
+        return response.body().string();
     }
-
-
-    /**
-     * get请求
-     *
-     * @param urlStr URL
-     * @return GET到的字符串
-     */
-    private static String doGet(String urlStr) throws IOException {
-        OkHttpClient client = new OkHttpClient();
-        Request request = new Request.Builder().url(urlStr).build();
-        Response response = client.newCall(request).execute();
-        if (response.isSuccessful()) {
-            return response.body().string();
-        } else {
-            throw new IOException("Unexpected code " + response);
-        }
-    }
-
 
 
 }

@@ -30,16 +30,26 @@
             android:layout_toEndOf="@+id/book_info_headicon"
             android:layout_marginStart="10dp" />
 
-        <RatingBar
-            android:id="@+id/book_info_userrating"
-            style="@style/foodRatingBar"
+        <com.willy.ratingbar.ScaleRatingBar
+            android:layout_gravity="center_horizontal"
+            android:id="@+id/book_info_rating"
             android:layout_width="wrap_content"
-            android:layout_height="35dp"
+            android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:isIndicator="true"
-            android:numStars="5"
-            android:rating="5" />
+            app:srb_starWidth="20dp"
+            app:srb_starHeight="20dp"
+            app:srb_starPadding="0dp"
+            app:srb_numStars="5"
+            app:srb_stepSize="0.1"
+            app:srb_rating="0"
+            app:srb_isIndicator="false"
+            app:srb_clickable="true"
+            app:srb_scrollable="true"
+            app:srb_clearRatingEnabled="true"
+            app:srb_drawableEmpty="@mipmap/star_empty"
+            app:srb_drawableFilled="@mipmap/star_full">
+        </com.willy.ratingbar.ScaleRatingBar>
     </RelativeLayout>
     <TextView
         android:id="@+id/book_info_usercomment"

@@ -8,7 +8,7 @@
     android:orientation="vertical"
     android:background="#eee"
     tools:context="cn.a1949science.www.bookrecord.activity.BookInfoActivity">
->
+
     <android.support.v7.widget.Toolbar
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
@@ -23,11 +23,10 @@
             android:layout_width="20dp"
             android:layout_height="25dp"
             android:background="@mipmap/verticalline"/>
-            />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="20dp"
+            android:textSize="20sp"
             android:textColor="@android:color/black"
             android:text="@string/bookName"/>
         <Button
@@ -36,16 +35,18 @@
             android:layout_marginLeft="180dp"
             android:background="@mipmap/scan" />
     </android.support.v7.widget.Toolbar>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scrollbars="vertical"
         android:fadingEdge="vertical">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
->
+        android:orientation="vertical">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -54,10 +55,10 @@
             android:layout_marginRight="10dp"
             android:background="#fff"
             android:orientation="vertical">
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -73,30 +74,42 @@
                 android:layout_marginTop="10dp"
                 android:text="@string/bookName"
                 android:textColor="@color/bookName"
-                android:textSize="20dp" />
+                android:textSize="20sp" />
 
             <LinearLayout
+                android:orientation="horizontal"
+                android:gravity="center_horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                >
-                <RatingBar
+                android:layout_height="wrap_content">
+
+                <com.willy.ratingbar.ScaleRatingBar
+                    android:layout_gravity="center_horizontal"
                     android:id="@+id/bookRating"
-                    style="@style/foodRatingBar"
                     android:layout_width="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_height="35dp"
-                    android:isIndicator="true"
-                    android:numStars="5"
-                    android:rating="3" />
+                    android:layout_height="wrap_content"
+                    app:srb_starWidth="30dp"
+                    app:srb_starHeight="30dp"
+                    app:srb_starPadding="0dp"
+                    app:srb_numStars="5"
+                    app:srb_stepSize="0.1"
+                    app:srb_rating="2"
+                    app:srb_isIndicator="true"
+                    app:srb_clickable="true"
+                    app:srb_scrollable="true"
+                    app:srb_clearRatingEnabled="true"
+                    app:srb_drawableEmpty="@mipmap/star_empty"
+                    app:srb_drawableFilled="@mipmap/star_full">
+                </com.willy.ratingbar.ScaleRatingBar>
+
                 <TextView
                     android:id="@+id/bookScore"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
+                    android:layout_marginStart="5dp"
                     android:layout_marginTop="4dp"
                     android:layout_gravity="center_horizontal|center_vertical"
                     android:text="@string/bookScore" />
+
             </LinearLayout>
 
             <TextView
@@ -133,6 +146,7 @@
         </LinearLayout>
 
         <ImageView
+            android:id="@+id/bookImage"
             android:layout_width="wrap_content"
             android:layout_height="201dp"
             android:layout_weight="0.5"
