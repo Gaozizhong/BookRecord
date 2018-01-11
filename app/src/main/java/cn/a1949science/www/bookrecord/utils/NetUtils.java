@@ -162,55 +162,38 @@ public class NetUtils {
      * @return
      */
     private static String doGet(String urlStr) {
-        URL url = null;
-        HttpURLConnection conn = null;
-        InputStream is = null;//输入流
-        ByteArrayOutputStream baos = null; //输出流
-        try {
-            url = new URL(urlStr);
-            //获取一个连接对象
-            conn = (HttpURLConnection) url.openConnection();
-            conn.setConnectTimeout(TIMEOUT_IN_MILLIONS);
-            conn.setRequestMethod("GET");
-            conn.setRequestProperty("accept", "*/*");
-            conn.setRequestProperty("connection", "keep-Alive");
-            //获取响应码 说明请求成功
-            if (conn.getResponseCode() == 200) {
-                //获取一个输入流
-                is = conn.getInputStream();
-                //创建一个字节数组输出流
-                baos = new ByteArrayOutputStream();
-                int len = -1;
-                //获取一个字节数组
-                byte[] bytes = new byte[1024];
-                while ((len = is.read(bytes)) != -1) {
-                    baos.write(bytes, 0, len);
-                }
-                baos.flush();
-                //返回字符串
-                return baos.toString();
+        HttpURLConnection connection = null;
+        BufferedReader reader = null;
+        try{
+            URL url = new URL(urlStr);
+            connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+            connection.setConnectTimeout(8000);
+            connection.setReadTimeout(8000);
+            InputStream in = connection.getInputStream();
+            //下面对获取到的输入流进行读取
+            reader = new BufferedReader(new InputStreamReader(in));
+            StringBuilder response = new StringBuilder();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                response.append(line);
             }
+            return response.toString();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            //处理管理流的逻辑
-            if (is != null) {
+            if (reader != null) {
                 try {
-                    is.close();
+                    reader.close();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
-            if (baos != null) {
-                try {
-                    baos.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+            if (connection != null) {
+                connection.disconnect();
             }
-            assert conn != null;
-            conn.disconnect();
         }
+
         return null;
     }
 }

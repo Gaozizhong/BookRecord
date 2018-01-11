@@ -24,19 +24,15 @@
             android:layout_height="25dp"
             android:background="@mipmap/verticalline"/>
         <TextView
+            android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="20sp"
-            android:textColor="@android:color/black"
-            android:text="@string/bookName"/>
-        <Button
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_marginLeft="180dp"
-            android:background="@mipmap/scan" />
+            android:textColor="@android:color/black"/>
     </android.support.v7.widget.Toolbar>
 
     <ScrollView
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scrollbars="vertical"
@@ -56,59 +52,60 @@
             android:background="#fff"
             android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="201dp"
-            android:layout_weight="0.5"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/bookName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="10dp"
-                android:text="@string/bookName"
-                android:textColor="@color/bookName"
-                android:textSize="20sp" />
-
             <LinearLayout
+                android:layout_margin="5dp"
                 android:orientation="horizontal"
-                android:gravity="center_horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <com.willy.ratingbar.ScaleRatingBar
-                    android:layout_gravity="center_horizontal"
-                    android:id="@+id/bookRating"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_gravity="center_vertical"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    app:srb_starWidth="30dp"
-                    app:srb_starHeight="30dp"
-                    app:srb_starPadding="0dp"
-                    app:srb_numStars="5"
-                    app:srb_stepSize="0.1"
-                    app:srb_rating="2"
-                    app:srb_isIndicator="true"
-                    app:srb_clickable="true"
-                    app:srb_scrollable="true"
-                    app:srb_clearRatingEnabled="true"
-                    app:srb_drawableEmpty="@mipmap/star_empty"
-                    app:srb_drawableFilled="@mipmap/star_full">
-                </com.willy.ratingbar.ScaleRatingBar>
+                    android:layout_weight="0.5"
+                    android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/bookScore"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginTop="4dp"
-                    android:layout_gravity="center_horizontal|center_vertical"
-                    android:text="@string/bookScore" />
+                    <TextView
+                        android:id="@+id/bookName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="10dp"
+                        android:textColor="@color/bookName"
+                        android:textSize="20sp" />
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:gravity="center_horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <com.willy.ratingbar.ScaleRatingBar
+                            android:layout_gravity="center_horizontal"
+                            android:id="@+id/bookRating"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:srb_starWidth="30dp"
+                            app:srb_starHeight="30dp"
+                            app:srb_starPadding="0dp"
+                            app:srb_numStars="5"
+                            app:srb_stepSize="0.1"
+                            app:srb_rating="2"
+                            app:srb_isIndicator="true"
+                            app:srb_clickable="true"
+                            app:srb_scrollable="true"
+                            app:srb_clearRatingEnabled="true"
+                            app:srb_drawableEmpty="@mipmap/star_empty"
+                            app:srb_drawableFilled="@mipmap/star_full">
+                        </com.willy.ratingbar.ScaleRatingBar>
+
+                        <TextView
+                            android:id="@+id/bookScore"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
+                            android:layout_marginTop="4dp"
+                            android:layout_gravity="center_horizontal|center_vertical" />
 
             </LinearLayout>
 
@@ -117,41 +114,37 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:layout_gravity="center_horizontal"
-                android:text="@string/bookWriter" />
+                android:layout_gravity="center_horizontal" />
 
             <TextView
                 android:id="@+id/bookPressName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:layout_gravity="center_horizontal"
-                android:text="@string/bookPressName" />
+                android:layout_gravity="center_horizontal" />
 
             <TextView
                 android:id="@+id/bookPressData"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:layout_gravity="center_horizontal"
-                android:text="@string/bookPressData" />
+                android:layout_gravity="center_horizontal" />
 
             <TextView
                 android:id="@+id/bookISBN"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:layout_gravity="center_horizontal"
-                android:text="@string/bookISBN" />
+                android:layout_gravity="center_horizontal" />
         </LinearLayout>
 
         <ImageView
             android:id="@+id/bookImage"
-            android:layout_width="wrap_content"
-            android:layout_height="201dp"
-            android:layout_weight="0.5"
-            android:layout_marginEnd="10dp"
-            android:src="@mipmap/bookdemo" />
+            android:layout_width="100dp"
+            android:layout_height="140dp"
+            android:layout_margin="10dp"
+            android:scaleType="fitCenter"
+            android:contentDescription="@string/bookimage" />
     </LinearLayout>
         <RelativeLayout
             android:layout_width="match_parent"
@@ -193,21 +186,21 @@
             android:layout_marginTop="20dp"
             android:layout_marginLeft="20dp"/>
         <TextView
+            android:id="@+id/book_summary"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:text="@string/bookcontext"/>
+            android:layout_marginRight="20dp"/>
         </LinearLayout>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="20dp"
             android:layout_marginTop="10dp"
-            android:text="历史"
+            android:text="@string/history"
             android:layout_gravity="center_horizontal"
-            android:gravity="center_vertical"
-          />
+            android:gravity="center_vertical" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
