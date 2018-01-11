@@ -2,19 +2,16 @@ package cn.a1949science.www.bookrecord.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
@@ -23,8 +20,6 @@ import com.amap.api.location.AMapLocationListener;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 import cn.a1949science.www.bookrecord.R;
@@ -35,6 +30,8 @@ Context context=ReadingActivity.this;
 Button returnButton;
 Button adressButton;
 TextView adressText;
+EditText note;
+EditText reason;
 private Spinner  reading_way=null;
 private Spinner  reading_classfy=null;
     //声明AMapLocationClientOption对象
@@ -169,6 +166,10 @@ private Spinner  reading_classfy=null;
         reading_classfy=findViewById(R.id.reading_classfy);
         adressButton=findViewById(R.id.reading_adress_button);
         adressText=findViewById(R.id.reading_adress_textview);
+        note=findViewById(R.id.reading_note);
+
+        reason=findViewById(R.id.reading_reason);
+
     }
     public void onBackPressed()
     {
