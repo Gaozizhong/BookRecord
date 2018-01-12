@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Looper;
@@ -23,6 +24,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
 import cn.a1949science.www.bookrecord.R;
 import cn.a1949science.www.bookrecord.utils.AMUtils;
 import cn.a1949science.www.bookrecord.utils.HttpUtils;
@@ -33,8 +35,9 @@ public class LoginActivity extends AppCompatActivity {
 
     Context mContext = LoginActivity.this;
     EditText phoneNumber,verification;
-    Button delete,getverification,loginButton;
+    Button delete,getverification;
     MyCountTimer timer;
+    CircularProgressButton loginButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,39 +80,43 @@ public class LoginActivity extends AppCompatActivity {
 
         //登录按钮的触发事件
         loginButton.setOnClickListener(new View.OnClickListener() {
-            @SuppressLint("ShowToast")
             @Override
-            public void onClick(View v) {
-                if (!phoneNumber.getText().toString().equals("") && !verification.getText().toString().equals("")) {
-                    //验证验证码是否正确
-                    new Thread() {
-                        @Override
-                        public void run() {
-                            String code = verification.getText().toString();
-                            try {
-                                String str = MobileMessageCheck.checkMsg(phoneNumber.getText().toString(), code);
-                                if (str.equals("success")) {
-                                    addDataToMysql(phoneNumber.getText().toString(), System.currentTimeMillis());
-                                    Intent intent = new Intent(mContext, MainActivity.class);
-                                    startActivity(intent);
-                                    finish();
-                                } else {
-                                    Looper.prepare();
-                                    Toast.makeText(mContext, "验证失败！", Toast.LENGTH_LONG).show();
-                                    Looper.loop();
+            public void onClick(View view) {
+                //andriod版本大于等于5.0
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    loginButton.startAnimation();
+                    if (!phoneNumber.getText().toString().equals("") && !verification.getText().toString().equals("")) {
+                        //验证验证码是否正确
+                        new Thread() {
+                            @Override
+                            public void run() {
+                                String code = verification.getText().toString();
+                                try {
+                                    String str = MobileMessageCheck.checkMsg(phoneNumber.getText().toString(), code);
+                                    if (str.equals("success")) {
+                                        addDataToMysql(phoneNumber.getText().toString(), System.currentTimeMillis());
+                                        loginButton.stopAnimation();
+                                        Intent intent = new Intent(mContext, MainActivity.class);
+                                        startActivity(intent);
+                                        finish();
+                                    } else {
+                                        Looper.prepare();
+                                        Toast.makeText(mContext, "验证失败！", Toast.LENGTH_LONG).show();
+                                        Looper.loop();
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
                                 }
-                            } catch (Exception e) {
-                                e.printStackTrace();
                             }
-                        }
-                    }.start();
-                } else {
-                    Toast.makeText(mContext, "请填写正确的信息！", Toast.LENGTH_LONG).show();
+                        }.start();
+                    } else {
+                        Toast.makeText(mContext, "请填写正确的信息！", Toast.LENGTH_LONG).show();
+                    }
                 }
-
             }
         });
 
+        //获取验证码按钮的触发事件
         getverification.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -169,11 +176,9 @@ public class LoginActivity extends AppCompatActivity {
         //创建一个Map对象
         Map<String,String> map = new HashMap<>();
         map.put("user_phone_number", phoneNumber);
-        //map.put("creat_time", time.toString());
         //转成JSON数据
         final String json = JSON.toJSONString(map,true);
-        //Toast.makeText(mContext, json, Toast.LENGTH_SHORT).show();
-        HttpUtils.doPostAsy("http://139.199.123.55:8080/login1/Login.jsp", json, new HttpUtils.CallBack() {
+        HttpUtils.doPostAsy(getString(R.string.LoginInterface), json, new HttpUtils.CallBack() {
             @Override
             public void onRequestComplete(final String result) {
                 JSONObject jsonObject = JSON.parseObject(result.trim());

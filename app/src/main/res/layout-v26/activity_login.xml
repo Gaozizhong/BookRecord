@@ -31,13 +31,11 @@
         android:orientation="vertical">
 
         <LinearLayout
-            android:layout_marginStart="40dp"
-            android:layout_marginEnd="40dp"
-            android:layout_width="match_parent"
+            android:layout_width="280dp"
             android:layout_height="20dp"
             android:orientation="horizontal"
             android:layout_gravity="center_horizontal"
-            android:gravity="center"
+            android:gravity="center_vertical"
             android:layout_weight="3"
             android:background="@drawable/bg_border">
 
@@ -65,39 +63,35 @@
                 android:id="@+id/phoneNumberDelete"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-                android:layout_marginEnd="5dp"
+                android:layout_marginEnd="10dp"
                 android:background="@mipmap/delete" />
         </LinearLayout>
-
+        
         <LinearLayout
-            android:layout_marginStart="40dp"
-            android:layout_marginEnd="40dp"
-            android:layout_width="match_parent"
+            android:layout_width="280dp"
             android:layout_height="20dp"
             android:layout_marginTop="10dp"
             android:orientation="horizontal"
             android:layout_gravity="center_horizontal"
-            android:gravity="center"
+            android:gravity="center_vertical"
             android:layout_weight="3"
             android:background="@drawable/bg_border">
 
             <TextView
                 android:id="@+id/TextVerification"
-                android:layout_marginStart="5dp"
                 android:layout_width="50dp"
                 android:layout_height="25dp"
                 android:gravity="center_vertical|center_horizontal"
-                android:text="@string/code" />
+                android:text=" 验证码" />
             <ImageView
                 android:layout_width="5dp"
                 android:layout_height="25dp"
-                android:background="@mipmap/verticalline"
-                android:contentDescription="@string/split" />
+                android:background="@mipmap/verticalline"/>
             <EditText
                 android:id="@+id/verification"
                 android:layout_width="125dp"
                 android:layout_height="wrap_content"
-                android:hint="@string/code_hide"
+                android:hint="请输入验证码"
                 android:singleLine="true"
                 android:textColorHint="#95A1AA"
                 android:inputType="phone"
@@ -106,14 +100,13 @@
                 android:id="@+id/VerificationButton"
                 android:layout_width="100dp"
                 android:layout_height="40dp"
-                android:layout_marginEnd="5dp"
                 android:text="@string/getVerification"
                 android:textSize="10sp"
                 tools:ignore="SmallSp" />
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="200dp"
             android:layout_height="100dp"
             android:gravity="center"
             android:layout_weight="2"
@@ -140,7 +133,7 @@
                 android:layout_height="25dp"
                 android:background="@mipmap/webo" />
         </LinearLayout>
-
+        
     </LinearLayout>
 
     <LinearLayout
@@ -151,17 +144,19 @@
         android:layout_weight="2">
 
         <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
-            android:id="@+id/loginButton"
-            android:layout_marginStart="40dp"
-            android:layout_marginEnd="40dp"
+            android:id="@+id/btn_id"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:background="@drawable/button_shape_default"
-            android:text="@string/login"
-            android:textSize="18sp"
             app:spinning_bar_width="4dp"
             app:spinning_bar_color="#FFF"
             app:spinning_bar_padding="6dp" />
+
+        <Button
+            android:id="@+id/loginButton"
+            android:layout_marginHorizontal="40dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/login" />
     </LinearLayout>
 
     <RelativeLayout
