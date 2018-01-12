@@ -1,7 +1,6 @@
 package cn.a1949science.www.bookrecord.activity;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -48,7 +47,6 @@ import cn.a1949science.www.bookrecord.fragment.WantFragment;
 import cn.a1949science.www.bookrecord.utils.BookInfoGetFromDouban;
 import cn.a1949science.www.bookrecord.utils.HttpUtils;
 import cn.a1949science.www.bookrecord.widget.CircleImageView;
-import okhttp3.OkHttpClient;
 
 public class MainActivity extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener, WantFragment.OnFragmentInteractionListener
@@ -63,8 +61,7 @@ public class MainActivity extends AppCompatActivity implements
     MaterialSearchView searchView;
     CircleImageView favicon;
     TextView nickname;
-    private int REQUEST_CODE = 5,REQUEST_CAMERA_PERMISSION = 0;
-    OkHttpClient client = new OkHttpClient();
+    private int REQUEST_CODE = 5;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -205,7 +202,8 @@ public class MainActivity extends AppCompatActivity implements
                 Intent it = new Intent(mContext, CaptureActivity.class);
                 startActivityForResult(it, REQUEST_CODE);
             } else {//没有权限
-                ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.CAMERA},REQUEST_CAMERA_PERMISSION);
+                int REQUEST_CAMERA_PERMISSION = 0;
+                ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSION);
             }
 
         }
@@ -218,7 +216,6 @@ public class MainActivity extends AppCompatActivity implements
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-
         if (id == R.id.nav_statistic) {
             // Handle the camera action
         } else if (id == R.id.nav_advice)
@@ -268,13 +265,12 @@ public class MainActivity extends AppCompatActivity implements
 
     }
 
+    //处理二维码扫描结果
     @Override
     protected void onActivityResult(final int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         final String[] str = new String[1];
-        /**
-         * 处理二维码扫描结果
-         */
+
         if (requestCode == REQUEST_CODE) {
             //处理扫描结果（在界面上显示）
             if (null != data) {

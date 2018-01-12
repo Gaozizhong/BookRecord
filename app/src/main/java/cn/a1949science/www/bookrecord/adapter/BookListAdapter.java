@@ -38,6 +38,12 @@ public class BookListAdapter extends RecyclerView.Adapter<BookListAdapter.ViewHo
 
     private String mStatus;
 
+    //构造方法
+    public BookListAdapter(List<BookInfo> bookInfoList,String status) {
+        mBookInfoList = bookInfoList;
+        mStatus = status;
+    }
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view;
@@ -150,12 +156,5 @@ public class BookListAdapter extends RecyclerView.Adapter<BookListAdapter.ViewHo
             }
         }
     }
-
-    //构造方法
-    public BookListAdapter(List<BookInfo> bookInfoList,String status) {
-        mBookInfoList = bookInfoList;
-        mStatus = status;
-    }
-
 
 }

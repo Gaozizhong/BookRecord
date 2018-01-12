@@ -120,10 +120,6 @@ public class ReadingFragment extends Fragment {
             @Override
             public void onRefresh() {
                 refreshList();
-                initList();
-                addDate();
-                adapter.notifyDataSetChanged();
-                refresh.setRefreshing(false);
             }
         });
         mLayoutManager = new LinearLayoutManager(this.getActivity());
@@ -147,6 +143,7 @@ public class ReadingFragment extends Fragment {
                     @Override
                     public void run() {
                         initList();
+                        addDate();
                         adapter.notifyDataSetChanged();
                         refresh.setRefreshing(false);
                     }

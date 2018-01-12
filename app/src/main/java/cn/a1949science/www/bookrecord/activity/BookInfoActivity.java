@@ -3,9 +3,11 @@ package cn.a1949science.www.bookrecord.activity;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
@@ -17,55 +19,69 @@ import com.bumptech.glide.Glide;
 import com.willy.ratingbar.ScaleRatingBar;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Map;
+import java.util.List;
+import java.util.Random;
 
 import cn.a1949science.www.bookrecord.R;
-import cn.a1949science.www.bookrecord.adapter.CommentAdapter;
+import cn.a1949science.www.bookrecord.adapter.CommentListAdapter;
 import cn.a1949science.www.bookrecord.bean.BookInfo;
-import cn.a1949science.www.bookrecord.bean.BookInfoComment;
+import cn.a1949science.www.bookrecord.bean.BookComment;
 import cn.a1949science.www.bookrecord.database.MyDatabaseHelper;
-import cn.a1949science.www.bookrecord.widget.MyListView;
 
 public class BookInfoActivity extends AppCompatActivity {
-    private LinkedList<BookInfoComment> mData = null;
-    private Context mContext = BookInfoActivity.this;
-    private CommentAdapter mAdapter = null;
-    private MyListView bookInfoList;
-    Button wantRead, reading, havaRead, returnButton;
-    TextView bookName,bookScore,bookWriter,bookPressName,bookPressData,bookISBN,book_summary,title;
-    ScaleRatingBar bookRating;
-    ImageView bookImage;
-    ScrollView scrollView;
-    private MyDatabaseHelper db;//sqlite数据库
-    private long exitTime = 0;
-    private BookInfo bookInfo;
 
+    private Context mContext = BookInfoActivity.this;
+
+    private RecyclerView recyclerView;
+
+    private BookComment[] bookComments = {new BookComment("https://img3.doubanio.com/lpic/s29418322.jpg","芳华","8.1","《芳华》涵盖了严歌苓的青春与成长期，她在四十余年后回望这段经历，笔端蕴含了饱满的情感。青春荷尔蒙冲动下的少男少女的懵懂激情，由激情犯下的过错，由过错生出的懊悔，还有那个特殊的时代背景，种种，构成了《芳华》对一段历史、一群人以及潮流更替、境遇变迁的复杂感怀。","2017-4-1"),
+            new BookComment("https://img3.doubanio.com/lpic/s29418322.jpg","芳华","8.1","《芳华》涵盖了严歌苓的青春与成长期，她在四十余年后回望这段经历，笔端蕴含了饱满的情感。青春荷尔蒙冲动下的少男少女的懵懂激情，由激情犯下的过错，由过错生出的懊悔，还有那个特殊的时代背景，种种，构成了《芳华》对一段历史、一群人以及潮流更替、境遇变迁的复杂感怀。","2017-4-1"),
+            new BookComment("https://img3.doubanio.com/lpic/s29418322.jpg","芳华","8.1","《芳华》涵盖了严歌苓的青春与成长期，她在四十余年后回望这段经历，笔端蕴含了饱满的情感。青春荷尔蒙冲动下的少男少女的懵懂激情，由激情犯下的过错，由过错生出的懊悔，还有那个特殊的时代背景，种种，构成了《芳华》对一段历史、一群人以及潮流更替、境遇变迁的复杂感怀。","2017-4-1"),
+            new BookComment("https://img3.doubanio.com/lpic/s29418322.jpg","芳华","8.1","《芳华》涵盖了严歌苓的青春与成长期，她在四十余年后回望这段经历，笔端蕴含了饱满的情感。青春荷尔蒙冲动下的少男少女的懵懂激情，由激情犯下的过错，由过错生出的懊悔，还有那个特殊的时代背景，种种，构成了《芳华》对一段历史、一群人以及潮流更替、境遇变迁的复杂感怀。","2017-4-1")};
+
+    private List<BookComment> bookCommentList = new ArrayList<>();
+
+    Button wantRead, reading, havaRead, returnButton;
+
+    TextView bookName,bookScore, bookWriter,bookPressName,bookPressData,bookISBN,book_summary,title;
+
+    ScaleRatingBar bookRating;
+
+    ImageView bookImage;
+
+    ScrollView scrollView;
+
+    LinearLayoutManager mLayoutManager;
+
+    //sqlite数据库
+    private MyDatabaseHelper db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_info);
-        //将资源加载到listview中
-        findView();
-       // getBookInfo();
-        //监听事件
+        initView();
+        getBookInfo();
         onClick();
-        test();//c此方法用于在测试阶段，将样本数据导入数据库
-        //setListview();
+        //c此方法用于在测试阶段，将样本数据导入数据库
+        test();
+        mLayoutManager = new LinearLayoutManager(mContext);
+        recyclerView.setLayoutManager(mLayoutManager);
+        initList();
+        addDate();
     }
 
     //从上一页面获取图书信息类，来填充控件
     @SuppressLint("SetTextI18n")
     private void getBookInfo() {
         Intent intent = this.getIntent();
-        bookInfo = (BookInfo) intent.getSerializableExtra("bookInfo");
+        BookInfo bookInfo = (BookInfo) intent.getSerializableExtra("bookInfo");
         bookName.setText(bookInfo.getBook_name());
         title.setText(bookInfo.getBook_name());
         bookWriter.setText(bookInfo.getBook_author());
         bookPressName.setText(bookInfo.getBook_publisher());
         bookPressData.setText(bookInfo.getBook_publish_date());
-        bookISBN.setText("ISBN:"+bookInfo.getBook_isbn13());
+        bookISBN.setText("ISBN:"+ bookInfo.getBook_isbn13());
         Glide.with(mContext)
                 .load(bookInfo.getBook_image())
                 .into(bookImage);
@@ -81,7 +97,7 @@ public class BookInfoActivity extends AppCompatActivity {
         //db.insertBookInfoListview(mContext, db);
     }
 
-    private void findView() {
+    private void initView() {
         wantRead = findViewById(R.id.book_info_wantRead);
         reading = findViewById(R.id.book_info_reading);
         havaRead = findViewById(R.id.book_info_haveRead);
@@ -97,7 +113,26 @@ public class BookInfoActivity extends AppCompatActivity {
         book_summary = findViewById(R.id.book_summary);
         title = findViewById(R.id.title);
         scrollView = findViewById(R.id.scrollView);
+        recyclerView = findViewById(R.id.recycler_comment);
     }
+
+    //获取评论信息
+    private void initList() {
+        bookCommentList.clear();
+        for (int i = 0; i < 50;i++) {
+            Random random = new Random();
+            int index = random.nextInt(bookComments.length);
+            bookCommentList.add(bookComments[index]);
+        }
+    }
+
+    //adapter中添加数据
+    private void addDate() {
+        CommentListAdapter adapter = new CommentListAdapter(bookCommentList);
+        recyclerView.setAdapter(adapter);
+
+    }
+
 
     //监听事件
     private void onClick() {
@@ -109,6 +144,7 @@ public class BookInfoActivity extends AppCompatActivity {
                 scrollView.fullScroll(View.FOCUS_UP);
             }
         });
+
         wantRead.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -138,20 +174,7 @@ public class BookInfoActivity extends AppCompatActivity {
         });
     }
 
-    //设置listview
-    private void setListview() {
 
-        ArrayList<Map<String, Object>> result;
-        result = db.resultBookInfoListview(mContext, db);
-        //bookInfoList = findViewById(R.id.book_info_list);
-        mData = new LinkedList<>();
-        //对数据库得到的结果遍历
-        for (int i = 0; i < result.size(); i++) {
-            mData.add(new BookInfoComment((Bitmap) result.get(i).get("icon"), result.get(i).get("usernick").toString(), (int) result.get(i).get("rate"), result.get(i).get("comment").toString(), result.get(i).get("data").toString()));
-            mAdapter = new CommentAdapter(mData, mContext);
-            bookInfoList.setAdapter(mAdapter);
-        }
-    }
     public void OnDestroy() {
         super.onDestroy();
         if (db != null) {

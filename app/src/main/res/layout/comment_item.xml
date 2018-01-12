@@ -9,9 +9,10 @@
     app:cardCornerRadius="4dp">
 
     <LinearLayout
+        android:layout_margin="10dp"
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="100dp">
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:orientation="horizontal"
@@ -21,14 +22,14 @@
             android:layout_height="wrap_content">
 
             <cn.a1949science.www.bookrecord.widget.CircleImageView
-                android:id="@+id/headicon"
+                android:id="@+id/user_favicon"
                 android:layout_marginStart="10dp"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 app:civ_border_width="2dp" />
 
             <TextView
-                android:id="@+id/book_info_usernick"
+                android:id="@+id/user_nickname"
                 android:layout_width="0dp"
                 android:layout_height="20dp"
                 android:textSize="15sp"
@@ -36,7 +37,7 @@
                 android:layout_weight="1"/>
 
             <com.willy.ratingbar.ScaleRatingBar
-                android:id="@+id/book_info_rating"
+                android:id="@+id/read_rating"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
@@ -46,7 +47,7 @@
                 app:srb_numStars="5"
                 app:srb_stepSize="0.1"
                 app:srb_rating="0"
-                app:srb_isIndicator="false"
+                app:srb_isIndicator="true"
                 app:srb_clickable="true"
                 app:srb_scrollable="true"
                 app:srb_clearRatingEnabled="true"
@@ -57,14 +58,14 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/book_info_usercomment"
+            android:id="@+id/read_review"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"/>
 
         <TextView
-            android:id="@+id/book_info_commentdate"
+            android:id="@+id/finish_time"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"

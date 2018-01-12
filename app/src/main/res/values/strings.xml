@@ -23,7 +23,7 @@
     <string name="seen">读过</string>
     <string name="book_summary">内容简介</string>
     <string name="split">分隔图片</string>
-    <string name="LoginInterface">http://139.199.123.55:8080/login1/Login.jsp</string>
+    <string name="LoginInterface">http://139.199.123.55:8080/book/Login.jsp</string>
     <string name="login">登录</string>
     <string name="code">验证码</string>
     <string name="code_hide">请输入验证码</string>
