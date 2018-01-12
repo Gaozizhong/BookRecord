@@ -18,54 +18,10 @@ import okhttp3.Response;
 
 public class BookInfoGetFromDouban {
 
-    //从豆瓣服务器获取相应的图书信息JSON
-    public static BookInfo BookInfoGet(final String ISBN_scan) throws IOException {
-        //HttpURLConnection实现
-        /*HttpURLConnection connection = null;
-        BufferedReader reader = null;
-        try{
-            URL url = new URL("https://api.douban.com/v2/book/isbn/" + result);
-            connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("GET");
-            connection.setConnectTimeout(8000);
-            connection.setReadTimeout(8000);
-            InputStream in = connection.getInputStream();
-            //下面对获取到的输入流进行读取
-            reader = new BufferedReader(new InputStreamReader(in));
-            StringBuilder response = new StringBuilder();
-            String line;
-            while ((line = reader.readLine()) != null) {
-                response.append(line);
-            }
-            decodeBookInfo(response.toString());
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (reader != null) {
-                try {
-                    reader.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (connection != null) {
-                connection.disconnect();
-            }
-        }*/
-        //okHttp实现
-        String responseData = null;
-        OkHttpClient client = new OkHttpClient();
-        Request request = new Request.Builder()
-                .url("https://api.douban.com/v2/book/isbn/" + ISBN_scan)
-                .build();
-        Response response = client.newCall(request).execute();
-        if (response.isSuccessful()) {
-            responseData = response.body().string();
-        } else {
-            throw new IOException("Unexpected code"+response);
-        }
+    //解析从豆瓣服务器获取相应的图书信息JSON
+    public static BookInfo parsingBookInfo(final String json) throws IOException {
         //解析从豆瓣传回来的json数据
-        JSONObject jsonObject = JSON.parseObject(responseData);
+        JSONObject jsonObject = JSON.parseObject(json);
         BookInfo bookInfo = new BookInfo();
         String imageUrl = jsonObject.getString("image");
         bookInfo.setImageUrl(imageUrl);

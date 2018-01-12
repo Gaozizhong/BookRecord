@@ -7,8 +7,10 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -31,9 +33,10 @@ public class BookInfoActivity extends AppCompatActivity {
     private CommentAdapter mAdapter = null;
     private MyListView bookInfoList;
     Button wantRead, reading, havaRead, returnButton;
-    TextView bookName,bookScore,bookWriter,bookPressName,bookPressData,bookISBN;
+    TextView bookName,bookScore,bookWriter,bookPressName,bookPressData,bookISBN,book_summary,title;
     ScaleRatingBar bookRating;
     ImageView bookImage;
+    ScrollView scrollView;
     private MyDatabaseHelper db;//sqlite数据库
     private long exitTime = 0;
     private BookInfo bookInfo;
@@ -58,6 +61,7 @@ public class BookInfoActivity extends AppCompatActivity {
         Intent intent = this.getIntent();
         bookInfo = (BookInfo) intent.getSerializableExtra("bookInfo");
         bookName.setText(bookInfo.getBookName());
+        title.setText(bookInfo.getBookName());
         bookWriter.setText(bookInfo.getAuthorName());
         bookPressName.setText(bookInfo.getPublish());
         bookPressData.setText(bookInfo.getPublishDate());
@@ -65,8 +69,9 @@ public class BookInfoActivity extends AppCompatActivity {
         Glide.with(mContext)
                 .load(bookInfo.getImageUrl())
                 .into(bookImage);
-        bookScore.setText(bookInfo.getRating()+" FROM豆瓣");
+        bookScore.setText(bookInfo.getRating());
         bookRating.setRating(Float.parseFloat(bookInfo.getRating())/2);
+        book_summary.setText(bookInfo.getBook_summary());
     }
 
     //测试
@@ -89,10 +94,21 @@ public class BookInfoActivity extends AppCompatActivity {
         bookISBN = findViewById(R.id.bookISBN);
         bookRating = findViewById(R.id.bookRating);
         bookImage = findViewById(R.id.bookImage);
+        book_summary = findViewById(R.id.book_summary);
+        title = findViewById(R.id.title);
+        scrollView = findViewById(R.id.scrollView);
     }
 
     //监听事件
     private void onClick() {
+
+        //scrollView从顶部显示
+        scrollView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                scrollView.fullScroll(View.FOCUS_UP);
+            }
+        });
         wantRead.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

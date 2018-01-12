@@ -3,6 +3,7 @@ package cn.a1949science.www.bookrecord.adapter;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -61,7 +62,7 @@ public class BookListAdapter extends RecyclerView.Adapter<BookListAdapter.ViewHo
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        BookInfo bookInfo = mBookInfoList.get(position);
+        final BookInfo bookInfo = mBookInfoList.get(position);
         holder.bookName.setText(bookInfo.getBookName());
         Glide.with(mContext)
                 .load(bookInfo.getImageUrl())
@@ -74,6 +75,9 @@ public class BookListAdapter extends RecyclerView.Adapter<BookListAdapter.ViewHo
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(mContext,BookInfoActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("bookInfo", bookInfo);
+                intent.putExtras(bundle);
                 mContext.startActivity(intent);
                 //overridePendingTransition(R.anim.slide_right_in,R.anim.slide_left_out);
             }

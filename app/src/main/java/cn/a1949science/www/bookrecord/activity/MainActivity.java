@@ -1,8 +1,12 @@
 package cn.a1949science.www.bookrecord.activity;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
@@ -37,12 +41,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.a1949science.www.bookrecord.R;
+import cn.a1949science.www.bookrecord.bean.BookInfo;
 import cn.a1949science.www.bookrecord.fragment.ReadingFragment;
 import cn.a1949science.www.bookrecord.fragment.SeenFragment;
 import cn.a1949science.www.bookrecord.fragment.WantFragment;
+import cn.a1949science.www.bookrecord.utils.BookInfoGetFromDouban;
 import cn.a1949science.www.bookrecord.utils.HttpUtils;
-import cn.a1949science.www.bookrecord.utils.NetUtils;
 import cn.a1949science.www.bookrecord.widget.CircleImageView;
+import okhttp3.OkHttpClient;
 
 public class MainActivity extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener, WantFragment.OnFragmentInteractionListener
@@ -58,6 +64,7 @@ public class MainActivity extends AppCompatActivity implements
     CircleImageView favicon;
     TextView nickname;
     private int REQUEST_CODE = 5,REQUEST_CAMERA_PERMISSION = 0;
+    OkHttpClient client = new OkHttpClient();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -224,7 +231,31 @@ public class MainActivity extends AppCompatActivity implements
         }else if (id == R.id.nav_update) {
 
         }else if (id == R.id.nav_quit) {
+            AlertDialog dlg = new AlertDialog.Builder(mContext)
+                    .setTitle("确认退出？")
+                    .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
 
+                        }
+                    })
+                    .setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            SharedPreferences sp = mContext.getSharedPreferences("userData", MODE_PRIVATE);
+                            SharedPreferences.Editor editor = sp.edit();
+                            editor.clear();
+                            editor.apply();
+                            Intent intent = new Intent(mContext, LoginActivity.class);
+                            //清空源来栈中的Activity，新建栈打开相应的Activity
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
+                            overridePendingTransition(R.anim.slide_left_in,R.anim.slide_right_out);
+
+                        }
+                    })
+                    .create();
+            dlg.show();
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -238,7 +269,7 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(final int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         final String[] str = new String[1];
         /**
@@ -253,38 +284,35 @@ public class MainActivity extends AppCompatActivity implements
                 }
                 if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_SUCCESS) {
                     final String result = bundle.getString(CodeUtils.RESULT_STRING);
-                    NetUtils.doGetAsy("https://api.douban.com/v2/book/isbn/" + result, new NetUtils.CallBack() {
+                    //Toast.makeText(mContext, result, Toast.LENGTH_LONG).show();
+                    BookInfo bookInfo = null;
+                    HttpUtils.doGetAsy("https://api.douban.com/v2/book/isbn/" + result, new HttpUtils.CallBack() {
                         @Override
-                        public void onRequestComplete(String result) {
-
+                        public void onRequestComplete(final String result) {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    try {
+                                        BookInfo bookInfo = BookInfoGetFromDouban.parsingBookInfo(result);
+                                        Intent intent = new Intent();
+                                        intent.setClass(mContext, BookInfoActivity.class);
+                                        Bundle bundle = new Bundle();
+                                        bundle.putSerializable("bookInfo", bookInfo);
+                                        intent.putExtras(bundle);
+                                        startActivity(intent);
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            });
                         }
                     });
 
 
-
-
-                    //开启线程来发起网络请求
-                    /*new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                BookInfo bookInfo = BookInfoGetFromDouban.BookInfoGet(result);
-                                Intent intent = new Intent();
-                                intent.setClass(mContext, MainActivity.class);
-                                Bundle bundle = new Bundle();
-                                bundle.putSerializable("bookInfo", bookInfo);
-                                intent.putExtras(bundle);
-                                startActivity(intent);
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }).start();*/
                 } else if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_FAILED) {
                     Toast.makeText(MainActivity.this, "解析二维码失败", Toast.LENGTH_LONG).show();
                 }
             }
         }
     }
-
 }

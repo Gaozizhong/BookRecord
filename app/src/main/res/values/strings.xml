@@ -7,17 +7,6 @@
     <string name="help">帮助</string>
     <string name="quit">退出</string>
     <string name="setting">设置</string>
-    <string name="bookName">偷影子的人</string>
-    <string name="bookScore">6分</string>
-    <string name="bookWriter">[法]马克▪李维</string>
-    <string name="bookPressName">出版社：湖南文艺出版社</string>
-    <string name="bookPressData">出版年：2017-8</string>
-    <string name="bookISBN">ISBN:9787508677613</string>
-    <string name="bookcontext">
-        一个老是受班上同学欺负的瘦弱小男孩，因为拥有一种特殊能力而强大：他能“偷别人的影子”，因而能看见他人心事，听见人们心中不愿意说出口的秘密。他开始成为需要帮助者的心灵伙伴，为每个偷来的影子点亮生命的小小光芒。<br />
-        <p>某年灿烂的夏天，他在海边邂逅一位又聋又哑的女孩。他该如何用自己的能力帮助她?他将如何信守与她共许的承诺?一段缠绵多年的爱恋，一段进行中的不完美爱情。故事温柔风趣，轻盈优雅，能让你我真正感受到心跳的爱情疗愈小说。</p>
-        <p>《偷影子的人》是马克•李维的第10部作品，该书在法国首印45万册，位列全年销量排行榜的总冠军，法国媒体惊叹：“销售得比影子消失的速度还快！”这部作品完美展现了马克•李维温柔风趣的写作风格，有催人泪下的亲情、浪漫感人的爱情和不离不弃的友情，清新浪漫的气息和温柔感人的故事相互交织，带给读者笑中带泪的阅读感受，是一部唤醒童年回忆和内心梦想的温情疗愈小说。</p>
-    </string>
     <string name="usernick">用户1</string>
     <string name="comment">有些人只拥吻影子，于是只拥有幸福的幻影。 ——莎士比亚 爱情里最需要的，是想象力。每个人必须用尽全力和全部的想象力来形塑对方，并丝毫不向现实低头。那么，当双方的幻想相遇……就再也没有比这更美的景象了。 ——罗曼·加里 爱情，就像影子一样，如果你踩中了，就请带走我的心。 所有流言蜚语都为人津津乐道，人人都热衷于他人的不幸。 谈到时间，我常搞不懂，我的日子所剩无几，为何要用尽方法来跟我们过不去...</string>
     <string name="data">From BookRecord At 2017/12/31</string>
@@ -28,5 +17,11 @@
     <string name="scan">scan</string>
     <string name="bookimage">BookImage</string>
     <string name="aboutUs">       BookShare主要为大学生积压的实体书籍的流通与再利用创造机会，为喜欢读书并喜欢分享的大学生提供一个良好的图书共享平台，不仅可以帮助大学生分享出已经阅读完的书籍，还能够帮助大学生找到自己喜欢的书籍。在此平台中，大学生可以分享自己阅读过的好书，也可以通过平台找到自己感兴趣的书籍，以较方便的方式得到高质量的书籍，满足自己的读书需求。</string>
+    <string name="history">历史</string>
+    <string name="want_to_read">想读</string>
+    <string name="reading">在读</string>
+    <string name="seen">读过</string>
+    <string name="book_summary">内容简介</string>
+    <string name="split">分隔图片</string>
 
 </resources>
