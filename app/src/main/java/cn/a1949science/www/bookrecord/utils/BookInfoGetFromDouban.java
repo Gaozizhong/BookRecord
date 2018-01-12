@@ -1,14 +1,12 @@
 package cn.a1949science.www.bookrecord.utils;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 import java.io.IOException;
 
 import cn.a1949science.www.bookrecord.bean.BookInfo;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 
 /**
  * 通过ISBN从豆瓣获取图书信息
@@ -24,21 +22,26 @@ public class BookInfoGetFromDouban {
         JSONObject jsonObject = JSON.parseObject(json);
         BookInfo bookInfo = new BookInfo();
         String imageUrl = jsonObject.getString("image");
-        bookInfo.setImageUrl(imageUrl);
+        bookInfo.setBook_image(imageUrl);
         String bookName = jsonObject.getString("title");
-        bookInfo.setBookName(bookName);
+        bookInfo.setBook_name(bookName);
         String publishDate = jsonObject.getString("pubdate");
-        bookInfo.setPublishDate(publishDate);
+        bookInfo.setBook_publish_date(publishDate);
         String rating = jsonObject.getString("rating");
         JSONObject ratingObject = JSON.parseObject(rating);
         rating = ratingObject.getString("average");
-        bookInfo.setRating(rating);
-        String authorName = jsonObject.getString("author");
-        bookInfo.setAuthorName(authorName);
+        bookInfo.setBook_rating(rating);
+        //解析作者组
+        JSONArray authors = jsonObject.getJSONArray("author");
+        StringBuilder book_author = new StringBuilder();
+        for (int i = 0;i<authors.size();i++) {
+            book_author.append(" ").append(authors.get(i));
+        }
+        bookInfo.setBook_author(book_author.toString());
         String publish = jsonObject.getString("publisher");
-        bookInfo.setPublish(publish);
+        bookInfo.setBook_publisher(publish);
         String ISBN = jsonObject.getString("isbn13");
-        bookInfo.setISBN(ISBN);
+        bookInfo.setBook_isbn13(ISBN);
         String book_summary = jsonObject.getString("summary");
         bookInfo.setBook_summary(book_summary);
         return bookInfo;

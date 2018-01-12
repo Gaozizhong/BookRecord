@@ -52,7 +52,7 @@ public class BookInfoActivity extends AppCompatActivity {
         //监听事件
         onClick();
         test();//c此方法用于在测试阶段，将样本数据导入数据库
-        setListview();
+        //setListview();
     }
 
     //从上一页面获取图书信息类，来填充控件
@@ -60,17 +60,17 @@ public class BookInfoActivity extends AppCompatActivity {
     private void getBookInfo() {
         Intent intent = this.getIntent();
         bookInfo = (BookInfo) intent.getSerializableExtra("bookInfo");
-        bookName.setText(bookInfo.getBookName());
-        title.setText(bookInfo.getBookName());
-        bookWriter.setText(bookInfo.getAuthorName());
-        bookPressName.setText(bookInfo.getPublish());
-        bookPressData.setText(bookInfo.getPublishDate());
-        bookISBN.setText("ISBN:"+bookInfo.getISBN());
+        bookName.setText(bookInfo.getBook_name());
+        title.setText(bookInfo.getBook_name());
+        bookWriter.setText(bookInfo.getBook_author());
+        bookPressName.setText(bookInfo.getBook_publisher());
+        bookPressData.setText(bookInfo.getBook_publish_date());
+        bookISBN.setText("ISBN:"+bookInfo.getBook_isbn13());
         Glide.with(mContext)
-                .load(bookInfo.getImageUrl())
+                .load(bookInfo.getBook_image())
                 .into(bookImage);
-        bookScore.setText(bookInfo.getRating());
-        bookRating.setRating(Float.parseFloat(bookInfo.getRating())/2);
+        bookScore.setText(bookInfo.getBook_rating());
+        bookRating.setRating(Float.parseFloat(bookInfo.getBook_rating())/2);
         book_summary.setText(bookInfo.getBook_summary());
     }
 
@@ -143,7 +143,7 @@ public class BookInfoActivity extends AppCompatActivity {
 
         ArrayList<Map<String, Object>> result;
         result = db.resultBookInfoListview(mContext, db);
-        bookInfoList = findViewById(R.id.book_info_list);
+        //bookInfoList = findViewById(R.id.book_info_list);
         mData = new LinkedList<>();
         //对数据库得到的结果遍历
         for (int i = 0; i < result.size(); i++) {

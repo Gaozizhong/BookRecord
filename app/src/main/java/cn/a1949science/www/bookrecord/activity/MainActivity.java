@@ -232,7 +232,7 @@ public class MainActivity extends AppCompatActivity implements
 
         }else if (id == R.id.nav_quit) {
             AlertDialog dlg = new AlertDialog.Builder(mContext)
-                    .setTitle("确认退出？")
+                    .setTitle("退出登录？")
                     .setNegativeButton("取消", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {

@@ -26,6 +26,7 @@ import java.util.Map;
 import cn.a1949science.www.bookrecord.R;
 import cn.a1949science.www.bookrecord.utils.AMUtils;
 import cn.a1949science.www.bookrecord.utils.HttpUtils;
+import cn.a1949science.www.bookrecord.utils.MobileMessageCheck;
 import cn.a1949science.www.bookrecord.utils.MobileMessageSend;
 
 public class LoginActivity extends AppCompatActivity {
@@ -79,11 +80,7 @@ public class LoginActivity extends AppCompatActivity {
             @SuppressLint("ShowToast")
             @Override
             public void onClick(View v) {
-                addDataToMysql(phoneNumber.getText().toString(), System.currentTimeMillis());
-                //Intent intent = new Intent(mContext, MainActivity.class);
-                //startActivity(intent);
-                //finish();
-                /*if (!phoneNumber.getText().toString().equals("") && !verification.getText().toString().equals("")) {
+                if (!phoneNumber.getText().toString().equals("") && !verification.getText().toString().equals("")) {
                     //验证验证码是否正确
                     new Thread() {
                         @Override
@@ -92,8 +89,7 @@ public class LoginActivity extends AppCompatActivity {
                             try {
                                 String str = MobileMessageCheck.checkMsg(phoneNumber.getText().toString(), code);
                                 if (str.equals("success")) {
-                                    String userId = addDataToMysql(phoneNumber.getText().toString(), System.currentTimeMillis());
-                                    addDataToLocal(userId, phoneNumber.getText().toString(), System.currentTimeMillis() + 30 * 24 * 60 * 60 * 1000);
+                                    addDataToMysql(phoneNumber.getText().toString(), System.currentTimeMillis());
                                     Intent intent = new Intent(mContext, MainActivity.class);
                                     startActivity(intent);
                                     finish();
@@ -109,7 +105,7 @@ public class LoginActivity extends AppCompatActivity {
                     }.start();
                 } else {
                     Toast.makeText(mContext, "请填写正确的信息！", Toast.LENGTH_LONG).show();
-                }*/
+                }
 
             }
         });

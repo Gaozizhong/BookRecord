@@ -63,14 +63,14 @@ public class BookListAdapter extends RecyclerView.Adapter<BookListAdapter.ViewHo
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         final BookInfo bookInfo = mBookInfoList.get(position);
-        holder.bookName.setText(bookInfo.getBookName());
+        holder.bookName.setText(bookInfo.getBook_name());
         Glide.with(mContext)
-                .load(bookInfo.getImageUrl())
+                .load(bookInfo.getBook_image())
                 .into(holder.bookImage);
-        holder.publicDate.setText(bookInfo.getPublishDate());
-        holder.authorName.setText(bookInfo.getAuthorName());
-        holder.publicer.setText(bookInfo.getPublish());
-        holder.simpleRatingBar.setRating(Float.parseFloat(bookInfo.getRating())/2);
+        holder.publicDate.setText(bookInfo.getBook_publish_date());
+        holder.authorName.setText(bookInfo.getBook_author());
+        holder.publicer.setText(bookInfo.getBook_publisher());
+        holder.simpleRatingBar.setRating(Float.parseFloat(bookInfo.getBook_rating())/2);
         holder.mItemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -85,7 +85,7 @@ public class BookListAdapter extends RecyclerView.Adapter<BookListAdapter.ViewHo
 
         switch (mStatus) {
             case "want":
-                holder.rating.setText(bookInfo.getRating()+" FROM豆瓣");
+                holder.rating.setText(bookInfo.getBook_rating()+" FROM豆瓣");
                 holder.button.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -96,7 +96,7 @@ public class BookListAdapter extends RecyclerView.Adapter<BookListAdapter.ViewHo
                 });
                 break;
             case "reading":
-                holder.rating.setText(bookInfo.getRating());
+                holder.rating.setText(bookInfo.getBook_rating());
                 holder.button.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -107,7 +107,7 @@ public class BookListAdapter extends RecyclerView.Adapter<BookListAdapter.ViewHo
                 });
                 break;
             default:
-                holder.rating.setText(bookInfo.getRating());
+                holder.rating.setText(bookInfo.getBook_rating());
                 break;
         }
     }
