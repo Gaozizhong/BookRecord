@@ -10,7 +10,7 @@
     tools:context=".activity.UserInfoActivity">
 <android.support.v7.widget.Toolbar
     android:layout_width="match_parent"
-    android:layout_height="?attr/actionBarSize"
+    android:layout_height="wrap_content"
     android:background="@android:color/white">
     <Button
         android:id="@+id/user_info_return_button"

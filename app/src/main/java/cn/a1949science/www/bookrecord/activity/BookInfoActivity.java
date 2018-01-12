@@ -48,7 +48,7 @@ public class BookInfoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_book_info);
         //将资源加载到listview中
         findView();
-        getBookInfo();
+       // getBookInfo();
         //监听事件
         onClick();
         test();//c此方法用于在测试阶段，将样本数据导入数据库

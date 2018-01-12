@@ -8,7 +8,7 @@
     android:gravity="center_horizontal">
         <android.support.v7.widget.Toolbar
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
+            android:layout_height="wrap_content"
             android:background="@android:color/white">
             <Button
                 android:id="@+id/reading_return_button"
@@ -155,8 +155,8 @@
                     />
                 <Button
                     android:id="@+id/reading_adress_button"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:layout_marginLeft="10dp"
                     android:background="@mipmap/adress"/>
             </LinearLayout>
@@ -173,7 +173,6 @@
                     android:textColor="@android:color/background_dark"
                     android:gravity="right|center_vertical"
                     />
-
                 <Spinner
                     android:id="@+id/reading_classfy"
                     android:layout_width="200dp"

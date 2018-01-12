@@ -61,13 +61,11 @@
         <activity android:name=".activity.AdviceActivity" />
         <activity android:name=".activity.AboutUsActivity" />
         <activity android:name=".activity.ScanISBN" />
-
+        <activity android:name=".activity.UserInfoActivity"/>
         <service android:name="com.amap.api.location.APSService" />
-
         <meta-data
             android:name="com.amap.api.v2.apikey"
             android:value="9656c111eb4ab6b214069e8f6f6e379e" />
-        <activity android:name=".activity.UserInfoActivity"></activity>
     </application>
 
 </manifest>

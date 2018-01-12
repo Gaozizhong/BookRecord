@@ -10,7 +10,7 @@
     tools:context="cn.a1949science.www.bookrecord.activity.SeenActivity">
     <android.support.v7.widget.Toolbar
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
+        android:layout_height="wrap_content"
         android:background="@android:color/white">
         <Button
             android:id="@+id/seen_return"
@@ -158,8 +158,8 @@
                 />
             <Button
                 android:id="@+id/seen_adress_button"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:layout_marginLeft="10dp"
                 android:background="@mipmap/adress"/>
         </LinearLayout>

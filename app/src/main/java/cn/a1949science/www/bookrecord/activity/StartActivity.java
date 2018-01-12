@@ -23,7 +23,9 @@ public class StartActivity extends AppCompatActivity {
     // 所需的全部权限
     static final String[] PERMISSIONS = new String[]{
             //Manifest.permission.READ_PHONE_STATE,
-            Manifest.permission.CAMERA//摄像头权限
+            Manifest.permission.CAMERA,//摄像头权限
+            Manifest.permission.ACCESS_COARSE_LOCATION,//网络定位
+            Manifest.permission.ACCESS_FINE_LOCATION//GPS定位
     };
     private PermissionsChecker mPermissionsChecker; // 权限检测器
 
