@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.willy.ratingbar.ScaleRatingBar;
@@ -63,8 +64,6 @@ public class BookInfoActivity extends AppCompatActivity {
         initView();
         getBookInfo();
         onClick();
-        //c此方法用于在测试阶段，将样本数据导入数据库
-        test();
         mLayoutManager = new LinearLayoutManager(mContext);
         recyclerView.setLayoutManager(mLayoutManager);
         initList();
@@ -88,6 +87,7 @@ public class BookInfoActivity extends AppCompatActivity {
         bookScore.setText(bookInfo.getBook_rating());
         bookRating.setRating(Float.parseFloat(bookInfo.getBook_rating())/2);
         book_summary.setText(bookInfo.getBook_summary());
+        //Toast.makeText(mContext,bookInfo.getBook_image(), Toast.LENGTH_LONG).show();
     }
 
     //测试
