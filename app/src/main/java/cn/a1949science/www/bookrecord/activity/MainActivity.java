@@ -28,6 +28,7 @@ import android.widget.AdapterView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSON;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 import com.uuzuche.lib_zxing.activity.CaptureActivity;
 import com.uuzuche.lib_zxing.activity.CodeUtils;
@@ -35,16 +36,15 @@ import com.uuzuche.lib_zxing.activity.ZXingLibrary;
 import com.ycl.tabview.library.TabView;
 import com.ycl.tabview.library.TabViewChild;
 
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import cn.a1949science.www.bookrecord.R;
-import cn.a1949science.www.bookrecord.bean.BookInfo;
 import cn.a1949science.www.bookrecord.fragment.ReadingFragment;
 import cn.a1949science.www.bookrecord.fragment.SeenFragment;
 import cn.a1949science.www.bookrecord.fragment.WantFragment;
-import cn.a1949science.www.bookrecord.utils.BookInfoGetFromDouban;
 import cn.a1949science.www.bookrecord.utils.HttpUtils;
 import cn.a1949science.www.bookrecord.widget.CircleImageView;
 
@@ -279,10 +279,32 @@ public class MainActivity extends AppCompatActivity implements
                     return;
                 }
                 if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_SUCCESS) {
-                    final String result = bundle.getString(CodeUtils.RESULT_STRING);
-                    //Toast.makeText(mContext, result, Toast.LENGTH_LONG).show();
-                    BookInfo bookInfo = null;
-                    HttpUtils.doGetAsy("https://api.douban.com/v2/book/isbn/" + result, new HttpUtils.CallBack() {
+                    final String isbn = bundle.getString(CodeUtils.RESULT_STRING);
+                    //Toast.makeText(mContext, isbn, Toast.LENGTH_LONG).show();
+                    //创建一个Map对象
+                    Map<String,String> map = new HashMap<>();
+                    map.put("book_isbn13", isbn);
+                    //转成JSON数据
+                    final String ISBNjson = JSON.toJSONString(map,true);
+                    HttpUtils.doPostAsy(getString(R.string.SelectISBNInterface), ISBNjson, new HttpUtils.CallBack() {
+                        @Override
+                        public void onRequestComplete(final String result2) {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(MainActivity.this, result2.trim(), Toast.LENGTH_LONG).show();
+                                }
+                            });
+                            /*BookInfo bookInfo = JSON.parseObject(result, new TypeReference<BookInfo>() {});
+                            Intent intent = new Intent();
+                            intent.setClass(mContext, BookInfoActivity.class);
+                            Bundle bundle = new Bundle();
+                            bundle.putSerializable("bookInfo", bookInfo);
+                            intent.putExtras(bundle);
+                            startActivity(intent);*/
+                        }
+                    });
+                    /*HttpUtils.doGetAsy("https://api.douban.com/v2/book/isbn/" + result, new HttpUtils.CallBack() {
                         @Override
                         public void onRequestComplete(final String result) {
                             runOnUiThread(new Runnable() {
@@ -302,7 +324,7 @@ public class MainActivity extends AppCompatActivity implements
                                 }
                             });
                         }
-                    });
+                    });*/
 
 
                 } else if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_FAILED) {

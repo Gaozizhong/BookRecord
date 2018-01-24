@@ -114,6 +114,7 @@ public class BookInfoActivity extends AppCompatActivity {
         title = findViewById(R.id.title);
         scrollView = findViewById(R.id.scrollView);
         recyclerView = findViewById(R.id.recycler_comment);
+        recyclerView.setNestedScrollingEnabled(false);
     }
 
     //获取评论信息
