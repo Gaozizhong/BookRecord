@@ -295,12 +295,6 @@ public class MainActivity extends AppCompatActivity implements
                     HttpUtils.doPostAsy(getString(R.string.SelectISBNInterface), ISBNjson, new HttpUtils.CallBack() {
                         @Override
                         public void onRequestComplete(final String result2) {
-                            /*runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Toast.makeText(MainActivity.this, result2.trim(), Toast.LENGTH_LONG).show();
-                                }
-                            });*/
                             BookInfo bookInfo = JSON.parseObject(result2, new TypeReference<BookInfo>() {});
                             Intent intent = new Intent();
                             intent.setClass(mContext, BookInfoActivity.class);
@@ -311,28 +305,6 @@ public class MainActivity extends AppCompatActivity implements
                             progress.dismiss();
                         }
                     });
-                    /*HttpUtils.doGetAsy("https://api.douban.com/v2/book/isbn/" + result, new HttpUtils.CallBack() {
-                        @Override
-                        public void onRequestComplete(final String result) {
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    try {
-                                        BookInfo bookInfo = BookInfoGetFromDouban.parsingBookInfo(result);
-                                        Intent intent = new Intent();
-                                        intent.setClass(mContext, BookInfoActivity.class);
-                                        Bundle bundle = new Bundle();
-                                        bundle.putSerializable("bookInfo", bookInfo);
-                                        intent.putExtras(bundle);
-                                        startActivity(intent);
-                                    } catch (IOException e) {
-                                        e.printStackTrace();
-                                    }
-                                }
-                            });
-                        }
-                    });*/
-
 
                 } else if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_FAILED) {
                     Toast.makeText(MainActivity.this, "解析二维码失败", Toast.LENGTH_LONG).show();
