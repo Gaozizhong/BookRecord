@@ -19,6 +19,8 @@ import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.mob.MobApplication;
+import com.mob.MobSDK;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -30,6 +32,8 @@ import cn.a1949science.www.bookrecord.utils.AMUtils;
 import cn.a1949science.www.bookrecord.utils.HttpUtils;
 import cn.a1949science.www.bookrecord.utils.MobileMessageCheck;
 import cn.a1949science.www.bookrecord.utils.MobileMessageSend;
+import cn.smssdk.EventHandler;
+import cn.smssdk.SMSSDK;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -50,6 +54,7 @@ public class LoginActivity extends AppCompatActivity {
 
     //事件
     private void onClick() {
+        //新建一个缓存
         SharedPreferences sp = mContext.getSharedPreferences("userData", Context.MODE_PRIVATE);
         if (sp.getString("phoneNumber",null) != null) {
             phoneNumber.setText(sp.getString("phoneNumber",null));
@@ -87,28 +92,8 @@ public class LoginActivity extends AppCompatActivity {
                     loginButton.startAnimation();
                     if (!phoneNumber.getText().toString().equals("") && !verification.getText().toString().equals("")) {
                         //验证验证码是否正确
-                        new Thread() {
-                            @Override
-                            public void run() {
-                                String code = verification.getText().toString();
-                                try {
-                                    String str = MobileMessageCheck.checkMsg(phoneNumber.getText().toString(), code);
-                                    if (str.equals("success")) {
-                                        addDataToMysql(phoneNumber.getText().toString(), System.currentTimeMillis());
-                                        loginButton.stopAnimation();
-                                        Intent intent = new Intent(mContext, MainActivity.class);
-                                        startActivity(intent);
-                                        finish();
-                                    } else {
-                                        Looper.prepare();
-                                        Toast.makeText(mContext, "验证失败！", Toast.LENGTH_LONG).show();
-                                        Looper.loop();
-                                    }
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        }.start();
+                        submitCode("86", phoneNumber.getText().toString(), verification.getText().toString());
+
                     } else {
                         Toast.makeText(mContext, "请填写正确的信息！", Toast.LENGTH_LONG).show();
                     }
@@ -132,26 +117,7 @@ public class LoginActivity extends AppCompatActivity {
                     timer = new MyCountTimer(60000, 1000);
                     timer.start();
                     //请求发送验证码
-                    new Thread(){
-                        @Override
-                        public void run(){
-                            try {
-                                String number = phoneNumber.getText().toString();
-                                String str = MobileMessageSend.sendMsg(number);
-                                if (str.equals("success")) {
-                                    Looper.prepare();
-                                    Toast.makeText(mContext, "发送成功", Toast.LENGTH_SHORT).show();
-                                    Looper.loop();
-                                } else {
-                                    Looper.prepare();
-                                    Toast.makeText(mContext, str, Toast.LENGTH_SHORT).show();
-                                    Looper.loop();
-                                }
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }.start();
+                    sendCode("86",phoneNumber.getText().toString());
 
                 } else {
                     Toast.makeText(mContext, "请输入正确的手机号码", Toast.LENGTH_SHORT).show();
@@ -192,6 +158,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void findView() {
+        //初始化MobSDK
+        MobSDK.init(this);
         phoneNumber= findViewById(R.id.phoneNumber);
         verification= findViewById(R.id.verification);
         delete= findViewById(R.id.phoneNumberDelete);
@@ -217,4 +185,53 @@ public class LoginActivity extends AppCompatActivity {
             getverification.setText("重新发送验证码");
         }
     }
+
+    // 请求验证码，其中country表示国家代码，如“86”；phone表示手机号码
+    public void sendCode(String country, String phone) {
+        // 注册一个事件回调，用于处理发送验证码操作的结果
+        SMSSDK.registerEventHandler(new EventHandler() {
+            public void afterEvent(int event, int result, Object data) {
+                if (result == SMSSDK.RESULT_COMPLETE) {
+                    // TODO 处理成功得到验证码的结果
+                    // 请注意，此时只是完成了发送验证码的请求，验证码短信还需要几秒钟之后才送达
+                    //Toast.makeText(mContext, "发送成功", Toast.LENGTH_SHORT).show();
+                } else{
+                    // TODO 处理错误的结果
+                    //Toast.makeText(mContext, "发送出错", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
+        // 触发操作
+        SMSSDK.getVerificationCode(country, phone);
+    }
+
+    // 提交验证码，其中的code表示验证码
+    public void submitCode(String country, String phone, String code) {
+        // 注册一个事件回调，用于处理提交验证码操作的结果
+        SMSSDK.registerEventHandler(new EventHandler() {
+            public void afterEvent(int event, int result, Object data) {
+                if (result == SMSSDK.RESULT_COMPLETE) {
+                    // TODO 处理验证成功的结果
+                    addDataToMysql(phoneNumber.getText().toString(), System.currentTimeMillis());
+                    //loginButton.stopAnimation();
+                    Intent intent = new Intent(mContext, MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                } else{
+                    // TODO 处理错误的结果
+                    Toast.makeText(mContext, "验证失败！", Toast.LENGTH_LONG).show();
+                }
+
+            }
+        });
+        // 触发操作
+        SMSSDK.submitVerificationCode(country, phone, code);
+    }
+
+    protected void onDestroy() {
+        super.onDestroy();
+        //用完回调要注销掉，否则可能会出现内存泄露
+        SMSSDK.unregisterAllEventHandler();
+    };
 }
