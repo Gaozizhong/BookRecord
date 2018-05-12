@@ -91,12 +91,21 @@
                         android:textColor="@android:color/background_dark"
                         android:gravity="right|center_vertical"
                         tools:ignore="RtlHardcoded" />
-                    <com.sendtion.xrichtext.RichTextEditor
+
+                    <EditText
                         android:id="@+id/want_read_reason"
-                        android:layout_height="wrap_content"
                         android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:hint="请输入内容"
+                        android:background="@null"
                         android:textSize="16sp"
-                        android:textColor="@android:color/darker_gray"/>
+                        android:textColor="@android:color/darker_gray"
+                        android:inputType="textMultiLine"
+                        tools:ignore="LabelFor" />
+
+
+
                 </LinearLayout>
 
                 <LinearLayout
@@ -113,12 +122,19 @@
                         android:textColor="@android:color/background_dark"
                         android:gravity="right|center_vertical"
                         tools:ignore="RtlHardcoded" />
-                    <com.sendtion.xrichtext.RichTextEditor
+
+                    <EditText
                         android:id="@+id/want_read_hope"
-                        android:layout_height="wrap_content"
                         android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:hint="请输入内容"
+                        android:background="@null"
                         android:textSize="16sp"
-                        android:textColor="@android:color/darker_gray"/>
+                        android:textColor="@android:color/darker_gray"
+                        android:inputType="textMultiLine"
+                        tools:ignore="HardcodedText,LabelFor" />
+
                 </LinearLayout>
 
 

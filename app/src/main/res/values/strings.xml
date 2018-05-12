@@ -29,6 +29,7 @@
     <string name="code_hide">请输入验证码</string>
     <string name="SelectISBNInterface">http://139.199.123.55:8080/book/SelectIsbn.jsp</string>
     <string name="douban_score">豆瓣评分</string>
+    <string name="WantReadInterface">http://139.199.123.55:8080/book/WantRead.jsp</string>
 
 
 </resources>
