@@ -145,7 +145,7 @@ public class BookInfoActivity extends AppCompatActivity {
                 Bundle bundle = new Bundle();
                 bundle.putString("bookId", book_id);
                 bundle.putString("bookScore", book_score);
-                intent.putExtras(bundle);
+                intent.putExtra("id_score",bundle);
                 startActivity(intent);
             }
         });
