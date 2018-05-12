@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,7 +13,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.willy.ratingbar.ScaleRatingBar;
@@ -25,9 +23,8 @@ import java.util.Random;
 
 import cn.a1949science.www.bookrecord.R;
 import cn.a1949science.www.bookrecord.adapter.CommentListAdapter;
-import cn.a1949science.www.bookrecord.bean.BookInfo;
 import cn.a1949science.www.bookrecord.bean.BookComment;
-import cn.a1949science.www.bookrecord.database.MyDatabaseHelper;
+import cn.a1949science.www.bookrecord.bean.BookInfo;
 
 public class BookInfoActivity extends AppCompatActivity {
 
@@ -42,6 +39,8 @@ public class BookInfoActivity extends AppCompatActivity {
 
     private List<BookComment> bookCommentList = new ArrayList<>();
 
+    String book_id,book_score;
+
     Button wantRead, reading, havaRead, returnButton;
 
     TextView bookName,bookScore, bookWriter,bookPressName,bookPressData,bookISBN,book_summary,title;
@@ -54,8 +53,6 @@ public class BookInfoActivity extends AppCompatActivity {
 
     LinearLayoutManager mLayoutManager;
 
-    //sqlite数据库
-    private MyDatabaseHelper db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +72,7 @@ public class BookInfoActivity extends AppCompatActivity {
     private void getBookInfo() {
         Intent intent = this.getIntent();
         BookInfo bookInfo = (BookInfo) intent.getSerializableExtra("bookInfo");
+        book_id = String.valueOf(bookInfo.getBook_id());
         bookName.setText(bookInfo.getBook_name());
         title.setText(bookInfo.getBook_name());
         bookWriter.setText(bookInfo.getBook_author());
@@ -84,17 +82,11 @@ public class BookInfoActivity extends AppCompatActivity {
         Glide.with(mContext)
                 .load(bookInfo.getBook_image())
                 .into(bookImage);
+        book_score = bookInfo.getBook_rating();
         bookScore.setText(bookInfo.getBook_rating());
         bookRating.setRating(Float.parseFloat(bookInfo.getBook_rating())/2);
         book_summary.setText(bookInfo.getBook_summary());
         //Toast.makeText(mContext,bookInfo.getBook_image(), Toast.LENGTH_LONG).show();
-    }
-
-    //测试
-    private void test() {
-        db = new MyDatabaseHelper(mContext, "book.db3", 1);
-        //将插入语句注释掉，防止重复插入
-        //db.insertBookInfoListview(mContext, db);
     }
 
     private void initView() {
@@ -150,6 +142,10 @@ public class BookInfoActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(mContext, WantReadActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("bookId", book_id);
+                bundle.putString("bookScore", book_score);
+                intent.putExtras(bundle);
                 startActivity(intent);
             }
         });
@@ -175,13 +171,6 @@ public class BookInfoActivity extends AppCompatActivity {
         });
     }
 
-
-    public void OnDestroy() {
-        super.onDestroy();
-        if (db != null) {
-            db.close();
-        }
-    }
 
     public void onBackPressed() {
         finish();
