@@ -77,7 +77,9 @@
             android:layout_width="match_parent"
             android:layout_height="80dp"
             android:orientation="horizontal"
-            android:layout_marginTop="10dp">
+            android:layout_marginTop="10dp"
+            android:focusable="true"
+            android:focusableInTouchMode="true">
             <TextView
                 android:layout_width="80dp"
                 android:layout_height="80dp"
@@ -183,13 +185,12 @@
                 android:textColor="@android:color/background_dark"
                 android:gravity="right|center_vertical"
                 />
-            <Spinner
+            <TextView
                 android:id="@+id/seen_classfy"
                 android:layout_width="200dp"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="50dp"
-                android:entries="@array/readclassfy">
-            </Spinner>
+                android:gravity="center"
+                android:hint="点击选择图书分类" />
         </LinearLayout>
         <Button
             android:id="@+id/seen_Button"
