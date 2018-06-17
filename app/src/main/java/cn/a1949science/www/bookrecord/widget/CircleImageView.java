@@ -27,7 +27,7 @@ import cn.a1949science.www.bookrecord.R;
  * Created by 高子忠 on 2018/1/5.
  */
 
-public class CircleImageView extends ImageView {
+public class CircleImageView extends android.support.v7.widget.AppCompatImageView {
 
     private static final ScaleType SCALE_TYPE = ScaleType.CENTER_CROP;
 

@@ -59,7 +59,7 @@
                             app:srb_starPadding="0dp"
                             app:srb_numStars="5"
                             app:srb_stepSize="0.1"
-                            app:srb_rating="2"
+                            app:srb_rating="0"
                             app:srb_isIndicator="true"
                             app:srb_clickable="true"
                             app:srb_scrollable="true"

@@ -7,7 +7,6 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -19,10 +18,8 @@ import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.mob.MobApplication;
 import com.mob.MobSDK;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,8 +27,6 @@ import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
 import cn.a1949science.www.bookrecord.R;
 import cn.a1949science.www.bookrecord.utils.AMUtils;
 import cn.a1949science.www.bookrecord.utils.HttpUtils;
-import cn.a1949science.www.bookrecord.utils.MobileMessageCheck;
-import cn.a1949science.www.bookrecord.utils.MobileMessageSend;
 import cn.smssdk.EventHandler;
 import cn.smssdk.SMSSDK;
 
