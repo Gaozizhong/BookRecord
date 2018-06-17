@@ -14,6 +14,7 @@ import android.view.animation.Animation;
 
 import cn.a1949science.www.bookrecord.R;
 import cn.a1949science.www.bookrecord.widget.PermissionsChecker;
+import cn.bmob.v3.Bmob;
 
 public class StartActivity extends AppCompatActivity {
 
@@ -32,6 +33,7 @@ public class StartActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Bmob.initialize(this, "8b2890f3afdee1e695d1024a61bedc38");
 
         //加载启动页面
         final View view = View.inflate(this, R.layout.activity_start, null);
