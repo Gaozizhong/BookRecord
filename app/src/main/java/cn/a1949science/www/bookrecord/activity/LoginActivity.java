@@ -1,12 +1,13 @@
 package cn.a1949science.www.bookrecord.activity;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -23,21 +24,22 @@ import com.alibaba.fastjson.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
 import cn.a1949science.www.bookrecord.R;
+import cn.a1949science.www.bookrecord.bean._User;
 import cn.a1949science.www.bookrecord.utils.AMUtils;
 import cn.a1949science.www.bookrecord.utils.HttpUtils;
 import cn.bmob.v3.BmobSMS;
+import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.LogInListener;
 import cn.bmob.v3.listener.QueryListener;
 
 public class LoginActivity extends AppCompatActivity {
 
     Context mContext = LoginActivity.this;
     EditText phoneNumber,verification;
-    Button delete,getverification;
+    Button delete,getverification,loginButton;
     MyCountTimer timer;
-    CircularProgressButton loginButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +48,15 @@ public class LoginActivity extends AppCompatActivity {
         //寻找地址
         findView();
         onClick();
+    }
+
+    //查找地址
+    private void findView() {
+        phoneNumber= findViewById(R.id.phoneNumber);
+        verification= findViewById(R.id.verification);
+        delete= findViewById(R.id.phoneNumberDelete);
+        getverification= findViewById(R.id.VerificationButton);
+        loginButton= findViewById(R.id.loginButton);
     }
 
     //事件
@@ -83,17 +94,35 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //andriod版本大于等于5.0
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    loginButton.startAnimation();
-                    if (!phoneNumber.getText().toString().equals("") && !verification.getText().toString().equals("")) {
-                        //验证验证码是否正确
-                        //submitCode("86", phoneNumber.getText().toString(), verification.getText().toString());
+                if (!TextUtils.isEmpty(phoneNumber.getText().toString()) && !TextUtils.isEmpty(verification.getText().toString())) {
+                    loginButton.setClickable(false);
+                    final ProgressDialog progress = new ProgressDialog(mContext);
+                    progress.setMessage("正在登录中...");
+                    progress.setCanceledOnTouchOutside(false);
+                    progress.show();
 
+                    //验证验证码是否正确
+                    BmobUser.signOrLoginByMobilePhone(phoneNumber.getText().toString(), verification.getText().toString(), new LogInListener<_User>() {
 
-                    } else {
-                        Toast.makeText(mContext, "请填写正确的信息！", Toast.LENGTH_LONG).show();
-                    }
+                        @Override
+                        public void done(_User user, BmobException e) {
+                            if(user!=null){
+                                //Toast.makeText(mContext, "用户登陆成功！", Toast.LENGTH_SHORT).show();
+                                addDataToLocal(user.getObjectId(), phoneNumber.getText().toString(),  System.currentTimeMillis() + (long)30 * 24 * 60 * 60 * 1000);
+                                progress.dismiss();
+                                Intent intent = new Intent(mContext, MainActivity.class);
+                                startActivity(intent);
+                                finish();
+                            } else {
+                                Toast.makeText(mContext, "验证失败！", Toast.LENGTH_LONG).show();
+                                loginButton.setClickable(true);
+                                progress.dismiss();
+                            }
+                        }
+                    });
+
+                } else {
+                    Toast.makeText(mContext, "手机号码或验证码不能为空！", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -162,14 +191,6 @@ public class LoginActivity extends AppCompatActivity {
                 finish();
             }
         });
-    }
-
-    private void findView() {
-        phoneNumber= findViewById(R.id.phoneNumber);
-        verification= findViewById(R.id.verification);
-        delete= findViewById(R.id.phoneNumberDelete);
-        getverification= findViewById(R.id.VerificationButton);
-        loginButton= findViewById(R.id.loginButton);
     }
 
 

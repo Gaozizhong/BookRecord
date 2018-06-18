@@ -30,6 +30,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 import com.uuzuche.lib_zxing.activity.CaptureActivity;
@@ -38,6 +40,7 @@ import com.uuzuche.lib_zxing.activity.ZXingLibrary;
 import com.ycl.tabview.library.TabView;
 import com.ycl.tabview.library.TabViewChild;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -48,8 +51,11 @@ import cn.a1949science.www.bookrecord.bean.BookInfo;
 import cn.a1949science.www.bookrecord.fragment.ReadingFragment;
 import cn.a1949science.www.bookrecord.fragment.SeenFragment;
 import cn.a1949science.www.bookrecord.fragment.WantFragment;
+import cn.a1949science.www.bookrecord.utils.BookInfoGetFromDouban;
 import cn.a1949science.www.bookrecord.utils.HttpUtils;
 import cn.a1949science.www.bookrecord.widget.CircleImageView;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.SaveListener;
 
 public class MainActivity extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener, WantFragment.OnFragmentInteractionListener
@@ -287,6 +293,7 @@ public class MainActivity extends AppCompatActivity implements
                     progress.setMessage("正在查询...");
                     progress.setCanceledOnTouchOutside(false);
                     progress.show();
+
                     //创建一个Map对象
                     Map<String,String> map = new HashMap<>();
                     map.put("book_isbn13", isbn);
@@ -305,6 +312,50 @@ public class MainActivity extends AppCompatActivity implements
                             progress.dismiss();
                         }
                     });
+
+                    /*HttpUtils.doGetAsy("https://api.douban.com/v2/book/isbn/" + isbn, new HttpUtils.CallBack() {
+                        @Override
+                        public void onRequestComplete(String result) {
+                            Toast.makeText(MainActivity.this, result, Toast.LENGTH_LONG).show();
+                            //解析从豆瓣传回来的json数据
+                            JSONObject jsonObject = JSON.parseObject(result);
+                            BookInfo bookInfo = new BookInfo();
+                            String imageUrl = jsonObject.getString("image");
+                            bookInfo.setBook_image(imageUrl);
+                            String bookName = jsonObject.getString("title");
+                            bookInfo.setBook_name(bookName);
+                            String publishDate = jsonObject.getString("pubdate");
+                            bookInfo.setBook_publish_date(publishDate);
+                            String rating = jsonObject.getString("rating");
+                            JSONObject ratingObject = JSON.parseObject(rating);
+                            rating = ratingObject.getString("average");
+                            bookInfo.setBook_rating(rating);
+                            //解析作者组
+                            JSONArray authors = jsonObject.getJSONArray("author");
+                            StringBuilder book_author = new StringBuilder();
+                            for (int i = 0;i<authors.size();i++) {
+                                book_author.append(" ").append(authors.get(i));
+                            }
+                            bookInfo.setBook_author(book_author.toString());
+                            String publish = jsonObject.getString("publisher");
+                            bookInfo.setBook_publisher(publish);
+                            String ISBN = jsonObject.getString("isbn13");
+                            bookInfo.setBook_isbn13(ISBN);
+                            String book_summary = jsonObject.getString("summary");
+                            bookInfo.setBook_summary(book_summary);
+                            bookInfo.save(new SaveListener<String>() {
+                                @Override
+                                public void done(String s, BmobException e) {
+                                    if(e==null){
+                                        Toast.makeText(MainActivity.this, "创建数据成功:"+ s, Toast.LENGTH_LONG).show();
+                                    }else{
+                                        Toast.makeText(MainActivity.this, "解析二维码失败:"+e.getMessage()+","+e.getErrorCode(), Toast.LENGTH_LONG).show();
+                                    }
+                                }
+                            });
+                        }
+                    });*/
+
 
                 } else if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_FAILED) {
                     Toast.makeText(MainActivity.this, "解析二维码失败", Toast.LENGTH_LONG).show();

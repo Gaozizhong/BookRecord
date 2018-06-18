@@ -97,7 +97,7 @@ public class HttpUtils {
      * @param json      请求参数以JSON串的格式传递
      * @return
      */
-    private static String doPost(String urlStr, String json) throws IOException {
+    public static String doPost(String urlStr, String json) throws IOException {
         OkHttpClient client = new OkHttpClient();
         RequestBody body = RequestBody.create(JSON, json);
         Request request = new Request.Builder()
@@ -115,12 +115,13 @@ public class HttpUtils {
      * @param urlStr    url字符串
      * @return
      */
-    private static String doGet(String urlStr) throws IOException {
+    public static String doGet(String urlStr) throws IOException {
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
                 .url(urlStr)
                 .build();
         Response response = client.newCall(request).execute();
+        assert response.body() != null;
         return response.body().string();
     }
 }

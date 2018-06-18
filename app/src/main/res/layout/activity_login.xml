@@ -118,29 +118,6 @@
             android:gravity="center"
             android:layout_gravity="center_horizontal">
 
-            <Button
-                android:layout_margin="20dp"
-                android:id="@+id/wechat"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:background="@mipmap/wechat"
-                tools:ignore="ButtonStyle" />
-
-            <Button
-                android:layout_margin="20dp"
-                android:id="@+id/qq"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:background="@mipmap/qq"
-                tools:ignore="ButtonStyle" />
-
-            <Button
-                android:layout_margin="20dp"
-                android:id="@+id/weibo"
-                android:layout_width="30dp"
-                android:layout_height="25dp"
-                android:background="@mipmap/webo"
-                tools:ignore="ButtonStyle" />
         </LinearLayout>
 
     </LinearLayout>
@@ -152,18 +129,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
-            android:id="@+id/loginButton"
-            android:layout_marginStart="40dp"
-            android:layout_marginEnd="40dp"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="@drawable/button_shape_default"
+        <Button
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
             android:text="@string/login"
-            android:textSize="18sp"
-            app:spinning_bar_width="4dp"
-            app:spinning_bar_color="#FFF"
-            app:spinning_bar_padding="6dp" />
+            android:id="@+id/loginButton"
+            android:textSize="20sp"
+            android:background="@drawable/rs_select_btn_blue"
+            android:textColor="#FFFFFF"
+            style="@style/Widget.AppCompat.Button"/>
     </LinearLayout>
 
 </LinearLayout>
