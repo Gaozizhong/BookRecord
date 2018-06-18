@@ -11,6 +11,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -21,6 +22,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -307,7 +309,7 @@ public class MainActivity extends AppCompatActivity implements
                     progress.setCanceledOnTouchOutside(false);
                     progress.show();
 
-                    //创建一个Map对象
+                    /*//创建一个Map对象
                     Map<String,String> map = new HashMap<>();
                     map.put("book_isbn13", isbn);
                     //转成JSON数据
@@ -324,7 +326,43 @@ public class MainActivity extends AppCompatActivity implements
                             startActivity(intent);
                             progress.dismiss();
                         }
+                    });*/
+
+                    HttpUtils.doGetAsy("https://api.douban.com/v2/book/isbn/" + isbn, new HttpUtils.CallBack() {
+                        @Override
+                        public void onRequestComplete(String result) {
+                            try {
+                                BookInfo bookInfo = BookInfoGetFromDouban.parsingBookInfo(result);
+                                //把数据存入Bmob数据库
+                                bookInfo.save(new SaveListener<String>() {
+                                    @Override
+                                    public void done(String s, BmobException e) {
+                                        if(e==null){
+                                            Log.i("bmob","创建数据成功：" + s);
+                                        }else{
+                                            Log.i("bmob","失败："+e.getMessage()+","+e.getErrorCode());
+                                        }
+                                    }
+                                });
+                                Intent intent = new Intent();
+                                intent.setClass(mContext, BookInfoActivity.class);
+                                Bundle bundle = new Bundle();
+                                bundle.putSerializable("bookInfo", bookInfo);
+                                intent.putExtras(bundle);
+                                startActivity(intent);
+                                progress.dismiss();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
                     });
+
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+
+                        }
+                    }).start();
 
                     /*HttpUtils.doGetAsy("https://api.douban.com/v2/book/isbn/" + isbn, new HttpUtils.CallBack() {
                         @Override

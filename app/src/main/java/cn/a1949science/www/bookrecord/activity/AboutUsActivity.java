@@ -22,11 +22,6 @@ public class AboutUsActivity extends AppCompatActivity {
     Button returnButton, contact_us;
     Intent intent;
     private static final int REQUEST_CALL_PHONE_PERMISSION = 0; // 请求码
-    // 所需的全部权限
-    static final String[] PERMISSIONS = new String[]{
-            Manifest.permission.CALL_PHONE
-    };
-    private PermissionsChecker mPermissionsChecker; // 权限检测器
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
