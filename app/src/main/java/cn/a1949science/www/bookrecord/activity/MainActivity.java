@@ -48,12 +48,14 @@ import java.util.Map;
 
 import cn.a1949science.www.bookrecord.R;
 import cn.a1949science.www.bookrecord.bean.BookInfo;
+import cn.a1949science.www.bookrecord.bean._User;
 import cn.a1949science.www.bookrecord.fragment.ReadingFragment;
 import cn.a1949science.www.bookrecord.fragment.SeenFragment;
 import cn.a1949science.www.bookrecord.fragment.WantFragment;
 import cn.a1949science.www.bookrecord.utils.BookInfoGetFromDouban;
 import cn.a1949science.www.bookrecord.utils.HttpUtils;
 import cn.a1949science.www.bookrecord.widget.CircleImageView;
+import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.SaveListener;
 
@@ -84,6 +86,8 @@ public class MainActivity extends AppCompatActivity implements
 
         initView();
         onClick();
+        displayList();
+        display();
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -103,7 +107,19 @@ public class MainActivity extends AppCompatActivity implements
 
         });
         nickname = headerLayout.findViewById(R.id.nickname);
+        _User bmobUser = BmobUser.getCurrentUser(_User.class);
+        nickname.setText(bmobUser.getUsername());
         favicon = headerLayout.findViewById(R.id.favicon);
+    }
+
+    //显示其他信息
+    private void display() {
+
+    }
+
+    //显示列表
+    private void displayList() {
+
     }
 
     //点击事件
@@ -248,10 +264,7 @@ public class MainActivity extends AppCompatActivity implements
                     .setPositiveButton("确认", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            SharedPreferences sp = mContext.getSharedPreferences("userData", MODE_PRIVATE);
-                            SharedPreferences.Editor editor = sp.edit();
-                            editor.clear();
-                            editor.apply();
+                            BmobUser.logOut();
                             Intent intent = new Intent(mContext, LoginActivity.class);
                             //清空源来栈中的Activity，新建栈打开相应的Activity
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);

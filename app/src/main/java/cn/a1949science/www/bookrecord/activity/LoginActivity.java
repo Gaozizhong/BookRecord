@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -212,9 +211,6 @@ public class LoginActivity extends AppCompatActivity {
             getverification.setText("重新发送验证码");
         }
     }
-
-
-
 
 
     protected void onDestroy() {

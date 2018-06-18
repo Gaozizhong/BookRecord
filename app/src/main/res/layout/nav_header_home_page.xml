@@ -22,6 +22,6 @@
         android:id="@+id/nickname"
         android:textSize="20sp"
         android:text="暖倾心"
-        android:layout_marginLeft="20dp"/>
+        android:layout_marginStart="20dp"/>
 
 </LinearLayout>

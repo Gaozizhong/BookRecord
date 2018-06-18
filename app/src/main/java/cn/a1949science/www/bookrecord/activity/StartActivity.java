@@ -13,8 +13,10 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 
 import cn.a1949science.www.bookrecord.R;
+import cn.a1949science.www.bookrecord.bean._User;
 import cn.a1949science.www.bookrecord.widget.PermissionsChecker;
 import cn.bmob.v3.Bmob;
+import cn.bmob.v3.BmobUser;
 
 public class StartActivity extends AppCompatActivity {
 
@@ -23,7 +25,7 @@ public class StartActivity extends AppCompatActivity {
     private static final int REQUEST_CODE = 0; // 请求码
     // 所需的全部权限
     static final String[] PERMISSIONS = new String[]{
-            //Manifest.permission.READ_PHONE_STATE,
+            Manifest.permission.READ_PHONE_STATE,
             Manifest.permission.CAMERA,//摄像头权限
             Manifest.permission.ACCESS_COARSE_LOCATION,//网络定位
             Manifest.permission.ACCESS_FINE_LOCATION//GPS定位
@@ -67,16 +69,17 @@ public class StartActivity extends AppCompatActivity {
 
     private void redirectTo(){
         //判断用户是否登录过
-        SharedPreferences sp = mContext.getSharedPreferences("userData", Context.MODE_PRIVATE);
-        if (sp.getString("userId",null) == null || (sp.getLong("deadline",0) < System.currentTimeMillis()) ) {
-            Intent intent = new Intent(this, LoginActivity.class);
+        final BmobUser bmobUser = BmobUser.getCurrentUser();
+        if (bmobUser!=null) {
+            Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
             finish();
         } else {
-            Intent intent = new Intent(this,MainActivity.class);
+            Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
             finish();
         }
+
     }
 
     @Override protected void onResume() {

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,7 +17,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import cn.a1949science.www.bookrecord.R;
+import cn.a1949science.www.bookrecord.bean.UserAdvice;
+import cn.a1949science.www.bookrecord.bean._User;
 import cn.a1949science.www.bookrecord.utils.HttpUtils;
+import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.SaveListener;
 
 public class AdviceActivity extends AppCompatActivity {
 Context mContext=AdviceActivity.this;
@@ -42,10 +48,27 @@ EditText advice_text;
             public void onClick(View view) {
                 if (!advice_text.getText().toString().equals("")) {
                     final ProgressDialog progress = new ProgressDialog(mContext);
-                    progress.setMessage("正在查询...");
+                    progress.setMessage("正在反馈...");
                     progress.setCanceledOnTouchOutside(false);
                     progress.show();
-                    //创建一个Map对象
+                    //把信息存入Bmob数据库
+                    _User bmobUser = BmobUser.getCurrentUser(_User.class);
+                    UserAdvice userAdvice = new UserAdvice(bmobUser,advice_text.getText().toString());
+                    userAdvice.save(new SaveListener<String>() {
+                        @Override
+                        public void done(String s, BmobException e) {
+                            if(e==null){
+                                Toast.makeText(mContext, "创建数据成功：" + s, Toast.LENGTH_LONG).show();
+                                progress.dismiss();
+                                finish();
+                            }else{
+                                Toast.makeText(mContext, "失败："+e.getMessage()+","+e.getErrorCode(), Toast.LENGTH_LONG).show();
+                                Log.i("bmob","失败："+e.getMessage()+","+e.getErrorCode());
+                            }
+                        }
+                    });
+
+                    /*//创建一个Map对象
                     Map<String, String> map = new HashMap<>();
                     SharedPreferences sp = mContext.getSharedPreferences("userData", Context.MODE_PRIVATE);
                     map.put("user_id", sp.getString("userId",null));
@@ -57,7 +80,8 @@ EditText advice_text;
                         public void onRequestComplete(String result) {
                             progress.dismiss();
                         }
-                    });
+                    });*/
+
                 } else {
                     Toast.makeText(mContext, "请输入内容！", Toast.LENGTH_LONG).show();
                 }
