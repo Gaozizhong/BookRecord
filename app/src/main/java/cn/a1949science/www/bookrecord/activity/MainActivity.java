@@ -10,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -37,6 +38,7 @@ import com.ycl.tabview.library.TabView;
 import com.ycl.tabview.library.TabViewChild;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,9 +50,12 @@ import cn.a1949science.www.bookrecord.fragment.SeenFragment;
 import cn.a1949science.www.bookrecord.fragment.WantFragment;
 import cn.a1949science.www.bookrecord.utils.BookInfoGetFromDouban;
 import cn.a1949science.www.bookrecord.utils.HttpUtils;
+import cn.a1949science.www.bookrecord.utils.SearchFromDouban;
 import cn.a1949science.www.bookrecord.widget.CircleImageView;
+import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.SaveListener;
 
 public class MainActivity extends AppCompatActivity implements
@@ -122,9 +127,28 @@ public class MainActivity extends AppCompatActivity implements
         searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                Snackbar.make(findViewById(R.id.container), "Query: " + query, Snackbar.LENGTH_LONG)
-                        .show();
-
+                final ProgressDialog progress = new ProgressDialog(mContext);
+                progress.setMessage("正在搜索...");
+                progress.setCanceledOnTouchOutside(false);
+                progress.show();
+                //Snackbar.make(findViewById(R.id.container), "Query: " + query, Snackbar.LENGTH_LONG).show();
+                HttpUtils.doGetAsy("https://api.douban.com/v2/book/search?q=" + query, new HttpUtils.CallBack() {
+                    @Override
+                    public void onRequestComplete(String result) {
+                        try {
+                            List<BookInfo> bookInfos = SearchFromDouban.parsingBookInfos(result);
+                            /*Intent intent = new Intent();
+                            intent.setClass(mContext, SearchActivity.class);
+                            Bundle bundle = new Bundle();
+                            bundle.putSerializable("bookInfo", (Serializable)bookInfos);
+                            intent.putExtras(bundle);
+                            startActivity(intent);*/
+                            progress.dismiss();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
                 return false;
             }
 
@@ -319,6 +343,23 @@ public class MainActivity extends AppCompatActivity implements
                         }
                     });*/
 
+                    /*//先从数据库中查找相应图书
+                    final BmobQuery<BookInfo> query = new BmobQuery<>();
+                    query.addWhereEqualTo("book_isbn13", isbn);
+                    query.findObjects(new FindListener<BookInfo>() {
+                        @Override
+                        public void done(List<BookInfo> list, BmobException e) {
+                            if(e==null&& list.size() != 0){
+                                Log.i("bmob","查询成功：共"+list.size()+"条数据。");
+                            } else if (list.size() == 0) {
+                                Log.i("bmob","从豆瓣查询数据。");
+                            } else {
+                                Log.i("bmob", "失败：" + e.getMessage() + "," + e.getErrorCode());
+                            }
+                        }
+
+                    });*/
+
                     HttpUtils.doGetAsy("https://api.douban.com/v2/book/isbn/" + isbn, new HttpUtils.CallBack() {
                         @Override
                         public void onRequestComplete(String result) {
@@ -354,4 +395,6 @@ public class MainActivity extends AppCompatActivity implements
             }
         }
     }
+
+
 }

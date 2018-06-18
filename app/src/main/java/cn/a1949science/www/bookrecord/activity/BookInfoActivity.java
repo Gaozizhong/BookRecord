@@ -39,7 +39,7 @@ public class BookInfoActivity extends AppCompatActivity {
 
     private List<BookComment> bookCommentList = new ArrayList<>();
 
-    String book_id,book_score;
+    String book_ISBN,book_score;
 
     Button wantRead, reading, havaRead, returnButton;
 
@@ -72,7 +72,7 @@ public class BookInfoActivity extends AppCompatActivity {
     private void getBookInfo() {
         Intent intent = this.getIntent();
         BookInfo bookInfo = (BookInfo) intent.getSerializableExtra("bookInfo");
-        book_id = String.valueOf(bookInfo.getBook_id());
+        book_ISBN = String.valueOf(bookInfo.getBook_isbn13());
         bookName.setText(bookInfo.getBook_name());
         title.setText(bookInfo.getBook_name());
         bookWriter.setText(bookInfo.getBook_author());
@@ -134,7 +134,6 @@ public class BookInfoActivity extends AppCompatActivity {
         scrollView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-                //scrollView.fullScroll(View.FOCUS_UP);
                 //直接置顶，瞬间回到顶部，没有滚动过程
                 scrollView.scrollTo(0,0);
             }
@@ -145,7 +144,7 @@ public class BookInfoActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(mContext, WantReadActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putString("bookId", book_id);
+                bundle.putString("bookISBN", book_ISBN);
                 bundle.putString("bookScore", book_score);
                 intent.putExtra("id_score",bundle);
                 startActivity(intent);

@@ -53,7 +53,7 @@ dependencies {
     implementation 'com.amap.api:map2d:5.2.0'
     implementation 'com.amap.api:location:3.8.0'
     implementation 'com.amap.api:location:3.8.0'
-    compile ('com.squareup.okhttp3:okhttp:3.9.1',{
+    compile('com.squareup.okhttp3:okhttp:3.9.1', {
         exclude module: "okio"
     })
     implementation 'com.jhworks.library:ImageSelect:1.1.1'
