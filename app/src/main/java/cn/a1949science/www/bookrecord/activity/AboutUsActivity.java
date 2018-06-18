@@ -1,6 +1,7 @@
 package cn.a1949science.www.bookrecord.activity;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -46,17 +47,18 @@ public class AboutUsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //如果有权限直接执行
-                if (ActivityCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
                     // TODO: Consider calling
                     //用intent启动拨打电话
                     intent = new Intent(Intent.ACTION_CALL);
                     Uri data = Uri.parse("tel:17302221002");
                     intent.setData(data);
                     startActivity(intent);
+
                 }
                 //如果没有权限那么申请权限
                 else {
-                    ActivityCompat.requestPermissions(AboutUsActivity.this,new String[]{android.Manifest.permission.CALL_PHONE},REQUEST_CALL_PHONE_PERMISSION);
+                    ActivityCompat.requestPermissions((Activity) context,new String[]{android.Manifest.permission.CALL_PHONE},REQUEST_CALL_PHONE_PERMISSION);
                 }
             }
         });
@@ -75,6 +77,9 @@ public class AboutUsActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == REQUEST_CALL_PHONE_PERMISSION) {
+            intent = new Intent(Intent.ACTION_CALL);
+            Uri data = Uri.parse("tel:17302221002");
+            intent.setData(data);
             startActivity(intent);
         } else {
             Toast.makeText(this, "拒绝了权限", Toast.LENGTH_SHORT).show();
