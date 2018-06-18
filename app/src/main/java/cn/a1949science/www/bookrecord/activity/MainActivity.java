@@ -6,12 +6,10 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -31,10 +29,6 @@ import android.widget.AdapterView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.TypeReference;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 import com.uuzuche.lib_zxing.activity.CaptureActivity;
 import com.uuzuche.lib_zxing.activity.CodeUtils;
@@ -44,9 +38,7 @@ import com.ycl.tabview.library.TabViewChild;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import cn.a1949science.www.bookrecord.R;
 import cn.a1949science.www.bookrecord.bean.BookInfo;
@@ -102,9 +94,9 @@ public class MainActivity extends AppCompatActivity implements
         headerLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent it = new Intent(mContext,UserInfoActivity.class);
+                /*Intent it = new Intent(mContext,UserInfoActivity.class);
                 startActivity(it);
-                overridePendingTransition(R.anim.slide_right_in,R.anim.slide_left_out);
+                overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);*/
             }
 
         });
@@ -293,7 +285,6 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     protected void onActivityResult(final int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        final String[] str = new String[1];
 
         if (requestCode == REQUEST_CODE) {
             //处理扫描结果（在界面上显示）
@@ -356,57 +347,6 @@ public class MainActivity extends AppCompatActivity implements
                             }
                         }
                     });
-
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-
-                        }
-                    }).start();
-
-                    /*HttpUtils.doGetAsy("https://api.douban.com/v2/book/isbn/" + isbn, new HttpUtils.CallBack() {
-                        @Override
-                        public void onRequestComplete(String result) {
-                            Toast.makeText(MainActivity.this, result, Toast.LENGTH_LONG).show();
-                            //解析从豆瓣传回来的json数据
-                            JSONObject jsonObject = JSON.parseObject(result);
-                            BookInfo bookInfo = new BookInfo();
-                            String imageUrl = jsonObject.getString("image");
-                            bookInfo.setBook_image(imageUrl);
-                            String bookName = jsonObject.getString("title");
-                            bookInfo.setBook_name(bookName);
-                            String publishDate = jsonObject.getString("pubdate");
-                            bookInfo.setBook_publish_date(publishDate);
-                            String rating = jsonObject.getString("rating");
-                            JSONObject ratingObject = JSON.parseObject(rating);
-                            rating = ratingObject.getString("average");
-                            bookInfo.setBook_rating(rating);
-                            //解析作者组
-                            JSONArray authors = jsonObject.getJSONArray("author");
-                            StringBuilder book_author = new StringBuilder();
-                            for (int i = 0;i<authors.size();i++) {
-                                book_author.append(" ").append(authors.get(i));
-                            }
-                            bookInfo.setBook_author(book_author.toString());
-                            String publish = jsonObject.getString("publisher");
-                            bookInfo.setBook_publisher(publish);
-                            String ISBN = jsonObject.getString("isbn13");
-                            bookInfo.setBook_isbn13(ISBN);
-                            String book_summary = jsonObject.getString("summary");
-                            bookInfo.setBook_summary(book_summary);
-                            bookInfo.save(new SaveListener<String>() {
-                                @Override
-                                public void done(String s, BmobException e) {
-                                    if(e==null){
-                                        Toast.makeText(MainActivity.this, "创建数据成功:"+ s, Toast.LENGTH_LONG).show();
-                                    }else{
-                                        Toast.makeText(MainActivity.this, "解析二维码失败:"+e.getMessage()+","+e.getErrorCode(), Toast.LENGTH_LONG).show();
-                                    }
-                                }
-                            });
-                        }
-                    });*/
-
 
                 } else if (bundle.getInt(CodeUtils.RESULT_TYPE) == CodeUtils.RESULT_FAILED) {
                     Toast.makeText(MainActivity.this, "解析二维码失败", Toast.LENGTH_LONG).show();

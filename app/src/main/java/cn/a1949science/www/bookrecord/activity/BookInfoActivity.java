@@ -134,7 +134,9 @@ public class BookInfoActivity extends AppCompatActivity {
         scrollView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-                scrollView.fullScroll(View.FOCUS_UP);
+                //scrollView.fullScroll(View.FOCUS_UP);
+                //直接置顶，瞬间回到顶部，没有滚动过程
+                scrollView.scrollTo(0,0);
             }
         });
 
