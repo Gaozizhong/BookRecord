@@ -16,7 +16,8 @@
             android:layout_width="100dp"
             android:layout_height="140dp"
             android:layout_margin="10dp"
-            android:scaleType="fitCenter" />
+            android:scaleType="fitCenter"
+            android:contentDescription="@string/seen" />
 
         <LinearLayout
             android:orientation="vertical"
@@ -113,7 +114,7 @@
                     android:layout_width="60dp"
                     android:layout_height="30dp"
                     android:layout_marginEnd="20dp"
-                    android:text="已读"
+                    android:text="@string/seen"
                     android:background="@drawable/book_info_bg_border"
                     android:textColor="@color/orange" />
 

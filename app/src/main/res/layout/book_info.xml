@@ -39,9 +39,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
                         android:textColor="@color/bookName"
-                        android:textSize="20sp" />
+                        android:textSize="25sp" />
 
                     <LinearLayout
                         android:orientation="horizontal"
@@ -54,8 +54,8 @@
                             android:id="@+id/bookRating"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            app:srb_starWidth="30dp"
-                            app:srb_starHeight="30dp"
+                            app:srb_starWidth="20dp"
+                            app:srb_starHeight="20dp"
                             app:srb_starPadding="0dp"
                             app:srb_numStars="5"
                             app:srb_stepSize="0.1"
@@ -73,7 +73,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="5dp"
-                            android:layout_marginTop="4dp"
+                            android:layout_marginTop="1dp"
                             android:layout_gravity="center_horizontal|center_vertical" />
 
                     </LinearLayout>
@@ -110,8 +110,8 @@
 
                 <ImageView
                     android:id="@+id/bookImage"
-                    android:layout_width="100dp"
-                    android:layout_height="140dp"
+                    android:layout_width="137dp"
+                    android:layout_height="186dp"
                     android:layout_margin="10dp"
                     android:scaleType="fitCenter"
                     android:contentDescription="@string/bookimage" />
@@ -119,8 +119,7 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="30dp">
+                android:layout_height="wrap_content">
 
                 <Button
                     android:id="@+id/book_info_wantRead"

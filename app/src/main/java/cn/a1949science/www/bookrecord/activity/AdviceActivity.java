@@ -68,20 +68,6 @@ EditText advice_text;
                         }
                     });
 
-                    /*//创建一个Map对象
-                    Map<String, String> map = new HashMap<>();
-                    SharedPreferences sp = mContext.getSharedPreferences("userData", Context.MODE_PRIVATE);
-                    map.put("user_id", sp.getString("userId",null));
-                    map.put("advice_content", advice_text.getText().toString());
-                    //转成JSON数据
-                    final String adviceJson = JSON.toJSONString(map, true);
-                    HttpUtils.doPostAsy("http://139.199.123.55:8080/book/UserAdvice.jsp", adviceJson, new HttpUtils.CallBack() {
-                        @Override
-                        public void onRequestComplete(String result) {
-                            progress.dismiss();
-                        }
-                    });*/
-
                 } else {
                     Toast.makeText(mContext, "请输入内容！", Toast.LENGTH_LONG).show();
                 }

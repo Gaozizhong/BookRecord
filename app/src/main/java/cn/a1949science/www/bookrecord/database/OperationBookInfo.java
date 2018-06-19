@@ -1,8 +1,6 @@
 package cn.a1949science.www.bookrecord.database;
 
 import cn.a1949science.www.bookrecord.bean.BookInfo;
-import cn.a1949science.www.bookrecord.bean.ReadInfo;
-import cn.a1949science.www.bookrecord.bean._User;
 
 /**
  * 对BookInfo表进行操作

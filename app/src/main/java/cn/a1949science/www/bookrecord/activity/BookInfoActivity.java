@@ -88,7 +88,6 @@ public class BookInfoActivity extends AppCompatActivity {
         bookScore.setText(bookInfo.getBook_rating());
         bookRating.setRating(Float.parseFloat(bookInfo.getBook_rating())/2);
         book_summary.setText(bookInfo.getBook_summary());
-        //Toast.makeText(mContext,bookInfo.getBook_image(), Toast.LENGTH_LONG).show();
     }
 
     private void initView() {

@@ -14,5 +14,5 @@
         android:layout_height="match_parent"
         app:srcCompat="@drawable/app_start"
         android:id="@+id/imageView"
-        android:scaleType="fitXY" />
+        android:scaleType="fitCenter" />
 </LinearLayout>
