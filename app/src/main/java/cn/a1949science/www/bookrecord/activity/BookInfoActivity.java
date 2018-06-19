@@ -59,15 +59,17 @@ public class BookInfoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_info);
         initView();
+        //从上一页面获取图书信息类，来填充控件
         getBookInfo();
+        //点击事件
         onClick();
         mLayoutManager = new LinearLayoutManager(mContext);
         recyclerView.setLayoutManager(mLayoutManager);
+        //获取评论信息
         initList();
         addDate();
     }
 
-    //从上一页面获取图书信息类，来填充控件
     @SuppressLint("SetTextI18n")
     private void getBookInfo() {
         Intent intent = this.getIntent();
@@ -119,7 +121,7 @@ public class BookInfoActivity extends AppCompatActivity {
         }
     }
 
-    //adapter中添加数据
+    //向评论adapter中添加数据
     private void addDate() {
         CommentListAdapter adapter = new CommentListAdapter(bookCommentList);
         recyclerView.setAdapter(adapter);

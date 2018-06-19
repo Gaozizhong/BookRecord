@@ -25,8 +25,7 @@
                 android:id="@+id/user_favicon"
                 android:layout_marginStart="10dp"
                 android:layout_width="50dp"
-                android:layout_height="50dp"
-                app:civ_border_width="2dp" />
+                android:layout_height="50dp" />
 
             <TextView
                 android:id="@+id/user_nickname"
@@ -59,6 +58,7 @@
 
         <TextView
             android:id="@+id/read_review"
+            android:layout_marginTop="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"

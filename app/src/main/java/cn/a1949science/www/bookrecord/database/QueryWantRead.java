@@ -13,9 +13,9 @@ public class QueryWantRead {
     /**
      * 查询ReadInfo表中是否存在这条信息
      * 数据库操作类
-     * 返回值：Info对象
+     * 返回值：ReadInfo对象
      */
-    public static ReadInfo queryBookInfo(_User user, String book_isbn) {
+    public static ReadInfo queryReadInfo(_User user, String book_isbn) {
 
         return null;
     }
@@ -25,7 +25,7 @@ public class QueryWantRead {
      * 数据库操作类
      * 返回值：ReadInfo对象
      */
-    public static ReadInfo updateBookInfo(ReadInfo bookInfo, String book_isbn) {
+    public static ReadInfo updateReadInfo(ReadInfo bookInfo, String book_isbn) {
 
         return null;
     }
@@ -35,7 +35,7 @@ public class QueryWantRead {
      * 数据库操作类
      * 返回值：Info对象
      */
-    public static ReadInfo deleteBookInfo(ReadInfo bookInfo, String book_isbn) {
+    public static ReadInfo deleteReadInfo(ReadInfo bookInfo, String book_isbn) {
 
         return null;
     }

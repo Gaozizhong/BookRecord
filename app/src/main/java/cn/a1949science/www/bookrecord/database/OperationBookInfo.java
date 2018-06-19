@@ -1,5 +1,9 @@
 package cn.a1949science.www.bookrecord.database;
 
+import cn.a1949science.www.bookrecord.bean.BookInfo;
+import cn.a1949science.www.bookrecord.bean.ReadInfo;
+import cn.a1949science.www.bookrecord.bean._User;
+
 /**
  * 对BookInfo表进行操作
  * 数据库操作类
@@ -7,4 +11,13 @@ package cn.a1949science.www.bookrecord.database;
  */
 
 public class OperationBookInfo {
+    /**
+     * 查询BookInfo表中是否存在这条信息
+     * 数据库操作类
+     * 返回值：BookInfo对象
+     */
+    public static BookInfo queryBookInfo(String book_isbn) {
+
+        return null;
+    }
 }
