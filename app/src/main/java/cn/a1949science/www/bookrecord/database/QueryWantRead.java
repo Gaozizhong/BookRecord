@@ -10,6 +10,7 @@ import cn.a1949science.www.bookrecord.bean._User;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
+import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UpdateListener;
 
 /**
@@ -19,6 +20,30 @@ import cn.bmob.v3.listener.UpdateListener;
  */
 
 public class QueryWantRead {
+    /**
+     * 为read_info添加一行数据
+     * 数据库操作类
+     * 返回值 Boolean
+     */
+    public static Boolean addBookInfo(ReadInfo readInfo) {
+        final Boolean[] add = {false};
+        readInfo.save(new SaveListener<String>() {
+
+            @Override
+            public void done(String objectId, BmobException e) {
+                if(e==null){
+                    //toast("创建数据成功：" + objectId);
+                    add[0]=true;
+                }else{
+                    Log.i("bmob","失败："+e.getMessage()+","+e.getErrorCode());
+                    add[0]=false;
+                }
+            }
+        });
+        return add[0];
+    }
+
+
     /**
      * 查询ReadInfo表中是否存在这条信息
      * 数据库操作类
@@ -60,6 +85,7 @@ public class QueryWantRead {
     /**
      * 对ReadInfo表中存在某条信息进行更改
      * 数据库操作类
+     * 传入值：
      * 返回值：NUll
      */
     public static void updateReadInfo(ReadInfo readInfo, _User user,String book_isbn) {

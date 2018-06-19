@@ -18,4 +18,30 @@ public class OperationBookInfo {
 
         return null;
     }
+
+
+
+    /**
+     * 向BookInfo表添加这条信息
+     * 数据库操作类
+     * 返回值：Boolean值
+     */
+    public static Boolean addBookInfo(BookInfo bookInfo) {
+
+        return null;
+    }
+
+
+
+    /**
+     * 更新BookInfo表中的这条信息
+     * 数据库操作类
+     * 返回值：Boolean值
+     */
+    public static Boolean updateBookInfo(BookInfo bookInfo) {
+
+        return null;
+    }
+
+
 }

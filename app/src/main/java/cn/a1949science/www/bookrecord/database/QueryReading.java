@@ -1,5 +1,6 @@
 package cn.a1949science.www.bookrecord.database;
 
+import cn.a1949science.www.bookrecord.bean.BookInfo;
 import cn.a1949science.www.bookrecord.bean.ReadInfo;
 import cn.a1949science.www.bookrecord.bean._User;
 
@@ -15,17 +16,30 @@ public class QueryReading {
      * 数据库操作类
      * 返回值：Info对象
      */
-    public static ReadInfo queryBookInfo(_User user, String book_isbn) {
+    public static ReadInfo queryReadInfo(_User user, String book_isbn) {
 
         return null;
     }
 
+
+
     /**
      * 对ReadInfo表中存在某条信息进行更改
      * 数据库操作类
-     * 返回值：Info对象
+     * 返回值：Boolean
      */
-    public static ReadInfo parsingBookInfo(_User user, String book_isbn) {
+    public static Boolean updateReadInfo(ReadInfo readInfo) {
+
+        return null;
+    }
+
+
+    /**
+     * 删除ReadInfo表中的这条信息
+     * 数据库操作类
+     * 返回值：Boolean
+     */
+    public static Boolean deleteReadInfo(ReadInfo readInfo) {
 
         return null;
     }
