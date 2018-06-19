@@ -19,7 +19,7 @@ import cn.bmob.v3.listener.UpdateListener;
  * Created by 高子忠 on 2018/6/19.
  */
 
-public class QueryWantRead {
+public class OperationReadInfo {
     /**
      * 为read_info添加一行数据
      * 数据库操作类
@@ -85,11 +85,11 @@ public class QueryWantRead {
     /**
      * 对ReadInfo表中存在某条信息进行更改
      * 数据库操作类
-     * 传入值：
+     * 传入值：带有User_id和Book_isbn以及更新信息的ReadInfo
      * 返回值：NUll
      */
-    public static void updateReadInfo(ReadInfo readInfo, _User user,String book_isbn) {
-        ReadInfo queryResult = QueryWantRead.queryBookInfo(user,book_isbn);
+    public static void updateReadInfo(ReadInfo readInfo) {
+        ReadInfo queryResult = OperationReadInfo.queryBookInfo(readInfo.getUser_id(),readInfo.getBook_isbn());
         readInfo.update(queryResult.getObjectId(), new UpdateListener() {
             @Override
             public void done(BmobException e) {
@@ -111,7 +111,7 @@ public class QueryWantRead {
      */
     public static Boolean deleteBookInfo(_User user, String book_isbn) {
         final Boolean[] delete = {false};
-        ReadInfo queryResult = QueryWantRead.queryBookInfo(user,book_isbn);
+        ReadInfo queryResult = OperationReadInfo.queryBookInfo(user,book_isbn);
         ReadInfo r1=new ReadInfo();
         r1.setObjectId(queryResult.getObjectId());
         r1.delete(new UpdateListener() {
