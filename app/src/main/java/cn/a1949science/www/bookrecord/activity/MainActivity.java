@@ -332,14 +332,12 @@ public class MainActivity extends AppCompatActivity implements
                             try {
                                 BookInfo bookInfo = BookInfoGetFromDouban.parsingBookInfo(result);
                                 BookInfo bookInfo1 = OperationBookInfo.queryBookInfo(isbn);
-                                OperationBookInfo.addBookInfo(bookInfo);
                                 //把数据存入Bmob数据库
-                                /*if (bookInfo1.getBook_isbn13().equals("")) {
+                                if (bookInfo1==null) {
                                     OperationBookInfo.addBookInfo(bookInfo);
                                 } else {
-                                    OperationBookInfo.updateBookInfo(bookInfo);
-                                }*/
-
+                                    OperationBookInfo.updateBookInfo(bookInfo1.getObjectId(),bookInfo);
+                                }
 
                                 Intent intent = new Intent();
                                 intent.setClass(mContext, BookInfoActivity.class);

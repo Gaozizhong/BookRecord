@@ -26,17 +26,17 @@ public class OperationReadInfo {
      * 数据库操作类
      * 返回值 Boolean
      */
-    public static Boolean addBookInfo(ReadInfo readInfo) {
+    public static Boolean addReadInfo(ReadInfo readInfo) {
         final Boolean[] add = {false};
         readInfo.save(new SaveListener<String>() {
-
             @Override
             public void done(String objectId, BmobException e) {
                 if(e==null){
-                    //toast("创建数据成功：" + objectId);
+                    //toast();
+                    Log.i("bmob","创建数据成功：" + objectId);
                     add[0]=true;
                 }else{
-                    Log.i("bmob","失败："+e.getMessage()+","+e.getErrorCode());
+                    Log.i("bmob","创建数据失败："+e.getMessage()+","+e.getErrorCode());
                     add[0]=false;
                 }
             }

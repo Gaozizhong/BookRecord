@@ -1,6 +1,8 @@
 package cn.a1949science.www.bookrecord.database;
 
+import android.os.Looper;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
@@ -11,6 +13,7 @@ import org.json.JSONException;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.a1949science.www.bookrecord.activity.MainActivity;
 import cn.a1949science.www.bookrecord.bean.BookInfo;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
@@ -45,7 +48,7 @@ public class OperationBookInfo {
                 if(e==null){
                     List<BookInfo> bookInfo = JSON.parseArray(jsonArray.toString(), BookInfo.class);
                     bookInfo1[0] = bookInfo.get(0);
-                    Log.i("bmob","查询成功");
+                    Log.i("bmob","查询成功"+bookInfo1[0].getObjectId());
                 }else{
                     Log.i("bmob","查询失败："+e.getMessage()+","+e.getErrorCode());
                 }
@@ -78,10 +81,9 @@ public class OperationBookInfo {
             @Override
             public void done(String objectId, BmobException e) {
                 if(e==null){
-                    //toast("创建数据成功：" + objectId);
-                    Log.i("bmob","成功："+objectId);
+                    Log.i("bmob","添加成功："+objectId);
                 }else{
-                    Log.i("bmob","失败："+e.getMessage()+","+e.getErrorCode());
+                    Log.i("bmob","添加失败："+e.getMessage()+","+e.getErrorCode());
                 }
             }
         });
@@ -96,10 +98,11 @@ public class OperationBookInfo {
      * 传入值：BookInfo对象
      * 返回值：Boolean值
      */
-    public static Boolean updateBookInfo(BookInfo bookInfo) {
+    public static Boolean updateBookInfo(String objectId,BookInfo bookInfo) {
         final Boolean[] update = {false};
-        BookInfo queryResult = OperationBookInfo.queryBookInfo(bookInfo.getBook_isbn13());
-        bookInfo.update(queryResult.getObjectId(), new UpdateListener() {
+        BookInfo bookInfo1 = new BookInfo();
+        bookInfo1.setBook_isbn10(bookInfo.getBook_isbn10());
+        bookInfo1.update(objectId, new UpdateListener() {
             @Override
             public void done(BmobException e) {
                 if(e==null){
