@@ -45,6 +45,7 @@ import java.util.List;
 import cn.a1949science.www.bookrecord.R;
 import cn.a1949science.www.bookrecord.bean.BookInfo;
 import cn.a1949science.www.bookrecord.bean._User;
+import cn.a1949science.www.bookrecord.database.OperationBookInfo;
 import cn.a1949science.www.bookrecord.fragment.ReadingFragment;
 import cn.a1949science.www.bookrecord.fragment.SeenFragment;
 import cn.a1949science.www.bookrecord.fragment.WantFragment;
@@ -324,62 +325,27 @@ public class MainActivity extends AppCompatActivity implements
                     progress.setCanceledOnTouchOutside(false);
                     progress.show();
 
-                    /*//创建一个Map对象
-                    Map<String,String> map = new HashMap<>();
-                    map.put("book_isbn13", isbn);
-                    //转成JSON数据
-                    final String ISBNjson = JSON.toJSONString(map,true);
-                    HttpUtils.doPostAsy(getString(R.string.SelectISBNInterface), ISBNjson, new HttpUtils.CallBack() {
-                        @Override
-                        public void onRequestComplete(final String result2) {
-                            BookInfo bookInfo = JSON.parseObject(result2, new TypeReference<BookInfo>() {});
-                            Intent intent = new Intent();
-                            intent.setClass(mContext, BookInfoActivity.class);
-                            Bundle bundle = new Bundle();
-                            bundle.putSerializable("bookInfo", bookInfo);
-                            intent.putExtras(bundle);
-                            startActivity(intent);
-                            progress.dismiss();
-                        }
-                    });*/
-
-                    /*//先从数据库中查找相应图书
-                    final BmobQuery<BookInfo> query = new BmobQuery<>();
-                    query.addWhereEqualTo("book_isbn13", isbn);
-                    query.findObjects(new FindListener<BookInfo>() {
-                        @Override
-                        public void done(List<BookInfo> list, BmobException e) {
-                            if(e==null&& list.size() != 0){
-                                Log.i("bmob","查询成功：共"+list.size()+"条数据。");
-                            } else if (list.size() == 0) {
-                                Log.i("bmob","从豆瓣查询数据。");
-                            } else {
-                                Log.i("bmob", "失败：" + e.getMessage() + "," + e.getErrorCode());
-                            }
-                        }
-
-                    });*/
 
                     HttpUtils.doGetAsy("https://api.douban.com/v2/book/isbn/" + isbn, new HttpUtils.CallBack() {
                         @Override
                         public void onRequestComplete(String result) {
                             try {
                                 BookInfo bookInfo = BookInfoGetFromDouban.parsingBookInfo(result);
-                                //把数据存入Bmob数据库
-                                bookInfo.save(new SaveListener<String>() {
-                                    @Override
-                                    public void done(String s, BmobException e) {
-                                        if(e==null){
-                                            Log.i("bmob","创建数据成功：" + s);
-                                        }else{
-                                            Log.i("bmob","失败："+e.getMessage()+","+e.getErrorCode());
-                                        }
-                                    }
-                                });
+                                BookInfo bookInfo1 = OperationBookInfo.queryBookInfo(isbn);
+                                /*Looper.prepare();
+                                Toast.makeText(MainActivity.this, "1111", Toast.LENGTH_LONG).show();
+                                Looper.loop();*/
+                                /*//把数据存入Bmob数据库
+                                if (bookInfo1.getBook_isbn13().equals("")) {
+                                    OperationBookInfo.updateBookInfo(bookInfo);
+                                } else {
+                                    OperationBookInfo.addBookInfo(bookInfo);
+                                }*/
+
                                 Intent intent = new Intent();
                                 intent.setClass(mContext, BookInfoActivity.class);
                                 Bundle bundle = new Bundle();
-                                bundle.putSerializable("bookInfo", bookInfo);
+                                bundle.putSerializable("bookInfo", bookInfo1);
                                 intent.putExtras(bundle);
                                 startActivity(intent);
                                 progress.dismiss();

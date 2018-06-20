@@ -5,6 +5,7 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.a1949science.www.bookrecord.bean.BookInfo;
 import cn.a1949science.www.bookrecord.bean.ReadInfo;
 import cn.a1949science.www.bookrecord.bean._User;
 import cn.bmob.v3.BmobQuery;
@@ -14,7 +15,7 @@ import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UpdateListener;
 
 /**
- * 对WantRead列表进行操作
+ * 对WantRead列表，reading列表，seen列表进行操作
  * 数据库操作类
  * Created by 高子忠 on 2018/6/19.
  */
@@ -86,22 +87,25 @@ public class OperationReadInfo {
      * 对ReadInfo表中存在某条信息进行更改
      * 数据库操作类
      * 传入值：带有User_id和Book_isbn以及更新信息的ReadInfo
-     * 返回值：NUll
+     * 返回值：Boolean
      */
-    public static void updateReadInfo(ReadInfo readInfo) {
+    public static Boolean updateReadInfo(ReadInfo readInfo) {
+        final Boolean[] update = {false};
         ReadInfo queryResult = OperationReadInfo.queryBookInfo(readInfo.getUser_id(),readInfo.getBook_isbn());
         readInfo.update(queryResult.getObjectId(), new UpdateListener() {
             @Override
             public void done(BmobException e) {
                 if(e==null){
+                    update[0] = true;
                     Log.i("bmob","更新成功");
                 }else{
+                    update[0] = false;
                     Log.i("bmob","更新失败："+e.getMessage()+","+e.getErrorCode());
                 }
             }
 
         });
-
+        return update[0];
     }
 
     /**
