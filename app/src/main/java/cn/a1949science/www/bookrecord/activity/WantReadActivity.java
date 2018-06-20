@@ -27,6 +27,7 @@ import cn.a1949science.www.bookrecord.R;
 import cn.a1949science.www.bookrecord.bean.BookInfo;
 import cn.a1949science.www.bookrecord.bean.ReadInfo;
 import cn.a1949science.www.bookrecord.bean._User;
+import cn.a1949science.www.bookrecord.database.OperationReadInfo;
 import cn.a1949science.www.bookrecord.utils.HttpUtils;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
@@ -75,8 +76,10 @@ public class WantReadActivity extends AppCompatActivity {
 
                 _User bmobUser = BmobUser.getCurrentUser(_User.class);
                 ReadInfo readInfo = new ReadInfo(bmobUser, book_isbn, read_state, want_read_reason, want_read_hope, new BmobDate(new Date(System.currentTimeMillis())));
-
-                SharedPreferences sp = context.getSharedPreferences("userData", Context.MODE_PRIVATE);
+                if (OperationReadInfo.addBookInfo(readInfo)) {
+                    progress.dismiss();
+                }
+                /*SharedPreferences sp = context.getSharedPreferences("userData", Context.MODE_PRIVATE);
                 //创建一个Map对象
                 Map<String,String> map = new HashMap<>();
                 map.put("user_id", sp.getString("userId",null));
@@ -91,7 +94,7 @@ public class WantReadActivity extends AppCompatActivity {
                         finish();
                         progress.dismiss();
                     }
-                });
+                });*/
             }
         });
 
@@ -137,6 +140,7 @@ public class WantReadActivity extends AppCompatActivity {
         wantReason = findViewById(R.id.want_read_reason);
         wantHope = findViewById(R.id.want_read_hope);
         bookRating.setRating(Float.parseFloat(book_score)/2);
+        _User bmobUser = BmobUser.getCurrentUser(_User.class);
     }
     public void onBackPressed()
     {

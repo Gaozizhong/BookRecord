@@ -332,20 +332,19 @@ public class MainActivity extends AppCompatActivity implements
                             try {
                                 BookInfo bookInfo = BookInfoGetFromDouban.parsingBookInfo(result);
                                 BookInfo bookInfo1 = OperationBookInfo.queryBookInfo(isbn);
-                                /*Looper.prepare();
-                                Toast.makeText(MainActivity.this, "1111", Toast.LENGTH_LONG).show();
-                                Looper.loop();*/
-                                /*//把数据存入Bmob数据库
-                                if (bookInfo1.getBook_isbn13().equals("")) {
-                                    OperationBookInfo.updateBookInfo(bookInfo);
-                                } else {
+                                OperationBookInfo.addBookInfo(bookInfo);
+                                //把数据存入Bmob数据库
+                                /*if (bookInfo1.getBook_isbn13().equals("")) {
                                     OperationBookInfo.addBookInfo(bookInfo);
+                                } else {
+                                    OperationBookInfo.updateBookInfo(bookInfo);
                                 }*/
+
 
                                 Intent intent = new Intent();
                                 intent.setClass(mContext, BookInfoActivity.class);
                                 Bundle bundle = new Bundle();
-                                bundle.putSerializable("bookInfo", bookInfo1);
+                                bundle.putSerializable("bookInfo", bookInfo);
                                 intent.putExtras(bundle);
                                 startActivity(intent);
                                 progress.dismiss();
