@@ -35,6 +35,7 @@ public class WantReadActivity extends AppCompatActivity {
     String book_isbn,book_score;
     ScaleRatingBar bookRating;
     EditText wantReason,wantHope;
+    ReadInfo readInfo,readInfo2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,11 +68,14 @@ public class WantReadActivity extends AppCompatActivity {
                 String want_read_hope = wantHope.getText().toString();
 
                 _User bmobUser = BmobUser.getCurrentUser(_User.class);
-                ReadInfo readInfo = new ReadInfo(bmobUser, book_isbn, read_state, want_read_reason, want_read_hope, new BmobDate(new Date(System.currentTimeMillis())));
-                Boolean ifOk = OperationReadInfo.addReadInfo(readInfo);
-                Toast.makeText(context, ifOk.toString(), Toast.LENGTH_LONG).show();
-                progress.dismiss();
-                //finish();
+                readInfo2 = new ReadInfo(bmobUser, book_isbn, read_state, want_read_reason, want_read_hope, new BmobDate(new Date(System.currentTimeMillis())));
+                if (readInfo == null) {
+                    OperationReadInfo.addReadInfo(readInfo2);
+                    progress.dismiss();
+                } else {
+                    OperationReadInfo.updateReadInfo(readInfo2);
+                }
+                finish();
             }
         });
 
@@ -84,31 +88,7 @@ public class WantReadActivity extends AppCompatActivity {
         book_score = bundle.getString("bookScore");
     }
 
-    //通过ISBN先查询一下Bmob数据库中是否有此条记录
-    private void getInfoFromBmob() {
-        _User user = BmobUser.getCurrentUser(_User.class);
-        BmobQuery<ReadInfo> query1 = new BmobQuery<>();
-        // 查询当前用户的所有记录
-        query1.addWhereEqualTo("user_id", user);
-        BmobQuery<ReadInfo> query2 = new BmobQuery<>();
-        query2.addWhereEqualTo("book_isbn", book_isbn);
-        List<BmobQuery<ReadInfo>> andQuerys = new ArrayList<>();
-        andQuerys.add(query1);
-        andQuerys.add(query2);
-        //查询符合整个and条件的人
-        BmobQuery<ReadInfo> query = new BmobQuery<>();
-        query.and(andQuerys);
-        query.findObjects(new FindListener<ReadInfo>() {
-            @Override
-            public void done(List<ReadInfo> list, BmobException e) {
-                if(e==null){
-                    bmob_if_hava_read_info = list.size() != 0;
-                } else {
-                    Log.i("bmob", "失败：" + e.getMessage() + "," + e.getErrorCode());
-                }
-            }
-        });
-    }
+
 
     private void findView() {
         returnButton = findViewById(R.id.want_read_return);
@@ -117,7 +97,13 @@ public class WantReadActivity extends AppCompatActivity {
         wantReason = findViewById(R.id.want_read_reason);
         wantHope = findViewById(R.id.want_read_hope);
         bookRating.setRating(Float.parseFloat(book_score)/2);
+        //通过ISBN先查询一下Bmob数据库中是否有此条记录,有的话就显示出来
         _User bmobUser = BmobUser.getCurrentUser(_User.class);
+        ReadInfo readInfo = OperationReadInfo.queryReadInfo(bmobUser, book_isbn);
+        if (readInfo != null) {
+            wantReason.setText(readInfo.getRead_reason());
+            wantHope.setText(readInfo.getRead_except());
+        }
     }
     public void onBackPressed()
     {

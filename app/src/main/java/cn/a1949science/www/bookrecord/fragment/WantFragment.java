@@ -20,6 +20,9 @@ import java.util.Random;
 import cn.a1949science.www.bookrecord.R;
 import cn.a1949science.www.bookrecord.adapter.BookListAdapter;
 import cn.a1949science.www.bookrecord.bean.BookInfo;
+import cn.a1949science.www.bookrecord.bean._User;
+import cn.a1949science.www.bookrecord.database.OperationReadInfo;
+import cn.bmob.v3.BmobUser;
 
 
 /**
@@ -41,7 +44,7 @@ public class WantFragment extends Fragment {
             new BookInfo("https://img3.doubanio.com/lpic/s29418322.jpg","芳华","2017-4-1","8.1","严歌苓","人民文学出版社"),
             new BookInfo("https://img3.doubanio.com/lpic/s29418322.jpg","芳华","2017-4-1","8.1","严歌苓","人民文学出版社")};
 
-    private List<BookInfo> bookInfoList = new ArrayList<>();
+    private List<BookInfo> bookInfoList;
 
     private BookListAdapter adapter;
 
@@ -97,6 +100,9 @@ public class WantFragment extends Fragment {
             int index = random.nextInt(bookInfos.length);
             bookInfoList.add(bookInfos[index]);
         }
+       /* _User bmobUser = BmobUser.getCurrentUser(_User.class);
+        String state = "0";
+        bookInfoList = OperationReadInfo.queryBookInfoByState(bmobUser,state);*/
     }
 
     //adapter中添加数据

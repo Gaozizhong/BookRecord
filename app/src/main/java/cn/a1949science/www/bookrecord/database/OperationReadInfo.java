@@ -2,6 +2,9 @@ package cn.a1949science.www.bookrecord.database;
 
 import android.util.Log;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,6 +14,7 @@ import cn.a1949science.www.bookrecord.bean._User;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
+import cn.bmob.v3.listener.QueryListener;
 import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UpdateListener;
 
@@ -51,31 +55,36 @@ public class OperationReadInfo {
      * 传入值：_User user, String book_isbn
      * 返回值：ReadInfo对象
      */
-    public static ReadInfo queryBookInfo(_User user, String book_isbn) {
+    public static ReadInfo queryReadInfo(_User user, String book_isbn) {
         final ReadInfo[] readInfo = {new ReadInfo()};
+        /*String bql ="select * from read_info where book_isbn13='"+book_isbn+ "' and user_id ='" +user+"'";
+        final BmobQuery<BookInfo> query = new BmobQuery<>();
+        query.setSQL(bql);
+        query.order("-createdAt");*/
+
         //--and条件1
-        BmobQuery<ReadInfo> eq1 = new BmobQuery<ReadInfo>();
+        BmobQuery eq1 =new BmobQuery("read_info");
         eq1.addWhereEqualTo("book_isbn", book_isbn);//ISBN比较
         //--and条件2
-        BmobQuery<ReadInfo> eq2 = new BmobQuery<ReadInfo>();
-        eq2.addWhereGreaterThanOrEqualTo("user_id", user);//用户ID
-
+        BmobQuery eq2 =new BmobQuery("read_info");
+        eq2.addWhereEqualTo("user_id", user);//用户ID
         //最后组装完整的and条件
-        List<BmobQuery<ReadInfo>> andQuerys = new ArrayList<BmobQuery<ReadInfo>>();
+        List<BmobQuery<ReadInfo>> andQuerys = new ArrayList<>();
         andQuerys.add(eq1);
         andQuerys.add(eq2);
         //查询符合整个and条件的信息
-        BmobQuery<ReadInfo> query = new BmobQuery<ReadInfo>();
+        BmobQuery query =new BmobQuery("read_info");
         query.and(andQuerys);
-        query.include("user_id");//查询结果包含user_id
-        query.findObjects(new FindListener<ReadInfo>() {
+        //query.include("user_id");//查询结果包含user_id
+        query.findObjectsByTable(new QueryListener<JSONArray>() {
             @Override
-            public void done(List<ReadInfo> object, BmobException e) {
+            public void done(JSONArray jsonArray, BmobException e) {
                 if(e==null){
-                    //toast("查询年龄6-29岁之间，姓名以'y'或者'e'结尾的人个数："+object.size());
-                    readInfo[0] = object.get(0);
+                    List<ReadInfo> list = JSON.parseArray(jsonArray.toString(), ReadInfo.class);
+                    readInfo[0] = list.get(0);
+                    Log.i("bmob","查询成功:"+readInfo[0].getObjectId());
                 }else{
-                    Log.i("bmob","失败："+e.getMessage()+","+e.getErrorCode());
+                    Log.i("bmob","查询失败："+e.getMessage()+","+e.getErrorCode());
                 }
             }
         });
@@ -91,7 +100,7 @@ public class OperationReadInfo {
      */
     public static Boolean updateReadInfo(ReadInfo readInfo) {
         final Boolean[] update = {false};
-        ReadInfo queryResult = OperationReadInfo.queryBookInfo(readInfo.getUser_id(),readInfo.getBook_isbn());
+        ReadInfo queryResult = OperationReadInfo.queryReadInfo(readInfo.getUser_id(),readInfo.getBook_isbn());
         readInfo.update(queryResult.getObjectId(), new UpdateListener() {
             @Override
             public void done(BmobException e) {
@@ -115,7 +124,7 @@ public class OperationReadInfo {
      */
     public static Boolean deleteBookInfo(_User user, String book_isbn) {
         final Boolean[] delete = {false};
-        ReadInfo queryResult = OperationReadInfo.queryBookInfo(user,book_isbn);
+        ReadInfo queryResult = OperationReadInfo.queryReadInfo(user,book_isbn);
         ReadInfo r1=new ReadInfo();
         r1.setObjectId(queryResult.getObjectId());
         r1.delete(new UpdateListener() {
@@ -132,6 +141,48 @@ public class OperationReadInfo {
             }
         });
         return delete[0];
+    }
+
+
+    /**
+     * 根据阅读状态和user_id查询ReadInfo
+     * 输入：read_state和user_id
+     * 返回值：List<read_info>
+     * 数据库操作类
+     */
+    public static List<ReadInfo> queryBookInfoByState(_User user, String read_state) {
+        final List<ReadInfo> readInfo = new ArrayList<ReadInfo>();
+        //--and条件1
+        BmobQuery eq1 =new BmobQuery("read_info");
+        eq1.addWhereEqualTo("read_state", read_state);//ISBN比较
+        //--and条件2
+        BmobQuery eq2 =new BmobQuery("read_info");
+        eq2.addWhereGreaterThanOrEqualTo("user_id", user);//用户ID
+
+        //最后组装完整的and条件
+        List<BmobQuery> andQuerys = new ArrayList<BmobQuery>();
+        andQuerys.add(eq1);
+        andQuerys.add(eq2);
+        //查询符合整个and条件的信息
+        BmobQuery query =new BmobQuery("read_info");
+        query.and(andQuerys);
+        query.include("user_id");//查询结果包含user_id
+        query.findObjectsByTable(new QueryListener<JSONArray>() {
+            @Override
+            public void done(JSONArray jsonArray, BmobException e) {
+                if(e==null){
+                    List<ReadInfo> list = JSON.parseArray(jsonArray.toString(), ReadInfo.class);
+                    for(int i=0;i<list.size();i++){
+                        readInfo.set(i, list.get(i));
+                    }
+
+                    Log.i("bmob","查询成功");
+                }else{
+                    Log.i("bmob","查询失败："+e.getMessage()+","+e.getErrorCode());
+                }
+            }
+        });
+        return readInfo;
     }
 
 }

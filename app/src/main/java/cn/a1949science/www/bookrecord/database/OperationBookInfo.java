@@ -16,9 +16,11 @@ import java.util.List;
 import cn.a1949science.www.bookrecord.activity.MainActivity;
 import cn.a1949science.www.bookrecord.bean.BookInfo;
 import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.datatype.BmobQueryResult;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.QueryListener;
+import cn.bmob.v3.listener.SQLQueryListener;
 import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UpdateListener;
 
@@ -54,17 +56,7 @@ public class OperationBookInfo {
                 }
             }
         });
-        /*query.findObjects(new FindListener<BookInfo>() {
-            @Override
-            public void done(List<BookInfo> object, BmobException e) {
-                if(e==null&&object.size()!=0){
-                    bookInfo[0] = object.get(0);
-                    Log.i("bmob","成功");
-                }else{
-                    Log.i("bmob","失败："+e.getMessage()+","+e.getErrorCode());
-                }
-            }
-        });*/
+
         return bookInfo1[0];
     }
 
@@ -100,9 +92,7 @@ public class OperationBookInfo {
      */
     public static Boolean updateBookInfo(String objectId,BookInfo bookInfo) {
         final Boolean[] update = {false};
-        BookInfo bookInfo1 = new BookInfo();
-        bookInfo1.setBook_isbn10(bookInfo.getBook_isbn10());
-        bookInfo1.update(objectId, new UpdateListener() {
+        bookInfo.update(objectId, new UpdateListener() {
             @Override
             public void done(BmobException e) {
                 if(e==null){
