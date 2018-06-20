@@ -44,7 +44,7 @@ public class BookInfo extends BmobObject implements Serializable{
     private String book_tags;
 
     public BookInfo() {
-        this.setTableName("book_info");
+
     }
 
     public BookInfo(String book_image, String book_name, String book_publish_date

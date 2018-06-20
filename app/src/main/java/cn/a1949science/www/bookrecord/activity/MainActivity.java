@@ -30,12 +30,15 @@ import android.widget.AdapterView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSON;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 import com.uuzuche.lib_zxing.activity.CaptureActivity;
 import com.uuzuche.lib_zxing.activity.CodeUtils;
 import com.uuzuche.lib_zxing.activity.ZXingLibrary;
 import com.ycl.tabview.library.TabView;
 import com.ycl.tabview.library.TabViewChild;
+
+import org.json.JSONArray;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -57,7 +60,9 @@ import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
+import cn.bmob.v3.listener.QueryListener;
 import cn.bmob.v3.listener.SaveListener;
+import cn.bmob.v3.listener.UpdateListener;
 
 public class MainActivity extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener, WantFragment.OnFragmentInteractionListener
@@ -330,14 +335,82 @@ public class MainActivity extends AppCompatActivity implements
                         @Override
                         public void onRequestComplete(String result) {
                             try {
-                                BookInfo bookInfo = BookInfoGetFromDouban.parsingBookInfo(result);
-                                BookInfo bookInfo1 = OperationBookInfo.queryBookInfo(isbn);
-                                //把数据存入Bmob数据库
+                                final BookInfo bookInfo = BookInfoGetFromDouban.parsingBookInfo(result);
+                                //--查询条件
+                                BmobQuery<BookInfo> query = new BmobQuery<>();
+                                //ISBN比较
+                                query.addWhereEqualTo("book_isbn13", isbn);
+                                query.findObjects(new FindListener<BookInfo>() {
+                                    @Override
+                                    public void done(List<BookInfo> list, BmobException e) {
+                                        if(e==null){
+                                            if (list.size() == 0) {
+                                                OperationBookInfo.addBookInfo(bookInfo);
+                                            } else {
+                                                bookInfo.update(list.get(0).getObjectId(), new UpdateListener() {
+                                                    @Override
+                                                    public void done(BmobException e) {
+                                                        if(e==null){
+                                                            Log.i("bmob","更新成功");
+                                                        }else{
+                                                            Log.i("bmob","更新失败："+e.getMessage()+","+e.getErrorCode());
+                                                        }
+                                                    }
+
+                                                });
+                                            }
+                                        }else{
+                                            Log.i("bmob","查询失败："+e.getMessage()+","+e.getErrorCode());
+                                        }
+                                    }
+                                });
+
+
+
+                               /* query.findObjectsByTable(new QueryListener<JSONArray>() {
+                                    @Override
+                                    public void done(JSONArray jsonArray, BmobException e) {
+                                        if (e == null) {
+                                            List<BookInfo> bookInfo1 = JSON.parseArray(jsonArray.toString(), BookInfo.class);
+                                            if (bookInfo1.get(0) == null) {
+                                                OperationBookInfo.addBookInfo(bookInfo);
+                                            } else {
+                                                bookInfo.update(bookInfo1.get(0).getObjectId(), new UpdateListener() {
+                                                    @Override
+                                                    public void done(BmobException e) {
+                                                        if(e==null){
+                                                            Log.i("bmob","更新成功");
+                                                        }else{
+                                                            Log.i("bmob","更新失败："+e.getMessage()+","+e.getErrorCode());
+                                                        }
+                                                    }
+
+                                                });
+                                            }
+                                        } else {
+                                            Log.i("bmob", "查询失败：" + e.getMessage() + "," + e.getErrorCode());
+                                        }
+                                    }
+                                });*/
+                                /*//把数据存入Bmob数据库
                                 if (bookInfo1==null) {
                                     OperationBookInfo.addBookInfo(bookInfo);
                                 } else {
+
                                     OperationBookInfo.updateBookInfo(bookInfo1.getObjectId(),bookInfo);
-                                }
+                                    *//*bookInfo.update("659c38721f", new UpdateListener() {
+                                        @Override
+                                        public void done(BmobException e) {
+                                            if(e==null){
+                                                Log.i("bmob","更新成功");
+                                            }else{
+                                                Log.i("bmob","更新失败："+e.getMessage()+","+e.getErrorCode());
+                                            }
+                                        }
+
+                                    });*//*
+
+                                }*/
 
                                 Intent intent = new Intent();
                                 intent.setClass(mContext, BookInfoActivity.class);

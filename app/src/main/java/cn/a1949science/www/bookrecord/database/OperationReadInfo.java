@@ -12,9 +12,11 @@ import cn.a1949science.www.bookrecord.bean.BookInfo;
 import cn.a1949science.www.bookrecord.bean.ReadInfo;
 import cn.a1949science.www.bookrecord.bean._User;
 import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.datatype.BmobQueryResult;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.QueryListener;
+import cn.bmob.v3.listener.SQLQueryListener;
 import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UpdateListener;
 
@@ -57,30 +59,26 @@ public class OperationReadInfo {
      */
     public static ReadInfo queryReadInfo(_User user, String book_isbn) {
         final ReadInfo[] readInfo = {new ReadInfo()};
-        /*String bql ="select * from read_info where book_isbn13='"+book_isbn+ "' and user_id ='" +user+"'";
-        final BmobQuery<BookInfo> query = new BmobQuery<>();
-        query.setSQL(bql);
-        query.order("-createdAt");*/
 
         //--and条件1
-        BmobQuery eq1 =new BmobQuery("read_info");
+        BmobQuery eq1 =new BmobQuery<ReadInfo>();
         eq1.addWhereEqualTo("book_isbn", book_isbn);//ISBN比较
         //--and条件2
-        BmobQuery eq2 =new BmobQuery("read_info");
+        BmobQuery eq2 =new BmobQuery<ReadInfo>();
         eq2.addWhereEqualTo("user_id", user);//用户ID
+
         //最后组装完整的and条件
         List<BmobQuery<ReadInfo>> andQuerys = new ArrayList<>();
         andQuerys.add(eq1);
         andQuerys.add(eq2);
         //查询符合整个and条件的信息
-        BmobQuery query =new BmobQuery("read_info");
+        BmobQuery<ReadInfo> query = new BmobQuery<>();
         query.and(andQuerys);
         //query.include("user_id");//查询结果包含user_id
-        query.findObjectsByTable(new QueryListener<JSONArray>() {
+        query.findObjects(new FindListener<ReadInfo>() {
             @Override
-            public void done(JSONArray jsonArray, BmobException e) {
+            public void done(List<ReadInfo> list, BmobException e) {
                 if(e==null){
-                    List<ReadInfo> list = JSON.parseArray(jsonArray.toString(), ReadInfo.class);
                     readInfo[0] = list.get(0);
                     Log.i("bmob","查询成功:"+readInfo[0].getObjectId());
                 }else{
@@ -88,6 +86,28 @@ public class OperationReadInfo {
                 }
             }
         });
+
+
+        /*String bql ="select * from read_info where book_isbn13='"+book_isbn+ "' and user_id=" +user.toString();
+        //final BmobQuery<ReadInfo> query = new BmobQuery<>();
+        new BmobQuery("read_info").doSQLQuery(bql,new SQLQueryListener<ReadInfo>(){
+
+            @Override
+            public void done(BmobQueryResult<ReadInfo> result, BmobException e) {
+                if(e ==null){
+                    List<ReadInfo> list = (List<ReadInfo>) result.getResults();
+                    if(list!=null && list.size()>0){
+                        readInfo[0]=list.get(0);
+                        Log.i("smile", "查询成功:"+readInfo[0].getObjectId());
+                    }else{
+                        Log.i("smile", "查询成功，无数据返回");
+                    }
+                }else{
+                    Log.i("smile", "错误码："+e.getErrorCode()+"，错误描述："+e.getMessage());
+                }
+            }
+        });*/
+
         return readInfo[0];
     }
 

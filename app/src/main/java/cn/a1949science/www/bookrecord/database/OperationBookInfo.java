@@ -39,25 +39,25 @@ public class OperationBookInfo {
      * 返回值：BookInfo对象
      */
     public static BookInfo queryBookInfo(String book_isbn13) {
-        final BookInfo[] bookInfo1 = {new BookInfo()};
+        final BookInfo[] bookInfo = {new BookInfo()};
         //--查询条件
-        BmobQuery query =new BmobQuery("book_info");
+        BmobQuery<BookInfo> query = new BmobQuery<>();
         //ISBN比较
         query.addWhereEqualTo("book_isbn13", book_isbn13);
-        query.findObjectsByTable(new QueryListener<JSONArray>() {
+        query.findObjects(new FindListener<BookInfo>() {
             @Override
-            public void done(JSONArray jsonArray, BmobException e) {
+            public void done(List<BookInfo> list, BmobException e) {
                 if(e==null){
-                    List<BookInfo> bookInfo = JSON.parseArray(jsonArray.toString(), BookInfo.class);
-                    bookInfo1[0] = bookInfo.get(0);
-                    Log.i("bmob","查询成功"+bookInfo1[0].getObjectId());
+                    bookInfo[0] = list.get(0);
+                    Log.i("bmob","查询成功:"+bookInfo[0].getObjectId());
                 }else{
                     Log.i("bmob","查询失败："+e.getMessage()+","+e.getErrorCode());
                 }
             }
         });
 
-        return bookInfo1[0];
+
+        return bookInfo[0];
     }
 
 

@@ -28,12 +28,11 @@ public class ReadInfo extends BmobObject implements Serializable {
     private String finish_time;
 
     public ReadInfo(){
-        this.setTableName("read_info");
+
     }
 
     public ReadInfo(_User user_id, String book_isbn , Integer read_state, String read_reason, String read_except, BmobDate want_time)
     {
-        this.setTableName("read_info");
         this.user_id=user_id;
         this.book_isbn=book_isbn;
         this.read_state=read_state;
