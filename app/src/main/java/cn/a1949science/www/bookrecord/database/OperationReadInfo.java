@@ -167,11 +167,11 @@ public class OperationReadInfo {
     /**
      * 根据阅读状态和user_id查询ReadInfo
      * 输入：read_state和user_id
-     * 返回值：List<read_info>
+     * 返回值：List<BookInfo>
      * 数据库操作类
      */
-    public static List<ReadInfo> queryBookInfoByState(_User user, String read_state) {
-        final List<ReadInfo> readInfo = new ArrayList<ReadInfo>();
+    public static List<BookInfo> queryBookInfoByState(_User user, String read_state) {
+        final List<BookInfo> bookInfo = new ArrayList<BookInfo>();
         //--and条件1
         BmobQuery eq1 =new BmobQuery("read_info");
         eq1.addWhereEqualTo("read_state", read_state);//ISBN比较
@@ -193,7 +193,7 @@ public class OperationReadInfo {
                 if(e==null){
                     List<ReadInfo> list = JSON.parseArray(jsonArray.toString(), ReadInfo.class);
                     for(int i=0;i<list.size();i++){
-                        readInfo.set(i, list.get(i));
+                        bookInfo.set(i, OperationBookInfo.queryBookInfo(list.get(i).getBook_isbn()));
                     }
 
                     Log.i("bmob","查询成功");
@@ -202,7 +202,8 @@ public class OperationReadInfo {
                 }
             }
         });
-        return readInfo;
+        return bookInfo;
     }
+
 
 }
