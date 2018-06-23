@@ -365,53 +365,6 @@ public class MainActivity extends AppCompatActivity implements
                                     }
                                 });
 
-
-
-                               /* query.findObjectsByTable(new QueryListener<JSONArray>() {
-                                    @Override
-                                    public void done(JSONArray jsonArray, BmobException e) {
-                                        if (e == null) {
-                                            List<BookInfo> bookInfo1 = JSON.parseArray(jsonArray.toString(), BookInfo.class);
-                                            if (bookInfo1.get(0) == null) {
-                                                OperationBookInfo.addBookInfo(bookInfo);
-                                            } else {
-                                                bookInfo.update(bookInfo1.get(0).getObjectId(), new UpdateListener() {
-                                                    @Override
-                                                    public void done(BmobException e) {
-                                                        if(e==null){
-                                                            Log.i("bmob","更新成功");
-                                                        }else{
-                                                            Log.i("bmob","更新失败："+e.getMessage()+","+e.getErrorCode());
-                                                        }
-                                                    }
-
-                                                });
-                                            }
-                                        } else {
-                                            Log.i("bmob", "查询失败：" + e.getMessage() + "," + e.getErrorCode());
-                                        }
-                                    }
-                                });*/
-                                /*//把数据存入Bmob数据库
-                                if (bookInfo1==null) {
-                                    OperationBookInfo.addBookInfo(bookInfo);
-                                } else {
-
-                                    OperationBookInfo.updateBookInfo(bookInfo1.getObjectId(),bookInfo);
-                                    *//*bookInfo.update("659c38721f", new UpdateListener() {
-                                        @Override
-                                        public void done(BmobException e) {
-                                            if(e==null){
-                                                Log.i("bmob","更新成功");
-                                            }else{
-                                                Log.i("bmob","更新失败："+e.getMessage()+","+e.getErrorCode());
-                                            }
-                                        }
-
-                                    });*//*
-
-                                }*/
-
                                 Intent intent = new Intent();
                                 intent.setClass(mContext, BookInfoActivity.class);
                                 Bundle bundle = new Bundle();

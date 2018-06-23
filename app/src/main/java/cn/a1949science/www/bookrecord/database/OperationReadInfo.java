@@ -1,10 +1,16 @@
 package cn.a1949science.www.bookrecord.database;
 
+import android.support.annotation.RequiresPermission;
 import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,6 +65,7 @@ public class OperationReadInfo {
      */
     public static ReadInfo queryReadInfo(_User user, String book_isbn) {
         final ReadInfo[] readInfo = {new ReadInfo()};
+        //final String[] readInfoString = new String[1];
 
         //--and条件1
         BmobQuery eq1 =new BmobQuery<ReadInfo>();
@@ -79,36 +86,30 @@ public class OperationReadInfo {
             @Override
             public void done(List<ReadInfo> list, BmobException e) {
                 if(e==null){
+                    /*try {
+                        //序列化
+                        ByteArrayOutputStream bots=new ByteArrayOutputStream();
+                        ObjectOutputStream oos = new ObjectOutputStream(bots);
+                        oos.writeObject(list.get(0));
+                        //反序列化
+                        ObjectInputStream ois=new ObjectInputStream(new ByteArrayInputStream(bots.toByteArray()));
+                        readInfo[0] = (ReadInfo) ois.readObject();
+                    } catch (IOException | ClassNotFoundException e1) {
+                        e1.printStackTrace();
+                    }*/
                     readInfo[0] = list.get(0);
-                    Log.i("bmob","查询成功:"+readInfo[0].getObjectId());
+                    //String gao = JSON.toJSONString(list.get(0));
+                    //readInfo[0] = JSON.parseObject(gao,ReadInfo.class);
+                    //readInfo[0] = JSON.parseObject(JSON.toJSONString(list.get(0)),ReadInfo.class);
+                    //readInfoString[0] = JSON.toJSONString(list.get(0));
+                    Log.i("bmob","查询成功:"+list.get(0).getObjectId());
                 }else{
                     Log.i("bmob","查询失败："+e.getMessage()+","+e.getErrorCode());
                 }
             }
         });
-
-
-        /*String bql ="select * from read_info where book_isbn13='"+book_isbn+ "' and user_id=" +user.toString();
-        //final BmobQuery<ReadInfo> query = new BmobQuery<>();
-        new BmobQuery("read_info").doSQLQuery(bql,new SQLQueryListener<ReadInfo>(){
-
-            @Override
-            public void done(BmobQueryResult<ReadInfo> result, BmobException e) {
-                if(e ==null){
-                    List<ReadInfo> list = (List<ReadInfo>) result.getResults();
-                    if(list!=null && list.size()>0){
-                        readInfo[0]=list.get(0);
-                        Log.i("smile", "查询成功:"+readInfo[0].getObjectId());
-                    }else{
-                        Log.i("smile", "查询成功，无数据返回");
-                    }
-                }else{
-                    Log.i("smile", "错误码："+e.getErrorCode()+"，错误描述："+e.getMessage());
-                }
-            }
-        });*/
-
         return readInfo[0];
+        //return readInfoString[0];
     }
 
 
@@ -121,6 +122,7 @@ public class OperationReadInfo {
     public static Boolean updateReadInfo(ReadInfo readInfo) {
         final Boolean[] update = {false};
         ReadInfo queryResult = OperationReadInfo.queryReadInfo(readInfo.getUser_id(),readInfo.getBook_isbn());
+        //ReadInfo queryResult = JSON.parseObject(OperationReadInfo.queryReadInfo(readInfo.getUser_id(), readInfo.getBook_isbn()),ReadInfo.class);
         readInfo.update(queryResult.getObjectId(), new UpdateListener() {
             @Override
             public void done(BmobException e) {
@@ -145,6 +147,7 @@ public class OperationReadInfo {
     public static Boolean deleteBookInfo(_User user, String book_isbn) {
         final Boolean[] delete = {false};
         ReadInfo queryResult = OperationReadInfo.queryReadInfo(user,book_isbn);
+        //ReadInfo queryResult = JSON.parseObject(OperationReadInfo.queryReadInfo(user, book_isbn),ReadInfo.class);
         ReadInfo r1=new ReadInfo();
         r1.setObjectId(queryResult.getObjectId());
         r1.delete(new UpdateListener() {

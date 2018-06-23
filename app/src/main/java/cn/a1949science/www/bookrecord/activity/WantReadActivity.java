@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSON;
 import com.willy.ratingbar.ScaleRatingBar;
 
 import java.util.ArrayList;
@@ -66,7 +67,6 @@ public class WantReadActivity extends AppCompatActivity {
                 Integer read_state = 0;
                 String want_read_reason = wantReason.getText().toString();
                 String want_read_hope = wantHope.getText().toString();
-
                 _User bmobUser = BmobUser.getCurrentUser(_User.class);
                 readInfo2 = new ReadInfo(bmobUser, book_isbn, read_state, want_read_reason, want_read_hope, new BmobDate(new Date(System.currentTimeMillis())));
                 if (readInfo == null) {
@@ -100,6 +100,7 @@ public class WantReadActivity extends AppCompatActivity {
         //通过ISBN先查询一下Bmob数据库中是否有此条记录,有的话就显示出来
         _User bmobUser = BmobUser.getCurrentUser(_User.class);
         ReadInfo readInfo = OperationReadInfo.queryReadInfo(bmobUser, book_isbn);
+        Toast.makeText(context, readInfo.getObjectId(), Toast.LENGTH_LONG).show();
         if (readInfo != null) {
             wantReason.setText(readInfo.getRead_reason());
             wantHope.setText(readInfo.getRead_except());
