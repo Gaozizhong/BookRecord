@@ -1,8 +1,11 @@
 package cn.a1949science.www.bookrecord.activity;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,6 +22,7 @@ import java.util.Date;
 import java.util.List;
 
 import cn.a1949science.www.bookrecord.R;
+import cn.a1949science.www.bookrecord.bean.BookInfo;
 import cn.a1949science.www.bookrecord.bean.ReadInfo;
 import cn.a1949science.www.bookrecord.bean._User;
 import cn.a1949science.www.bookrecord.database.OperationReadInfo;
@@ -38,6 +42,7 @@ public class WantReadActivity extends AppCompatActivity {
     EditText wantReason,wantHope;
     ReadInfo readInfo,readInfo2;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,6 +51,27 @@ public class WantReadActivity extends AppCompatActivity {
         //getInfoFromBmob();
         findView();
         onClick();
+        @SuppressLint("HandlerLeak")
+        Handler handler = new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                switch (msg.what) {
+                    case 0:
+                        List<ReadInfo> list = (List<ReadInfo>) msg.obj;
+                        if (list.size()!=0) {
+                            readInfo = list.get(0);
+                            Log.i("bmob","handler传送成功:"+readInfo.getObjectId());
+                            wantReason.setText(readInfo.getRead_reason());
+                            wantHope.setText(readInfo.getRead_except());
+                        }
+                        break;
+                }
+            }
+        };
+        //通过ISBN先查询一下Bmob数据库中是否有此条记录,有的话就显示出来
+        _User bmobUser = BmobUser.getCurrentUser(_User.class);
+        OperationReadInfo.queryReadInfo(bmobUser, book_isbn,handler);
+
     }
 
     private void onClick() {
@@ -97,14 +123,7 @@ public class WantReadActivity extends AppCompatActivity {
         wantReason = findViewById(R.id.want_read_reason);
         wantHope = findViewById(R.id.want_read_hope);
         bookRating.setRating(Float.parseFloat(book_score)/2);
-        //通过ISBN先查询一下Bmob数据库中是否有此条记录,有的话就显示出来
-        _User bmobUser = BmobUser.getCurrentUser(_User.class);
-        ReadInfo readInfo = OperationReadInfo.queryReadInfo(bmobUser, book_isbn);
-        Toast.makeText(context, readInfo.getObjectId(), Toast.LENGTH_LONG).show();
-        if (readInfo != null) {
-            wantReason.setText(readInfo.getRead_reason());
-            wantHope.setText(readInfo.getRead_except());
-        }
+
     }
     public void onBackPressed()
     {

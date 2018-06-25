@@ -1,6 +1,8 @@
 package cn.a1949science.www.bookrecord.database;
 
-import android.support.annotation.RequiresPermission;
+import android.annotation.SuppressLint;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
@@ -18,11 +20,9 @@ import cn.a1949science.www.bookrecord.bean.BookInfo;
 import cn.a1949science.www.bookrecord.bean.ReadInfo;
 import cn.a1949science.www.bookrecord.bean._User;
 import cn.bmob.v3.BmobQuery;
-import cn.bmob.v3.datatype.BmobQueryResult;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.QueryListener;
-import cn.bmob.v3.listener.SQLQueryListener;
 import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UpdateListener;
 
@@ -33,6 +33,8 @@ import cn.bmob.v3.listener.UpdateListener;
  */
 
 public class OperationReadInfo {
+    /*需要返回值时调用的Handler*/
+    public static Handler bmobHandler;
     /**
      * 为read_info添加一行数据
      * 数据库操作类
@@ -57,15 +59,16 @@ public class OperationReadInfo {
     }
 
 
+
     /**
      * 查询ReadInfo表中是否存在这条信息
      * 数据库操作类
      * 传入值：_User user, String book_isbn
      * 返回值：ReadInfo对象
      */
-    public static ReadInfo queryReadInfo(_User user, String book_isbn) {
+    public static void queryReadInfo(_User user, String book_isbn, final Handler handler) {
         final ReadInfo[] readInfo = {new ReadInfo()};
-        //final String[] readInfoString = new String[1];
+
 
         //--and条件1
         BmobQuery eq1 =new BmobQuery<ReadInfo>();
@@ -86,7 +89,8 @@ public class OperationReadInfo {
             @Override
             public void done(List<ReadInfo> list, BmobException e) {
                 if(e==null){
-                    /*try {
+                    /*//解决方法1，用序列化来进行深拷贝
+                    try {
                         //序列化
                         ByteArrayOutputStream bots=new ByteArrayOutputStream();
                         ObjectOutputStream oos = new ObjectOutputStream(bots);
@@ -97,20 +101,33 @@ public class OperationReadInfo {
                     } catch (IOException | ClassNotFoundException e1) {
                         e1.printStackTrace();
                     }*/
-                    readInfo[0] = list.get(0);
-                    //String gao = JSON.toJSONString(list.get(0));
-                    //readInfo[0] = JSON.parseObject(gao,ReadInfo.class);
-                    //readInfo[0] = JSON.parseObject(JSON.toJSONString(list.get(0)),ReadInfo.class);
-                    //readInfoString[0] = JSON.toJSONString(list.get(0));
+
+                    /*//解决方法2，用JSON来进行深拷贝
+                    String gao = JSON.toJSONString(list.get(0));
+                    readInfo[0] = JSON.parseObject(gao,ReadInfo.class);
+                    readInfo[0] = JSON.parseObject(JSON.toJSONString(list.get(0)),ReadInfo.class);
+                    readInfoString[0] = JSON.toJSONString(list.get(0));*/
+
+                    //解决方法3，handler+message
+                    Message message = handler.obtainMessage();
+                    message.what = 0;
+                    //以消息为载体
+                    message.obj = list;//这里的list就是查询出list
+                    //向handler发送消息
+                    handler.sendMessage(message);
+
                     Log.i("bmob","查询成功:"+list.get(0).getObjectId());
                 }else{
                     Log.i("bmob","查询失败："+e.getMessage()+","+e.getErrorCode());
                 }
             }
         });
-        return readInfo[0];
+
+
         //return readInfoString[0];
     }
+
+
 
 
     /**
@@ -121,9 +138,25 @@ public class OperationReadInfo {
      */
     public static Boolean updateReadInfo(ReadInfo readInfo) {
         final Boolean[] update = {false};
-        ReadInfo queryResult = OperationReadInfo.queryReadInfo(readInfo.getUser_id(),readInfo.getBook_isbn());
+        final ReadInfo[] queryResult = {new ReadInfo()};
+        @SuppressLint("HandlerLeak")
+        //这个应该通过方法里的参数传进来
+        final Handler handler = new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                switch (msg.what) {
+                    case 0:
+                        List<ReadInfo> list = (List<ReadInfo>) msg.obj;
+                        if (list != null) {
+                            queryResult[0] = list.get(0);
+                        }
+                        break;
+                }
+            }
+        };
+        OperationReadInfo.queryReadInfo(readInfo.getUser_id(),readInfo.getBook_isbn(),handler);
         //ReadInfo queryResult = JSON.parseObject(OperationReadInfo.queryReadInfo(readInfo.getUser_id(), readInfo.getBook_isbn()),ReadInfo.class);
-        readInfo.update(queryResult.getObjectId(), new UpdateListener() {
+        readInfo.update(queryResult[0].getObjectId(), new UpdateListener() {
             @Override
             public void done(BmobException e) {
                 if(e==null){
@@ -146,10 +179,26 @@ public class OperationReadInfo {
      */
     public static Boolean deleteBookInfo(_User user, String book_isbn) {
         final Boolean[] delete = {false};
-        ReadInfo queryResult = OperationReadInfo.queryReadInfo(user,book_isbn);
+        final ReadInfo[] queryResult = {new ReadInfo()};
+        @SuppressLint("HandlerLeak")
+        //这个应该通过方法里的参数传进来
+        final Handler handler = new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                switch (msg.what) {
+                    case 0:
+                        List<ReadInfo> list = (List<ReadInfo>) msg.obj;
+                        if (list != null) {
+                            queryResult[0] = list.get(0);
+                        }
+                        break;
+                }
+            }
+        };
+        OperationReadInfo.queryReadInfo(user,book_isbn,handler);
         //ReadInfo queryResult = JSON.parseObject(OperationReadInfo.queryReadInfo(user, book_isbn),ReadInfo.class);
         ReadInfo r1=new ReadInfo();
-        r1.setObjectId(queryResult.getObjectId());
+        r1.setObjectId(queryResult[0].getObjectId());
         r1.delete(new UpdateListener() {
             @Override
             public void done(BmobException e) {
