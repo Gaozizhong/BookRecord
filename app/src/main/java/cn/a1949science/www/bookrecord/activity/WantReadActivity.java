@@ -51,6 +51,7 @@ public class WantReadActivity extends AppCompatActivity {
         //getInfoFromBmob();
         findView();
         onClick();
+        //定义传给数据库操作类的handler
         @SuppressLint("HandlerLeak")
         Handler handler = new Handler(){
             @Override
@@ -60,9 +61,10 @@ public class WantReadActivity extends AppCompatActivity {
                         List<ReadInfo> list = (List<ReadInfo>) msg.obj;
                         if (list.size()!=0) {
                             readInfo = list.get(0);
-                            Log.i("bmob","handler传送成功:"+readInfo.getObjectId());
+                            //Log.i("bmob","handler传送成功:"+readInfo.getObjectId());
                             wantReason.setText(readInfo.getRead_reason());
                             wantHope.setText(readInfo.getRead_except());
+                            bmob_if_hava_read_info = true;
                         }
                         break;
                 }
@@ -95,11 +97,13 @@ public class WantReadActivity extends AppCompatActivity {
                 String want_read_hope = wantHope.getText().toString();
                 _User bmobUser = BmobUser.getCurrentUser(_User.class);
                 readInfo2 = new ReadInfo(bmobUser, book_isbn, read_state, want_read_reason, want_read_hope, new BmobDate(new Date(System.currentTimeMillis())));
-                if (readInfo == null) {
+                Log.i("bmob","现在ReadInfo状态:"+bmob_if_hava_read_info);
+                if (!bmob_if_hava_read_info) {
                     OperationReadInfo.addReadInfo(readInfo2);
                     progress.dismiss();
                 } else {
                     OperationReadInfo.updateReadInfo(readInfo2);
+                    progress.dismiss();
                 }
                 finish();
             }

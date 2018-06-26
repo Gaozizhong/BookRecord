@@ -136,7 +136,7 @@ public class OperationReadInfo {
      * 传入值：带有User_id和Book_isbn以及更新信息的ReadInfo
      * 返回值：Boolean
      */
-    public static Boolean updateReadInfo(ReadInfo readInfo) {
+    public static Boolean updateReadInfo(final ReadInfo readInfo) {
         final Boolean[] update = {false};
         final ReadInfo[] queryResult = {new ReadInfo()};
         @SuppressLint("HandlerLeak")
@@ -149,6 +149,19 @@ public class OperationReadInfo {
                         List<ReadInfo> list = (List<ReadInfo>) msg.obj;
                         if (list != null) {
                             queryResult[0] = list.get(0);
+                            readInfo.update(queryResult[0].getObjectId(), new UpdateListener() {
+                                @Override
+                                public void done(BmobException e) {
+                                    if(e==null){
+                                        update[0] = true;
+                                        Log.i("bmob","更新成功");
+                                    }else{
+                                        update[0] = false;
+                                        Log.i("bmob","更新失败："+e.getMessage()+","+e.getErrorCode());
+                                    }
+                                }
+
+                            });
                         }
                         break;
                 }
@@ -156,19 +169,7 @@ public class OperationReadInfo {
         };
         OperationReadInfo.queryReadInfo(readInfo.getUser_id(),readInfo.getBook_isbn(),handler);
         //ReadInfo queryResult = JSON.parseObject(OperationReadInfo.queryReadInfo(readInfo.getUser_id(), readInfo.getBook_isbn()),ReadInfo.class);
-        readInfo.update(queryResult[0].getObjectId(), new UpdateListener() {
-            @Override
-            public void done(BmobException e) {
-                if(e==null){
-                    update[0] = true;
-                    Log.i("bmob","更新成功");
-                }else{
-                    update[0] = false;
-                    Log.i("bmob","更新失败："+e.getMessage()+","+e.getErrorCode());
-                }
-            }
 
-        });
         return update[0];
     }
 
