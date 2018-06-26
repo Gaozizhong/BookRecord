@@ -1,6 +1,7 @@
 package cn.a1949science.www.bookrecord.activity;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -10,7 +11,9 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Looper;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -47,6 +50,7 @@ import java.util.List;
 
 import cn.a1949science.www.bookrecord.R;
 import cn.a1949science.www.bookrecord.bean.BookInfo;
+import cn.a1949science.www.bookrecord.bean.ReadInfo;
 import cn.a1949science.www.bookrecord.bean._User;
 import cn.a1949science.www.bookrecord.database.OperationBookInfo;
 import cn.a1949science.www.bookrecord.fragment.ReadingFragment;
@@ -70,6 +74,7 @@ public class MainActivity extends AppCompatActivity implements
 
     Context mContext = MainActivity.this;
     private long exitTime = 0;
+    Boolean bmob_if_hava_book_info = false;
     Toolbar toolbar;
     DrawerLayout drawer;
     View headerLayout;
@@ -335,35 +340,33 @@ public class MainActivity extends AppCompatActivity implements
                         @Override
                         public void onRequestComplete(String result) {
                             try {
+                                //把豆瓣返回的数据解析成BookInfo类
                                 final BookInfo bookInfo = BookInfoGetFromDouban.parsingBookInfo(result);
-                                //--查询条件
-                                BmobQuery<BookInfo> query = new BmobQuery<>();
-                                //ISBN比较
-                                query.addWhereEqualTo("book_isbn13", isbn);
-                                query.findObjects(new FindListener<BookInfo>() {
+                                Looper.prepare();
+                                //定义传给数据库操作类的handler
+                                @SuppressLint("HandlerLeak")
+                                Handler handler = new Handler(){
                                     @Override
-                                    public void done(List<BookInfo> list, BmobException e) {
-                                        if(e==null){
-                                            if (list.size() == 0) {
-                                                OperationBookInfo.addBookInfo(bookInfo);
-                                            } else {
-                                                bookInfo.update(list.get(0).getObjectId(), new UpdateListener() {
-                                                    @Override
-                                                    public void done(BmobException e) {
-                                                        if(e==null){
-                                                            Log.i("bmob","更新成功");
-                                                        }else{
-                                                            Log.i("bmob","更新失败："+e.getMessage()+","+e.getErrorCode());
-                                                        }
-                                                    }
-
-                                                });
-                                            }
-                                        }else{
-                                            Log.i("bmob","查询失败："+e.getMessage()+","+e.getErrorCode());
+                                    public void handleMessage(Message msg) {
+                                        switch (msg.what) {
+                                            case 0:
+                                                List<BookInfo> list = (List<BookInfo>) msg.obj;
+                                                if (list.size() != 0) {
+                                                    Log.i("bmob", "handler传送成功:" + list.get(0).getObjectId());
+                                                    bmob_if_hava_book_info = true;
+                                                    Log.i("bmob", "BookInfo存在状态:" + bmob_if_hava_book_info);
+                                                    //如果存在的话就更新
+                                                    OperationBookInfo.updateBookInfo(bookInfo);
+                                                } else {
+                                                    //若数据库中没有这本书的信息，就添加
+                                                    OperationBookInfo.addBookInfo(bookInfo);
+                                                }
+                                                break;
                                         }
                                     }
-                                });
+                                };
+
+                                OperationBookInfo.queryBookInfo(bookInfo.getBook_isbn13(),handler);
 
                                 Intent intent = new Intent();
                                 intent.setClass(mContext, BookInfoActivity.class);
@@ -372,6 +375,7 @@ public class MainActivity extends AppCompatActivity implements
                                 intent.putExtras(bundle);
                                 startActivity(intent);
                                 progress.dismiss();
+                                Looper.loop();
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }

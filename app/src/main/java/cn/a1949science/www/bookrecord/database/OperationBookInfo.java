@@ -1,6 +1,9 @@
 package cn.a1949science.www.bookrecord.database;
 
+import android.annotation.SuppressLint;
+import android.os.Handler;
 import android.os.Looper;
+import android.os.Message;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -15,6 +18,7 @@ import java.util.List;
 
 import cn.a1949science.www.bookrecord.activity.MainActivity;
 import cn.a1949science.www.bookrecord.bean.BookInfo;
+import cn.a1949science.www.bookrecord.bean.ReadInfo;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.datatype.BmobQueryResult;
 import cn.bmob.v3.exception.BmobException;
@@ -38,8 +42,7 @@ public class OperationBookInfo {
      * 传入值：book_isbn13
      * 返回值：BookInfo对象
      */
-    public static BookInfo queryBookInfo(String book_isbn13) {
-        final BookInfo[] bookInfo = {new BookInfo()};
+    public static void queryBookInfo(String book_isbn13, final Handler handler) {
         //--查询条件
         BmobQuery<BookInfo> query = new BmobQuery<>();
         //ISBN比较
@@ -48,16 +51,20 @@ public class OperationBookInfo {
             @Override
             public void done(List<BookInfo> list, BmobException e) {
                 if(e==null){
-                    bookInfo[0] = list.get(0);
-                    Log.i("bmob","查询成功:"+bookInfo[0].getObjectId());
+                    //handler+message传递数据
+                    Message message = handler.obtainMessage();
+                    message.what = 0;
+                    //以消息为载体
+                    message.obj = list;//这里的list就是查询出list
+                    //向handler发送消息
+                    handler.sendMessage(message);
+                    Log.i("bmob","查询成功:"+list.get(0).getObjectId());
                 }else{
                     Log.i("bmob","查询失败："+e.getMessage()+","+e.getErrorCode());
                 }
             }
         });
 
-
-        return bookInfo[0];
     }
 
 
@@ -90,21 +97,38 @@ public class OperationBookInfo {
      * 传入值：BookInfo对象
      * 返回值：Boolean值
      */
-    public static Boolean updateBookInfo(String objectId,BookInfo bookInfo) {
+    public static Boolean updateBookInfo(final BookInfo bookInfo) {
         final Boolean[] update = {false};
-        bookInfo.update(objectId, new UpdateListener() {
+        final BookInfo[] queryResult = {new BookInfo()};
+        @SuppressLint("HandlerLeak")
+        //这个应该通过方法里的参数传进来
+        final Handler handler = new Handler(){
             @Override
-            public void done(BmobException e) {
-                if(e==null){
-                    Log.i("bmob","更新成功");
-                    update[0] =true;
-                }else{
-                    Log.i("bmob","更新失败："+e.getMessage()+","+e.getErrorCode());
-                    update[0] =false;
+            public void handleMessage(Message msg) {
+                switch (msg.what) {
+                    case 0:
+                        List<BookInfo> list = (List<BookInfo>) msg.obj;
+                        if (list != null) {
+                            queryResult[0] = list.get(0);
+                            bookInfo.update(queryResult[0].getObjectId(), new UpdateListener() {
+                                @Override
+                                public void done(BmobException e) {
+                                    if(e==null){
+                                        update[0] = true;
+                                        Log.i("bmob","更新成功");
+                                    }else{
+                                        update[0] = false;
+                                        Log.i("bmob","更新失败："+e.getMessage()+","+e.getErrorCode());
+                                    }
+                                }
+
+                            });
+                        }
+                        break;
                 }
             }
-
-        });
+        };
+        OperationBookInfo.queryBookInfo(bookInfo.getBook_isbn13(),handler);
 
         return update[0];
     }

@@ -8,11 +8,6 @@ import android.util.Log;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -168,7 +163,6 @@ public class OperationReadInfo {
             }
         };
         OperationReadInfo.queryReadInfo(readInfo.getUser_id(),readInfo.getBook_isbn(),handler);
-        //ReadInfo queryResult = JSON.parseObject(OperationReadInfo.queryReadInfo(readInfo.getUser_id(), readInfo.getBook_isbn()),ReadInfo.class);
 
         return update[0];
     }
@@ -246,7 +240,7 @@ public class OperationReadInfo {
                 if(e==null){
                     List<ReadInfo> list = JSON.parseArray(jsonArray.toString(), ReadInfo.class);
                     for(int i=0;i<list.size();i++){
-                        bookInfo.set(i, OperationBookInfo.queryBookInfo(list.get(i).getBook_isbn()));
+                        //bookInfo.set(i, OperationBookInfo.queryBookInfo(list.get(i).getBook_isbn()));
                     }
 
                     Log.i("bmob","查询成功");
