@@ -156,6 +156,10 @@ public class BookInfoActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(mContext, ReadingActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("bookISBN", book_ISBN);
+                bundle.putString("bookScore", book_score);
+                intent.putExtra("id_score",bundle);
                 startActivity(intent);
             }
         });

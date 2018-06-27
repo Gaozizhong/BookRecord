@@ -47,10 +47,16 @@ public class WantReadActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_want_read);
+        //从图书详情页面获取信息
         getInfoFromBookInfo();
         //getInfoFromBmob();
         findView();
         onClick();
+        //放入初始化信息
+        initInfo();
+    }
+
+    private void initInfo() {
         //定义传给数据库操作类的handler
         @SuppressLint("HandlerLeak")
         Handler handler = new Handler(){
@@ -73,7 +79,6 @@ public class WantReadActivity extends AppCompatActivity {
         //通过ISBN先查询一下Bmob数据库中是否有此条记录,有的话就显示出来
         _User bmobUser = BmobUser.getCurrentUser(_User.class);
         OperationReadInfo.queryReadInfo(bmobUser, book_isbn,handler);
-
     }
 
     private void onClick() {

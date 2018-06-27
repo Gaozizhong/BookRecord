@@ -233,7 +233,7 @@ public class OperationReadInfo {
         //查询符合整个and条件的信息
         BmobQuery query =new BmobQuery("read_info");
         query.and(andQuerys);
-        query.include("user_id");//查询结果包含user_id
+        //query.include("user_id");//查询结果包含user_id
         query.findObjectsByTable(new QueryListener<JSONArray>() {
             @Override
             public void done(JSONArray jsonArray, BmobException e) {
