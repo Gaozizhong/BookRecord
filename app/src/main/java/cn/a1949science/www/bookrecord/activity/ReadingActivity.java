@@ -1,6 +1,7 @@
 package cn.a1949science.www.bookrecord.activity;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -22,8 +23,10 @@ import com.amap.api.location.AMapLocationListener;
 import com.bigkoo.pickerview.builder.OptionsPickerBuilder;
 import com.bigkoo.pickerview.listener.OnOptionsSelectListener;
 import com.bigkoo.pickerview.view.OptionsPickerView;
+import com.willy.ratingbar.ScaleRatingBar;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import cn.a1949science.www.bookrecord.R;
@@ -32,6 +35,7 @@ import cn.a1949science.www.bookrecord.bean._User;
 import cn.a1949science.www.bookrecord.database.OperationReadInfo;
 import cn.a1949science.www.bookrecord.utils.LocationFromGaode;
 import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.datatype.BmobDate;
 
 public class ReadingActivity extends AppCompatActivity {
 
@@ -39,7 +43,9 @@ public class ReadingActivity extends AppCompatActivity {
     Button returnButton,addressButton,reading_button;
     TextView addressText,classfy;
     EditText read_notes,read_reason;
-    String book_isbn,book_score;
+    String book_isbn,book_score,book_way;
+    ScaleRatingBar bookRating;
+    ReadInfo readInfo;
     private Spinner reading_way=null;
     Boolean bmob_if_hava_read_info = false;
     //声明AMapLocationClient类对象
@@ -83,8 +89,11 @@ public class ReadingActivity extends AppCompatActivity {
                         if (list.size()!=0) {
                             ReadInfo readInfo = list.get(0);
                             Log.i("bmob","handler传送成功:"+readInfo.getObjectId());
+                            //bookRating.setRating(Float.parseFloat(book_score)/2);
+                            //bookRating.setRating(Float.parseFloat(readInfo.getRead_rating())/2);
+                            read_notes.setText(readInfo.getRead_notes());
                             read_reason.setText(readInfo.getRead_reason());
-                            //wantHope.setText(readInfo.getRead_except());
+
                             bmob_if_hava_read_info = true;
                         }
                         break;
@@ -103,9 +112,9 @@ public class ReadingActivity extends AppCompatActivity {
         read_notes = findViewById(R.id.reading_note_text);
         read_reason = findViewById(R.id.reading_reason);
         reading_way=findViewById(R.id.reading_way);
-        classfy=findViewById(R.id.reading_classfy);
-        addressButton=findViewById(R.id.reading_adress_button);
         addressText=findViewById(R.id.reading_adress_textview);
+        addressButton=findViewById(R.id.reading_adress_button);
+        classfy=findViewById(R.id.reading_classfy);
         reading_button = findViewById(R.id.reading_button);
     }
 
@@ -168,7 +177,27 @@ public class ReadingActivity extends AppCompatActivity {
         reading_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                /*final ProgressDialog progress = new ProgressDialog(context);
+                progress.setMessage("正在记录...");
+                progress.setCanceledOnTouchOutside(false);
+                progress.show();
 
+                _User bmobUser = BmobUser.getCurrentUser(_User.class);
+                readInfo = new ReadInfo();
+                readInfo.setRead_state(1);
+                readInfo.setRead_rating(String.valueOf(bookRating.getRating()));
+                readInfo.setRead_notes(read_notes.getText().toString());
+                readInfo.setRead_reason(read_reason.getText().toString());
+                //readInfo.setRead_way();
+                Log.i("bmob","现在ReadInfo状态:"+bmob_if_hava_read_info);
+                if (!bmob_if_hava_read_info) {
+                    OperationReadInfo.addReadInfo(readInfo);
+                    progress.dismiss();
+                } else {
+                    OperationReadInfo.updateReadInfo(readInfo);
+                    progress.dismiss();
+                }
+                finish();*/
             }
         });
   }
